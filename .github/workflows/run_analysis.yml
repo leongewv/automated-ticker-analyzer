@@ -6,7 +6,7 @@ name: Run Stock Analysis
 on:
   # Triggers the workflow at the top of every hour
   schedule:
-    - cron: '0 * * * *'
+    - cron: '21 12 * * *'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
