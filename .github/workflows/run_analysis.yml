@@ -29,6 +29,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          # Install a compatible numpy version first to fix the pandas-ta import error
+          pip install numpy==1.23.5 
           pip install pandas yfinance pandas-ta
 
       # Runs the analysis script
