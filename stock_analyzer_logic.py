@@ -68,15 +68,44 @@ def analyze_signal(df):
             if slope < 0: context_check_2 = True
         
         context_check_3 = False # Pullback to 200 EMA
-        is_near_ema = abs(middle_bb - ema_200) / ema_200 < 0.03
+        
+        # is_near_ema = abs(middle_bb - ema_200) / ema_200 < 0.03 # Original line commented out for debugging
+
+        # --- DEBUGGING PULLBACK ---
+        diff_percentage = (abs(middle_bb - ema_200) / ema_200) * 100
+        is_near_ema = diff_percentage < 3
+
+        print("\n--- PULLBACK CHECK (yfinance data) ---")
+        print(f"20-period SMA: {middle_bb:.4f}")
+        print(f"200-period EMA: {ema_200:.4f}")
+        print(f"Difference: {diff_percentage:.2f}%")
+        print(f"Is price near EMA (< 3%)?: {is_near_ema}")
+        print("-------------------------------------\n")
+        # --- END DEBUGGING ---
+
         if is_near_ema:
             past_price_period = df['Close'].iloc[-80:-20]
-            if crossover_signal == "Buy" and past_price_period.max() > ema_200 * 1.05: context_check_3 = True
-            if crossover_signal == "Sell" and past_price_period.min() < ema_200 * 0.95: context_check_3 = True
+            # New "Buy" condition: previous high must be above the 200 EMA AND the current close.
+            if crossover_signal == "Buy" and past_price_period.max() > ema_200 and past_price_period.max() > latest['Close']:
+                context_check_3 = True
+            # New "Sell" condition: previous low must be below the 200 EMA AND the current close.
+            if crossover_signal == "Sell" and past_price_period.min() < ema_200 and past_price_period.min() < latest['Close']:
+                context_check_3 = True
         
-        if context_check_2 or context_check_3:
+        # Check which consolidation conditions are met
+        setup_details = []
+        if context_check_2:
+            setup_details.append("Trend Slope")
+        if context_check_3:
+            setup_details.append("Pullback to 200 EMA")
+
+        # If any consolidation condition is met, create a descriptive signal
+        if setup_details:
             signal = "Strong Buy" if crossover_signal == "Buy" else "Strong Sell"
-            return signal, "Consolidation"
+            # Join the details for a descriptive setup type
+            # e.g., "Consolidation (Pullback to 200 EMA)"
+            setup_type = "Consolidation (" + " & ".join(setup_details) + ")"
+            return signal, setup_type
 
     return crossover_signal, "Crossover"
 
