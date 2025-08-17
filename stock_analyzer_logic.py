@@ -68,20 +68,7 @@ def analyze_signal(df):
             if slope < 0: context_check_2 = True
         
         context_check_3 = False # Pullback to 200 EMA
-        
-        # is_near_ema = abs(middle_bb - ema_200) / ema_200 < 0.03 # Original line commented out for debugging
-
-        # --- DEBUGGING PULLBACK ---
-        diff_percentage = (abs(middle_bb - ema_200) / ema_200) * 100
-        is_near_ema = diff_percentage < 3
-
-        print("\n--- PULLBACK CHECK (yfinance data) ---")
-        print(f"20-period SMA: {middle_bb:.4f}")
-        print(f"200-period EMA: {ema_200:.4f}")
-        print(f"Difference: {diff_percentage:.2f}%")
-        print(f"Is price near EMA (< 3%)?: {is_near_ema}")
-        print("-------------------------------------\n")
-        # --- END DEBUGGING ---
+        is_near_ema = abs(middle_bb - ema_200) / ema_200 < 0.03
 
         if is_near_ema:
             past_price_period = df['Close'].iloc[-80:-20]
@@ -109,7 +96,6 @@ def analyze_signal(df):
 
     return crossover_signal, "Crossover"
 
-
 def calculate_stop_loss(daily_df, direction):
     """Calculates a stop loss based on the 200 EMA, swing points, and ATR."""
     latest_ema_200 = daily_df['EMA_200'].iloc[-1]
@@ -125,6 +111,65 @@ def calculate_stop_loss(daily_df, direction):
         swing_high = daily_df['High'].iloc[-swing_lookback:-1].max()
         return min(sl_ema, swing_high + latest_atr)
     return None
+
+def calculate_take_profit(df, direction):
+    """
+    Calculates a take-profit level using Fibonacci Trend Extension.
+    Identifies the three points (A, B, C) of a trend and projects the 161.8% level.
+    """
+    lookback = 90  # Lookback period to find the trend
+    data = df.iloc[-lookback:]
+
+    try:
+        if direction == "Buy":
+            # Point A: The start of the uptrend (lowest low)
+            a_price = data['Low'].min()
+            a_index = data['Low'].idxmin()
+
+            # Point B: The peak of the uptrend (highest high after point A)
+            b_data = data[a_index:]
+            b_price = b_data['High'].max()
+            b_index = b_data['High'].idxmin()
+
+            # Point C: The retracement low (lowest low after point B)
+            # This low must be higher than point A
+            c_data = data[b_index:]
+            c_price = c_data['Low'].min()
+            
+            if c_price > a_price:
+                # Calculate the 1.618 extension level
+                target = c_price + (b_price - a_price) * 1.618
+                return f"{target:.4f}"
+            else:
+                return "N/A (Invalid Trend)"
+
+        elif direction == "Sell":
+            # Point A: The start of the downtrend (highest high)
+            a_price = data['High'].max()
+            a_index = data['High'].idxmax()
+
+            # Point B: The bottom of the downtrend (lowest low after point A)
+            b_data = data[a_index:]
+            b_price = b_data['Low'].min()
+            b_index = b_data['Low'].idxmin()
+
+            # Point C: The retracement high (highest high after point B)
+            # This high must be lower than point A
+            c_data = data[b_index:]
+            c_price = c_data['High'].max()
+
+            if c_price < a_price:
+                # Calculate the 1.618 extension level
+                target = c_price - (a_price - b_price) * 1.618
+                return f"{target:.4f}"
+            else:
+                return "N/A (Invalid Trend)"
+                
+    except Exception:
+        # If any error occurs in finding points, return N/A
+        return "N/A (Calc Error)"
+        
+    return "N/A"
 
 def run_full_analysis(tickers_to_analyze, status_callback=None):
     """
@@ -147,6 +192,7 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
         confirmation_setup_type = "N/A"
         entry_price = "N/A"
         stop_loss = "N/A"
+        take_profit = "N/A" # New variable for take-profit
         
         if daily_signal in ["Strong Buy", "Strong Sell"]:
             intraday_df = get_data(ticker=ticker, interval="30m")
@@ -164,9 +210,14 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
                 
                 direction = "Buy" if "Buy" in daily_signal else "Sell"
                 entry_price = f"{intraday_df['Close'].iloc[-1]:.4f}"
+                
                 stop_loss_val = calculate_stop_loss(daily_df, direction)
                 if stop_loss_val is not None:
                     stop_loss = f"{stop_loss_val:.4f}"
+                
+                # Calculate Take Profit
+                take_profit = calculate_take_profit(daily_df, direction)
+
             else:
                 confirmation_status = "30m Data Error"
 
@@ -178,6 +229,7 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
             "Daily Setup": daily_setup_type,
             "Entry Price": entry_price,
             "Stop Loss": stop_loss,
+            "Take Profit": take_profit, # New column
             "30m Confirmed": confirmation_status,
             "30m Setup": confirmation_setup_type
         })
