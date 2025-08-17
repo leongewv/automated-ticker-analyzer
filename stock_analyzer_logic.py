@@ -8,11 +8,9 @@ import time
 
 def get_data(ticker, period="2y", interval="1d"):
     """Fetches and prepares data."""
-    # For shorter intervals, yfinance limits the period
     if interval != "1d": 
-        period = "60d" # Max period for intervals < 1d is 60 days
+        period = "60d"
     data = yf.Ticker(ticker).history(period=period, interval=interval)
-    # Require at least 200 bars for EMA calculation
     if data.empty or len(data) < 200: 
         return None
     
@@ -72,25 +70,17 @@ def analyze_signal(df):
 
         if is_near_ema:
             past_price_period = df['Close'].iloc[-80:-20]
-            # New "Buy" condition: previous high must be above the 200 EMA AND the current close.
             if crossover_signal == "Buy" and past_price_period.max() > ema_200 and past_price_period.max() > latest['Close']:
                 context_check_3 = True
-            # New "Sell" condition: previous low must be below the 200 EMA AND the current close.
             if crossover_signal == "Sell" and past_price_period.min() < ema_200 and past_price_period.min() < latest['Close']:
                 context_check_3 = True
         
-        # Check which consolidation conditions are met
         setup_details = []
-        if context_check_2:
-            setup_details.append("Trend Slope")
-        if context_check_3:
-            setup_details.append("Pullback to 200 EMA")
+        if context_check_2: setup_details.append("Trend Slope")
+        if context_check_3: setup_details.append("Pullback to 200 EMA")
 
-        # If any consolidation condition is met, create a descriptive signal
         if setup_details:
             signal = "Strong Buy" if crossover_signal == "Buy" else "Strong Sell"
-            # Join the details for a descriptive setup type
-            # e.g., "Consolidation (Pullback to 200 EMA)"
             setup_type = "Consolidation (" + " & ".join(setup_details) + ")"
             return signal, setup_type
 
@@ -114,69 +104,59 @@ def calculate_stop_loss(daily_df, direction):
 
 def calculate_take_profit(df, direction):
     """
-    Calculates a take-profit level using Fibonacci Trend Extension.
-    Identifies the three points (A, B, C) of a trend and projects the 161.8% level.
+    Calculates multiple take-profit levels using structure and Fibonacci Trend Extension.
+    Returns a dictionary of profit targets.
     """
-    lookback = 90  # Lookback period to find the trend
+    lookback = 90
     data = df.iloc[-lookback:]
+    targets = {
+        "TP1 (Structure)": "N/A",
+        "TP2 (Fib 0.718)": "N/A",
+        "TP3 (Fib 1.0)": "N/A",
+        "TP4 (Fib 1.618)": "N/A",
+    }
 
     try:
         if direction == "Buy":
-            # Point A: The start of the uptrend (lowest low)
             a_price = data['Low'].min()
             a_index = data['Low'].idxmin()
-
-            # Point B: The peak of the uptrend (highest high after point A)
             b_data = data[a_index:]
             b_price = b_data['High'].max()
             b_index = b_data['High'].idxmin()
-
-            # Point C: The retracement low (lowest low after point B)
-            # This low must be higher than point A
             c_data = data[b_index:]
             c_price = c_data['Low'].min()
-            
+
             if c_price > a_price:
-                # Calculate the 1.618 extension level
-                target = c_price + (b_price - a_price) * 1.618
-                return f"{target:.4f}"
-            else:
-                return "N/A (Invalid Trend)"
+                trend_range = b_price - a_price
+                targets["TP1 (Structure)"] = f"{b_price:.4f}" # Major resistance
+                targets["TP2 (Fib 0.718)"] = f"{c_price + trend_range * 0.718:.4f}"
+                targets["TP3 (Fib 1.0)"] = f"{c_price + trend_range * 1.0:.4f}"
+                targets["TP4 (Fib 1.618)"] = f"{c_price + trend_range * 1.618:.4f}"
 
         elif direction == "Sell":
-            # Point A: The start of the downtrend (highest high)
             a_price = data['High'].max()
             a_index = data['High'].idxmax()
-
-            # Point B: The bottom of the downtrend (lowest low after point A)
             b_data = data[a_index:]
             b_price = b_data['Low'].min()
             b_index = b_data['Low'].idxmin()
-
-            # Point C: The retracement high (highest high after point B)
-            # This high must be lower than point A
             c_data = data[b_index:]
             c_price = c_data['High'].max()
 
             if c_price < a_price:
-                # Calculate the 1.618 extension level
-                target = c_price - (a_price - b_price) * 1.618
-                return f"{target:.4f}"
-            else:
-                return "N/A (Invalid Trend)"
-                
+                trend_range = a_price - b_price
+                targets["TP1 (Structure)"] = f"{b_price:.4f}" # Major support
+                targets["TP2 (Fib 0.718)"] = f"{c_price - trend_range * 0.718:.4f}"
+                targets["TP3 (Fib 1.0)"] = f"{c_price - trend_range * 1.0:.4f}"
+                targets["TP4 (Fib 1.618)"] = f"{c_price - trend_range * 1.618:.4f}"
+
     except Exception:
-        # If any error occurs in finding points, return N/A
-        return "N/A (Calc Error)"
+        return targets # Return default "N/A" values on error
         
-    return "N/A"
+    return targets
 
 def run_full_analysis(tickers_to_analyze, status_callback=None):
     """
     Runs the complete analysis for a list of tickers.
-    :param tickers_to_analyze: A list of stock tickers.
-    :param status_callback: An optional function to report progress (for Streamlit).
-    :return: A pandas DataFrame with the analysis results.
     """
     results_list = []
     total_tickers = len(tickers_to_analyze)
@@ -192,7 +172,10 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
         confirmation_setup_type = "N/A"
         entry_price = "N/A"
         stop_loss = "N/A"
-        take_profit = "N/A" # New variable for take-profit
+        take_profit_levels = {
+            "TP1 (Structure)": "N/A", "TP2 (Fib 0.718)": "N/A",
+            "TP3 (Fib 1.0)": "N/A", "TP4 (Fib 1.618)": "N/A"
+        }
         
         if daily_signal in ["Strong Buy", "Strong Sell"]:
             intraday_df = get_data(ticker=ticker, interval="30m")
@@ -215,25 +198,34 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
                 if stop_loss_val is not None:
                     stop_loss = f"{stop_loss_val:.4f}"
                 
-                # Calculate Take Profit
-                take_profit = calculate_take_profit(daily_df, direction)
+                take_profit_levels = calculate_take_profit(daily_df, direction)
 
             else:
                 confirmation_status = "30m Data Error"
 
         display_signal = final_signal if final_signal.startswith(("Super Strong", "Strong")) else "Hold for now"
 
-        results_list.append({
+        result_row = {
             "Instrument": ticker,
             "Signal": display_signal,
             "Daily Setup": daily_setup_type,
             "Entry Price": entry_price,
             "Stop Loss": stop_loss,
-            "Take Profit": take_profit, # New column
+        }
+        result_row.update(take_profit_levels) # Add all TP levels to the result row
+        result_row.update({
             "30m Confirmed": confirmation_status,
             "30m Setup": confirmation_setup_type
         })
-        # yfinance has rate limits, a small delay is good practice for large lists
+        results_list.append(result_row)
+        
         time.sleep(1)
     
-    return pd.DataFrame(results_list)
+    # Define column order for the final DataFrame
+    column_order = [
+        "Instrument", "Signal", "Daily Setup", "Entry Price", "Stop Loss",
+        "TP1 (Structure)", "TP2 (Fib 0.718)", "TP3 (Fib 1.0)", "TP4 (Fib 1.618)",
+        "30m Confirmed", "30m Setup"
+    ]
+    
+    return pd.DataFrame(results_list, columns=column_order)
