@@ -104,8 +104,8 @@ def calculate_stop_loss(daily_df, direction):
 
 def calculate_take_profit(df, direction):
     """
-    Calculates multiple take-profit levels using structure and Fibonacci Trend Extension.
-    Returns a dictionary of profit targets.
+    Calculates multiple take-profit levels.
+    TP1 (Structure) is independent. TP2-4 (Fibonacci) depend on a valid trend.
     """
     lookback = 90
     data = df.iloc[-lookback:]
@@ -118,39 +118,45 @@ def calculate_take_profit(df, direction):
 
     try:
         if direction == "Buy":
-            a_price = data['Low'].min()
-            a_index = data['Low'].idxmin()
-            b_data = data[a_index:]
-            b_price = b_data['High'].max()
-            b_index = b_data['High'].idxmin()
-            c_data = data[b_index:]
-            c_price = c_data['Low'].min()
+            # --- Independent Structure TP ---
+            a_price_struct = data['Low'].min()
+            a_index_struct = data['Low'].idxmin()
+            b_data_struct = data[a_index_struct:]
+            b_price_struct = b_data_struct['High'].max()
+            targets["TP1 (Structure)"] = f"{b_price_struct:.4f}"
 
-            if c_price > a_price:
-                trend_range = b_price - a_price
-                targets["TP1 (Structure)"] = f"{b_price:.4f}" # Major resistance
-                targets["TP2 (Fib 0.718)"] = f"{c_price + trend_range * 0.718:.4f}"
-                targets["TP3 (Fib 1.0)"] = f"{c_price + trend_range * 1.0:.4f}"
-                targets["TP4 (Fib 1.618)"] = f"{c_price + trend_range * 1.618:.4f}"
+            # --- Fibonacci TP (requires valid trend) ---
+            b_index_fib = b_data_struct['High'].idxmin()
+            c_data_fib = data[b_index_fib:]
+            c_price_fib = c_data_fib['Low'].min()
+            
+            if c_price_fib > a_price_struct: # Trend is valid for Fib
+                trend_range = b_price_struct - a_price_struct
+                targets["TP2 (Fib 0.718)"] = f"{c_price_fib + trend_range * 0.718:.4f}"
+                targets["TP3 (Fib 1.0)"] = f"{c_price_fib + trend_range * 1.0:.4f}"
+                targets["TP4 (Fib 1.618)"] = f"{c_price_fib + trend_range * 1.618:.4f}"
 
         elif direction == "Sell":
-            a_price = data['High'].max()
-            a_index = data['High'].idxmax()
-            b_data = data[a_index:]
-            b_price = b_data['Low'].min()
-            b_index = b_data['Low'].idxmin()
-            c_data = data[b_index:]
-            c_price = c_data['High'].max()
+            # --- Independent Structure TP ---
+            a_price_struct = data['High'].max()
+            a_index_struct = data['High'].idxmax()
+            b_data_struct = data[a_index_struct:]
+            b_price_struct = b_data_struct['Low'].min()
+            targets["TP1 (Structure)"] = f"{b_price_struct:.4f}"
 
-            if c_price < a_price:
-                trend_range = a_price - b_price
-                targets["TP1 (Structure)"] = f"{b_price:.4f}" # Major support
-                targets["TP2 (Fib 0.718)"] = f"{c_price - trend_range * 0.718:.4f}"
-                targets["TP3 (Fib 1.0)"] = f"{c_price - trend_range * 1.0:.4f}"
-                targets["TP4 (Fib 1.618)"] = f"{c_price - trend_range * 1.618:.4f}"
+            # --- Fibonacci TP (requires valid trend) ---
+            b_index_fib = b_data_struct['Low'].idxmin()
+            c_data_fib = data[b_index_fib:]
+            c_price_fib = c_data_fib['High'].max()
+
+            if c_price_fib < a_price_struct: # Trend is valid for Fib
+                trend_range = a_price_struct - b_price_struct
+                targets["TP2 (Fib 0.718)"] = f"{c_price_fib - trend_range * 0.718:.4f}"
+                targets["TP3 (Fib 1.0)"] = f"{c_price_fib - trend_range * 1.0:.4f}"
+                targets["TP4 (Fib 1.618)"] = f"{c_price_fib - trend_range * 1.618:.4f}"
 
     except Exception:
-        return targets # Return default "N/A" values on error
+        return targets
         
     return targets
 
@@ -212,7 +218,7 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
             "Entry Price": entry_price,
             "Stop Loss": stop_loss,
         }
-        result_row.update(take_profit_levels) # Add all TP levels to the result row
+        result_row.update(take_profit_levels)
         result_row.update({
             "30m Confirmed": confirmation_status,
             "30m Setup": confirmation_setup_type
@@ -221,7 +227,6 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
         
         time.sleep(1)
     
-    # Define column order for the final DataFrame
     column_order = [
         "Instrument", "Signal", "Daily Setup", "Entry Price", "Stop Loss",
         "TP1 (Structure)", "TP2 (Fib 0.718)", "TP3 (Fib 1.0)", "TP4 (Fib 1.618)",
