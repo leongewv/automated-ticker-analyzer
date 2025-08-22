@@ -40,3 +40,12 @@ jobs:
           SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
         run: python scheduled_analysis.py
+      
+      # Commits the results file back to the repository
+      - name: Commit analysis history
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📈 Update analysis history"
+          file_pattern: analysis_history.csv
+          commit_user_name: GitHub Actions Bot
+          commit_user_email: actions@github.com
