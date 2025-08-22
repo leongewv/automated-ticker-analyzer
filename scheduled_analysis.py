@@ -51,3 +51,5 @@ def generate_recommendations(current_df, previous_df):
     
     merged_df.drop(columns=['Signal_prev'], inplace=True)
     return merged_df
+    if __name__ == "__main__":
+    main()
