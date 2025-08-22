@@ -1,4 +1,4 @@
-# File: run_scheduled_analysis.py
+# File: scheduled_analysis.py
 
 import os
 import glob
@@ -10,6 +10,9 @@ import pandas as pd
 
 # Import the main analysis function from our logic file
 from stock_analyzer_logic import run_full_analysis
+
+# --- Configuration ---
+HISTORY_FILE = 'analysis_history.csv'  # File to store the last run's results
 
 # --- Email Configuration ---
 # Load credentials from environment variables for security
@@ -31,13 +34,12 @@ def send_email_notification(subject, html_body):
     msg["From"] = SENDER_EMAIL
     msg["To"] = RECEIVER_EMAIL
 
-    # Attach the HTML body
     msg.attach(MIMEText(html_body, "html"))
 
     try:
         print("Connecting to email server...")
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()  # Secure the connection
+            server.starttls()
             server.login(SENDER_EMAIL, SENDER_PASSWORD)
             server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL.split(','), msg.as_string())
         print("Email sent successfully!")
@@ -45,13 +47,79 @@ def send_email_notification(subject, html_body):
         print(f"Failed to send email: {e}")
 
 
+def generate_recommendations(current_df, previous_df):
+    """Compares current signals with previous ones to generate new recommendations."""
+    if previous_df.empty:
+        current_df['Recommendation'] = 'First run, no prior data to compare.'
+        return current_df
+
+    # Merge current results with the 'Signal' column from the previous results
+    merged_df = pd.merge(
+        current_df,
+        previous_df[['Instrument', 'Signal']],
+        on='Instrument',
+        how='left',
+        suffixes=('', '_prev')
+    ).fillna({'Signal_prev': 'N/A'}) # Handle new tickers gracefully
+
+    def get_recommendation(row):
+        current = row['Signal']
+        previous = row['Signal_prev']
+        
+        # Avoid clutter for unchanged "Hold" signals
+        if current == 'Hold for now' and previous == 'Hold for now':
+            return "No change."
+
+        direction = 'long' if 'Buy' in current else 'short'
+
+        # Scenario 1: Degradation
+        if 'Super Strong' in previous and 'Strong' in current and 'Moderate' not in current:
+            return f"📉 Degradation: Consider reducing {direction} positions."
+
+        # Scenario 2: Early Reversal (Improvement from unconfirmed)
+        if 'Strong' in previous and 'Moderate Strong' in current:
+            return f"📈 Improvement: Consider re-entering {direction} positions."
+        
+        # Scenario 3: Full Alignment (Improvement from reversal)
+        if 'Moderate Strong' in previous and 'Super Strong' in current:
+            return f"🚀 Alignment: Accumulate {direction} positions."
+            
+        # Scenario 4: Direct to Full Alignment (Breakout or confirmed trend)
+        if 'Strong' in previous and 'Super Strong' in current:
+            return f"🔥 Strengthening: Accumulate {direction} positions."
+
+        if 'Hold' in previous or previous == 'N/A':
+             return f"New Signal: {current}"
+        
+        return "Monitor signal change."
+
+    merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
+    
+    # Re-order columns to place Recommendation next to Signal for clarity
+    all_cols = list(merged_df.columns)
+    signal_index = all_cols.index('Signal')
+    rec_col = merged_df.pop('Recommendation')
+    merged_df.insert(signal_index + 1, 'Recommendation', rec_col)
+    
+    # Drop the previous signal column as it's no longer needed in the output
+    merged_df.drop(columns=['Signal_prev'], inplace=True)
+    return merged_df
+
+
 def main():
     """Main function to run the analysis and send the report."""
     print(f"Starting scheduled analysis at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
+    # --- 1. Load Previous Analysis State ---
+    try:
+        previous_results_df = pd.read_csv(HISTORY_FILE)
+        print(f"Successfully loaded previous analysis from '{HISTORY_FILE}'")
+    except FileNotFoundError:
+        print("History file not found. This must be the first run.")
+        previous_results_df = pd.DataFrame()
+
     # Define the folder where you store your CSV files
     source_folder = 'ticker_sources'
-    # Find all files ending with .csv inside that folder
     csv_files = glob.glob(os.path.join(source_folder, '*.csv'))
 
     if not csv_files:
@@ -59,38 +127,34 @@ def main():
         return
 
     all_tickers = []
-    print(f"Reading tickers from {len(csv_files)} CSV file(s)...")
     for file in csv_files:
         try:
-            # Read the CSV file using pandas
             df = pd.read_csv(file)
-            # IMPORTANT: Assumes tickers are in the FIRST column.
-            # If your ticker column is named 'Symbol', use: df['Symbol'].dropna().tolist()
             tickers_from_file = df.iloc[:, 0].dropna().tolist()
             all_tickers.extend(tickers_from_file)
-            print(f"  - Loaded {len(tickers_from_file)} tickers from {os.path.basename(file)}")
         except Exception as e:
             print(f"  - Could not read file {os.path.basename(file)}. Error: {e}")
 
-    # Create a unique, sorted list of tickers to avoid duplicates
     tickers_to_analyze = sorted(list(set(all_tickers)))
-
     if not tickers_to_analyze:
-        print("No tickers were loaded from the CSV files. Exiting.")
+        print("No tickers were loaded. Exiting.")
         return
     
     print(f"\nFound a total of {len(tickers_to_analyze)} unique tickers to analyze.")
 
-    # Run the analysis (status_callback prints progress to the console/log)
+    # --- 2. Run New Analysis ---
     full_results_df = run_full_analysis(tickers_to_analyze, status_callback=print)
     
-    # Filter for actionable signals
-    actionable_df = full_results_df[full_results_df['Signal'] != 'Hold for now'].reset_index(drop=True)
+    # --- 3. Generate Contextual Recommendations ---
+    results_with_recs_df = generate_recommendations(full_results_df.copy(), previous_results_df)
+
+    # Filter for actionable signals for the email report
+    actionable_df = results_with_recs_df[results_with_recs_df['Signal'] != 'Hold for now'].reset_index(drop=True)
 
     today_str = datetime.now().strftime('%Y-%m-%d')
 
     if not actionable_df.empty:
-        subject = f"Stock Signals Found - {today_str}"
+        subject = f"Stock Signals & Recommendations - {today_str}"
         html_body = f"""
         <html>
         <head>
@@ -103,7 +167,7 @@ def main():
             </style>
         </head>
         <body>
-            <h2>High-Conviction Stock Signals</h2>
+            <h2>High-Conviction Stock Signals & Recommendations</h2>
             <p>Analysis completed on {today_str}. The following signals were identified:</p>
             {actionable_df.to_html(index=False)}
             <br>
@@ -113,10 +177,19 @@ def main():
         """
         send_email_notification(subject, html_body)
     else:
-        subject = f"No Stock Signals Found - {today_str}"
-        html_body = f"<html><body><h2>No Strong or Super Strong signals were found for the monitored tickers on {today_str}.</h2></body></html>"
+        subject = f"No Actionable Stock Signals Found - {today_str}"
+        html_body = f"<html><body><h2>No actionable signals were found for the monitored tickers on {today_str}.</h2></body></html>"
         print("No actionable signals found.")
         send_email_notification(subject, html_body)
+
+    # --- 4. Save Current State for Next Run ---
+    try:
+        # We save the original results WITHOUT the recommendation column
+        # to ensure a clean state for the next comparison.
+        full_results_df.to_csv(HISTORY_FILE, index=False)
+        print(f"Successfully saved current analysis to '{HISTORY_FILE}' for the next run.")
+    except Exception as e:
+        print(f"Error saving analysis history: {e}")
 
 
 if __name__ == "__main__":
