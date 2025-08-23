@@ -25,7 +25,7 @@ CVX,Moderate Strong Buy,Consolidation (Trend Slope),158.1250,143.6593,158.7900,N
 DHI,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 DIA,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 DIS,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-DOGE-USD,Moderate Strong Buy,Consolidation (Trend Slope),0.2339,0.1939,0.2868,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+DOGE-USD,Strong Buy,Consolidation (Trend Slope),0.2323,0.1939,0.2868,N/A,N/A,N/A,Fail,N/A
 ED,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),101.6200,98.0471,105.2898,103.3188,105.7857,111.1918,Fail,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -77,7 +77,7 @@ TRX-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 TSLA,Moderate Strong Buy,Consolidation (Trend Slope),340.0100,294.1760,367.7100,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 TXT,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),81.5500,76.4530,87.8000,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 USDC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-USDCAD=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),1.3826,1.3950,1.3541,1.3585,1.3451,1.3158,Pass (Reversal),Lower Lows/Highs
+USDCAD=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),1.3826,1.3947,1.3541,1.3584,1.3450,1.3157,Pass (Reversal),Lower Lows/Highs
 USDCHF=X,Moderate Strong Sell,Consolidation (Trend Slope),0.8009,0.8312,0.7874,0.7740,0.7571,0.7201,Pass (Reversal),Lower Lows/Highs
 USDJPY=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),146.9140,149.3384,146.2220,145.4084,144.0850,141.1847,Pass (Reversal),Lower Lows/Highs
 USDT-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
