@@ -65,16 +65,20 @@ def generate_recommendations(current_df, previous_df):
         current = row['Signal']
         previous = row['Signal_prev']
 
-        # Guard rail to prevent errors from non-string/NaN signal data
         if not isinstance(current, str):
             return "Invalid signal data."
         
-        if current == 'Hold for now' and previous == 'Hold for now':
-            return "No change."
+        # Explicitly handle all scenarios where the signal has NOT changed.
+        if current == previous:
+            if current == 'Hold for now':
+                return "No change."
+            else:
+                # This now handles 'Super Strong' -> 'Super Strong', etc.
+                return "Monitor signal change."
 
         direction = 'long' if 'Buy' in current else 'short'
 
-        # Corrected logic for Degradation
+        # Logic for when the signal HAS changed
         if 'Super Strong' in previous and current in ['Strong Buy', 'Strong Sell']:
             return f"📉 Degradation: Consider reducing {direction} positions."
 
@@ -90,6 +94,7 @@ def generate_recommendations(current_df, previous_df):
         if 'Hold' in previous or previous == 'N/A':
              return f"New Signal: {current}"
         
+        # Default for any other unhandled signal CHANGE
         return "Monitor signal change."
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
