@@ -171,71 +171,57 @@ def confirm_30m_trend(df, direction):
 
 def run_full_analysis(tickers_to_analyze, status_callback=None):
     """
-    Runs the complete analysis for a list of tickers.
+    Runs the full analysis pipeline for a list of tickers.
     """
     results_list = []
-    total_tickers = len(tickers_to_analyze)
+    column_order = [
+        "Instrument", "Signal", "Daily Setup", "Entry Price", "Stop Loss",
+        "TP1 (Structure)", "TP2 (Fib 0.718)", "TP3 (Fib 1.0)", "TP4 (Fib 1.618)",
+        "30m Confirmed", "30m Setup"
+    ]
+
     for i, ticker in enumerate(tickers_to_analyze):
         if status_callback:
-            status_callback(f"Analyzing {ticker}... ({i+1}/{total_tickers})")
-        
-        daily_df = get_data(ticker=ticker, interval="1d")
-        daily_signal, daily_setup_type = analyze_signal(daily_df)
-        
-        final_signal = daily_signal
-        confirmation_status = "N/A"
-        confirmation_setup_type = "N/A"
-        entry_price = "N/A"
-        stop_loss = "N/A"
-        take_profit_levels = {
-            "TP1 (Structure)": "N/A", "TP2 (Fib 0.718)": "N/A",
-            "TP3 (Fib 1.0)": "N/A", "TP4 (Fib 1.618)": "N/A"
-        }
-        
-        if daily_signal in ["Strong Buy", "Strong Sell"]:
-            intraday_df = get_data(ticker=ticker, interval="30m")
-            direction = "Buy" if "Buy" in daily_signal else "Sell"
-            
-            if intraday_df is not None:
-                # Standard confirmation check
-                confirmed_signal, confirmed_setup_type = analyze_signal(intraday_df)
-                
-                # --- NEW CONFIRMATION LOGIC ---
-                # 1. Check for "Super Strong" signal (perfect alignment)
-                if (daily_signal == "Strong Buy" and confirmed_signal == "Strong Buy") or \
-                   (daily_signal == "Strong Sell" and confirmed_signal == "Strong Sell"):
-                    final_signal = "Super Strong Buy" if direction == "Buy" else "Super Strong Sell"
-                    confirmation_status = "Pass"
-                    confirmation_setup_type = confirmed_setup_type
-                
-                # 2. Check for "Moderate Strong" signal (early reversal)
-                elif confirm_30m_trend(intraday_df, direction):
-                    final_signal = "Moderate Strong Buy" if direction == "Buy" else "Moderate Strong Sell"
-                    confirmation_status = "Pass (Reversal)"
-                    confirmation_setup_type = "Higher Highs/Lows" if direction == "Buy" else "Lower Lows/Highs"
+            status_callback(f"Analyzing ({i+1}/{len(tickers_to_analyze)}): {ticker}...")
 
-                # 3. If neither, confirmation fails
+        try:
+            daily_df = get_data(ticker, period="1y", interval="1d")
+            thirty_m_df = get_data(ticker, period="60d", interval="30m")
+
+            daily_signal, daily_setup = analyze_signal(daily_df)
+            entry, sl, tp1, tp2, tp3, tp4 = (None,) * 6
+            thirty_m_confirmed_status = "N/A"
+            thirty_m_setup = "N/A"
+            final_signal = daily_signal
+
+            if "Strong" in daily_signal:
+                entry, sl, tp1, tp2, tp3, tp4 = calculate_levels(daily_df, daily_signal)
+                confirmed, thirty_m_setup = confirm_30m_trend(thirty_m_df, daily_signal)
+
+                if confirmed:
+                    if "Reversal" in thirty_m_setup:
+                        final_signal = f"Moderate {daily_signal}"
+                        thirty_m_confirmed_status = "Pass (Reversal)"
+                    else:
+                        final_signal = f"Super {daily_signal}"
+                        thirty_m_confirmed_status = "Pass"
                 else:
-                    confirmation_status = "Fail"
-                
-                entry_price = f"{intraday_df['Close'].iloc[-1]:.4f}"
-                stop_loss_val = calculate_stop_loss(daily_df, direction)
-                if stop_loss_val is not None:
-                    stop_loss = f"{stop_loss_val:.4f}"
-                take_profit_levels = calculate_take_profit(daily_df, direction)
-            else:
-                confirmation_status = "30m Data Error"
+                    final_signal = daily_signal
+                    thirty_m_confirmed_status = "Fail"
+            
+            display_signal = final_signal if "Strong" in final_signal else "Hold for now"
 
-        display_signal = final_signal if "Strong" in final_signal else "Hold for now"
+            result_row = {
+                "Instrument": ticker, "Signal": display_signal, "Daily Setup": daily_setup,
+                "Entry Price": entry, "Stop Loss": sl, "TP1 (Structure)": tp1,
+                "TP2 (Fib 0.718)": tp2, "TP3 (Fib 1.0)": tp3, "TP4 (Fib 1.618)": tp4,
+                "30m Confirmed": thirty_m_confirmed_status, "30m Setup": thirty_m_setup
+            }
+            results_list.append(result_row)
 
-        result_row = {"Instrument": ticker, "Signal": display_signal, "Daily Setup": daily_setup_type,
-                      "Entry Price": entry_price, "Stop Loss": stop_loss}
-        result_row.update(take_profit_levels)
-        result_row.update({"30m Confirmed": confirmation_status, "30m Setup": confirmation_setup_type})
-        results_list.append(result_row)
-        
-        time.sleep(1)
-    
-    column_order = ["Instrument", "Signal", "Daily Setup", "Entry Price", "Stop Loss", "TP1 (Structure)",
-                    "TP2 (Fib 0.718)", "TP3 (Fib 1.0)", "TP4 (Fib 1.618)", "30m Confirmed", "30m Setup"]
-    return pd.DataFrame(results_list, columns=column_order)
+        except Exception as e:
+            if status_callback:
+                status_callback(f"  -> Error analyzing {ticker}: {e}")
+            results_list.append({"Instrument": ticker, "Signal": "Error", "Daily Setup": str(e)})
+
+    return pd.DataFrame(results_list, columns=column_order).fillna("N/A")
