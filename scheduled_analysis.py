@@ -68,12 +68,10 @@ def generate_recommendations(current_df, previous_df):
         if not isinstance(current, str):
             return "Invalid signal data."
         
-        # Explicitly handle all scenarios where the signal has NOT changed.
         if current == previous:
             if current == 'Hold for now':
                 return "No change."
             else:
-                # This now handles 'Super Strong' -> 'Super Strong', etc.
                 return "Monitor signal change."
 
         direction = 'long' if 'Buy' in current else 'short'
@@ -81,17 +79,20 @@ def generate_recommendations(current_df, previous_df):
         # Logic for when the signal HAS changed
         if 'Super Strong' in previous and current in ['Strong Buy', 'Strong Sell']:
             return f"📉 Degradation: Consider reducing {direction} positions."
+        
+        elif 'Moderate Strong' in previous and 'Strong' in current:
+            return f"📉 Degradation: Confirmation lost, consider reducing {direction} positions."
 
-        if 'Strong' in previous and 'Moderate Strong' in current:
+        elif 'Strong' in previous and 'Moderate Strong' in current:
             return f"📈 Improvement: Consider re-entering {direction} positions."
         
-        if 'Moderate Strong' in previous and 'Super Strong' in current:
+        elif 'Moderate Strong' in previous and 'Super Strong' in current:
             return f"🚀 Alignment: Accumulate {direction} positions."
             
-        if 'Strong' in previous and 'Super Strong' in current:
+        elif 'Strong' in previous and 'Super Strong' in current:
             return f"🔥 Strengthening: Accumulate {direction} positions."
 
-        if 'Hold' in previous or previous == 'N/A':
+        elif 'Hold' in previous or previous == 'N/A':
              return f"New Signal: {current}"
         
         # Default for any other unhandled signal CHANGE
