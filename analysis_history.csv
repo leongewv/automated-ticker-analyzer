@@ -6,7 +6,7 @@ AMZN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 APTV,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDCAD=X,Strong Sell,Consolidation (Pullback to 200 EMA),0.8963,0.9011,0.8790,0.8846,0.8775,0.8619,Fail,N/A
 AUDCHF=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),95.3650,94.7241,97.4270,N/A,N/A,N/A,Fail,N/A
+AUDJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),95.3650,94.7165,97.4270,N/A,N/A,N/A,Fail,N/A
 AUDNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 BAC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -31,7 +31,7 @@ ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURGBP=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8662,0.8464,0.8752,0.8693,0.8803,0.9044,Pass (Reversal),Higher Highs/Lows
-EURJPY=X,Strong Buy,Consolidation (Trend Slope),172.1710,164.6384,173.8730,170.3475,173.9740,181.9215,Fail,N/A
+EURJPY=X,Strong Buy,Consolidation (Trend Slope),172.1710,164.6386,173.8730,170.3475,173.9740,181.9215,Fail,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Moderate Strong Buy,Consolidation (Trend Slope),1.1726,1.1265,1.1830,1.1639,1.1852,1.2319,Pass (Reversal),Higher Highs/Lows
 EXC,Super Strong Buy,Consolidation (Trend Slope),44.9600,41.2026,45.4700,44.7717,45.9358,48.4870,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
