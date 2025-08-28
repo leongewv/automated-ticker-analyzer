@@ -4,40 +4,40 @@ ADA-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ADM,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AMZN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 APTV,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDCAD=X,Strong Sell,Consolidation (Pullback to 200 EMA),0.8982,0.9009,0.8790,0.8846,0.8775,0.8619,Fail,N/A
+AUDCAD=X,Strong Sell,Consolidation (Pullback to 200 EMA),0.8986,0.9009,0.8790,0.8846,0.8775,0.8619,Fail,N/A
 AUDCHF=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),95.9370,94.7830,97.4270,95.6030,97.5310,101.7563,Fail,N/A
+AUDJPY=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),96.0220,94.7824,97.4270,95.6030,97.5310,101.7563,Pass (Reversal),Higher Highs/Lows
 AUDNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+AUDUSD=X,Moderate Strong Buy,Consolidation (Pullback to 200 EMA),0.6527,0.6404,0.6625,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 BAC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 BG,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-BK,Moderate Strong Buy,Breakout,105.0300,85.1868,105.5100,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+BK,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 BNB-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 BTC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-C,Moderate Strong Buy,Consolidation (Trend Slope),96.9000,75.1774,97.4500,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
-CADJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),106.8080,105.8589,108.9370,N/A,N/A,N/A,Fail,N/A
+C,Moderate Strong Buy,Consolidation (Trend Slope),97.1800,75.4799,97.4500,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+CADJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),106.8430,105.8591,108.9370,N/A,N/A,N/A,Fail,N/A
 CFG,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CINF,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 COF,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-COIN,Moderate Strong Buy,Consolidation (Trend Slope),308.9700,255.4795,444.6500,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+COIN,Moderate Strong Buy,Consolidation (Trend Slope),313.8000,256.5712,444.6500,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 CVS,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CVX,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 DHI,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 DIA,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 DIS,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-DOGE-USD,Moderate Strong Buy,Consolidation (Trend Slope),0.2236,0.1955,0.2868,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+DOGE-USD,Super Strong Buy,Consolidation (Trend Slope),0.2244,0.1955,0.2868,N/A,N/A,N/A,Pass,Consolidation (Trend Slope)
 ED,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8637,0.8470,0.8752,0.8693,0.8803,0.9044,Fail,N/A
-EURJPY=X,Strong Buy,Consolidation (Trend Slope),171.4720,164.8750,173.8730,N/A,N/A,N/A,Fail,N/A
+EURGBP=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8642,0.8470,0.8752,0.8693,0.8803,0.9044,Pass (Reversal),Higher Highs/Lows
+EURJPY=X,Moderate Strong Buy,Consolidation (Trend Slope),171.6340,164.8766,173.8730,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURUSD=X,Strong Buy,Consolidation (Trend Slope),1.1675,1.1283,1.1830,1.1639,1.1852,1.2319,Fail,N/A
-EXC,Strong Buy,Consolidation (Trend Slope),44.3800,41.3357,45.4700,44.7717,45.9358,48.4870,Fail,N/A
+EURUSD=X,Strong Buy,Consolidation (Trend Slope),1.1665,1.1282,1.1830,1.1639,1.1852,1.2319,Fail,N/A
+EXC,Strong Buy,Consolidation (Trend Slope),44.2200,41.3858,45.4700,44.7717,45.9358,48.4870,Fail,N/A
 F,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 F9D,Hold for now,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-FE,Super Strong Buy,Consolidation (Trend Slope),43.7750,39.8913,44.4000,42.9021,44.4594,47.8722,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
+FE,Super Strong Buy,Consolidation (Trend Slope),43.5400,39.9416,44.4000,42.9021,44.4594,47.8722,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
 FOX,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -49,27 +49,27 @@ GOOG,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 IWM,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 L,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 LINK-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-META,Strong Buy,Consolidation (Trend Slope),747.1500,647.3547,796.2500,N/A,N/A,N/A,Fail,N/A
+META,Strong Buy,Consolidation (Trend Slope),750.5500,651.2705,796.2500,N/A,N/A,N/A,Fail,N/A
 MHK,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 MOS,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 MSFT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 NFLX,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-NTRS,Super Strong Buy,Consolidation (Trend Slope),131.5400,106.6944,133.0000,N/A,N/A,N/A,Pass,Consolidation (Trend Slope)
-NVDA,Super Strong Buy,Consolidation (Trend Slope),181.6000,136.2836,184.4800,N/A,N/A,N/A,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
+NTRS,Super Strong Buy,Consolidation (Trend Slope),131.3400,107.0418,133.0000,N/A,N/A,N/A,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
+NVDA,Super Strong Buy,Consolidation (Trend Slope),180.8899,136.6407,184.4800,N/A,N/A,N/A,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
 NZDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 NZDJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 NZDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 PHM,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 PNC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 PNW,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-QQQ,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+QQQ,Moderate Strong Buy,Consolidation (Trend Slope),575.7500,516.1436,583.3200,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 RF,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SAP.DE,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SMCI,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SOL-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SOUN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SPY,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-STT,Super Strong Buy,Consolidation (Trend Slope),114.8500,95.1865,116.3700,N/A,N/A,N/A,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
+STT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SUI-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 SYF,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 T,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -77,14 +77,14 @@ TRX-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 TSLA,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 TXT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-USDCAD=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),1.3762,1.3943,1.3541,1.3584,1.3450,1.3157,Pass (Reversal),Lower Lows/Highs
-USDCHF=X,Moderate Strong Sell,Consolidation (Trend Slope),0.8018,0.8308,0.7874,0.7740,0.7571,0.7201,Pass (Reversal),Lower Lows/Highs
-USDJPY=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),147.0790,149.1971,146.2220,145.3964,144.0730,141.1727,Pass (Reversal),Lower Lows/Highs
+USDCAD=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),1.3778,1.3943,1.3541,1.3584,1.3450,1.3157,Pass (Reversal),Lower Lows/Highs
+USDCHF=X,Strong Sell,Consolidation (Trend Slope),0.8025,0.8308,0.7874,0.7740,0.7571,0.7201,Fail,N/A
+USDJPY=X,Moderate Strong Sell,Consolidation (Pullback to 200 EMA),147.1930,149.1982,146.2220,145.3964,144.0730,141.1727,Pass (Reversal),Lower Lows/Highs
 USDT-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-V,Moderate Strong Buy,Consolidation (Pullback to 200 EMA),350.2300,328.1540,374.8504,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+V,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 VZ,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 WETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-WFC,Moderate Strong Buy,Breakout,82.5100,70.8853,84.3346,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+WFC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 XAGUSD=X,Hold for now,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 XAUUSD=X,Hold for now,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 XLM-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
