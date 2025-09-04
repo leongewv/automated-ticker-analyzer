@@ -1,0 +1,4 @@
+Symbol,Description,Price,Price - Currency,Price Change % 1 day,Volume 1 day,Relative Volume 1 day,Market capitalization,Market capitalization - Currency,Price to earnings ratio,"Earnings per share diluted, Trailing 12 months","Earnings per share diluted, Trailing 12 months - Currency","Earnings per share diluted growth %, TTM YoY","Dividend yield %, Trailing 12 months",Sector,Analyst Rating
+ASML,ASML Holding NV Sponsored ADR,736.82,USD,1.5113315423296863,1330252,1.1272553016510314,278458403648.35443,USD,28.232273885472345,26.0985,USD,40.9556369292589,0.837202176758283,Electronic technology,Buy
+CPRT,"Copart, Inc.",48.12,USD,-0.7425742574257415,6428260,1.0855723892216715,46528967446.68317,USD,31.804362194315928,1.513,USD,6.0786650774731825,0,Retail trade,Buy
+CELH,"Celsius Holdings, Inc.",61.1,USD,-0.5048037778863299,4397101,0.7429280726470661,15760508899.88927,USD,168.45878136200716,0.3627,USD,-64.45511564092511,0,Consumer non-durables,Buy
