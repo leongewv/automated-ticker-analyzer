@@ -1,0 +1,6 @@
+Symbol,Description,Price,Price - Currency,Price Change % 1 day,Volume 1 day,Relative Volume 1 day,Market capitalization,Market capitalization - Currency,Price to earnings ratio,"Earnings per share diluted, Trailing 12 months","Earnings per share diluted, Trailing 12 months - Currency","Earnings per share diluted growth %, TTM YoY","Dividend yield %, Trailing 12 months",Sector,Analyst Rating
+GOOGL,Alphabet Inc.,232.3,USD,0.7110032081852141,51683569,1.3054785656485042,2811842445243.804,USD,24.743036693827555,9.3885,USD,34.66972674460303,0.35116621867684,Technology services,Buy
+ASML,ASML Holding NV Sponsored ADR,753.43,USD,2.254281914171697,1532716,1.2762241678046982,292427335834.81604,USD,28.868708929631968,26.0985,USD,40.9556369292589,0.824737656415407,Electronic technology,Buy
+FTNT,"Fortinet, Inc.",76.44,USD,-0.1828153564899459,6127667,0.8869953680344841,58573378434.12065,USD,30.50644530470527,2.5057,USD,48.05601512644766,0,Technology services,Neutral
+CPRT,"Copart, Inc.",49.97,USD,3.8445552784704935,8687561,1.4469962941331769,48317798704.164795,USD,33.02709847984138,1.513,USD,6.0786650774731825,0,Retail trade,Buy
+CELH,"Celsius Holdings, Inc.",60.76,USD,-0.5564648117839662,4748059,0.8526079963293064,15672806860.788868,USD,167.5213675213675,0.3627,USD,-64.45511564092511,0,Consumer non-durables,Buy
