@@ -1,16 +1,16 @@
 Instrument,Signal,Daily Setup,Entry Price,Stop Loss,TP1 (Structure),TP2 (Fib 0.718),TP3 (Fib 1.0),TP4 (Fib 1.618),30m Confirmed,30m Setup
 AAPL,Super Strong Buy,Consolidation (Trend Slope),239.6700,211.5941,241.3200,229.7020,243.3908,273.3897,Pass,Consolidation (Trend Slope)
-ADA-USD,Super Strong Buy,Consolidation (Trend Slope),0.8290,0.7030,1.0165,0.8998,1.0417,1.3527,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
+ADA-USD,Super Strong Buy,Consolidation (Trend Slope),0.8303,0.7028,1.0165,0.8998,1.0417,1.3527,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
 ADM,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AMZN,Strong Buy,Consolidation (Trend Slope),232.3200,205.0428,236.5300,N/A,N/A,N/A,Fail,N/A
 APEI,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-ASML,Moderate Strong Buy,Consolidation (Pullback to 200 EMA),782.1000,725.1985,826.5600,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+ASML,Moderate Strong Buy,Consolidation (Pullback to 200 EMA),782.1000,725.1230,826.5600,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 AUDCAD=X,Strong Buy,Consolidation (Trend Slope),0.9058,0.8908,0.9096,N/A,N/A,N/A,Fail,N/A
 AUDCHF=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),96.6670,94.8834,97.4270,N/A,N/A,N/A,Fail,N/A
 AUDNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-BNB-USD,Moderate Strong Buy,Consolidation (Trend Slope),871.9708,689.3299,899.7001,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+BNB-USD,Moderate Strong Buy,Consolidation (Trend Slope),870.3947,689.3142,899.7001,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 BTC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CADJPY=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),106.5830,105.8549,108.9370,N/A,N/A,N/A,Fail,N/A
 CELH,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -18,7 +18,7 @@ COIN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CPRT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CVS,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 DIA,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-DOGE-USD,Super Strong Buy,Consolidation (Trend Slope),0.2180,0.1997,0.2868,N/A,N/A,N/A,Pass,Consolidation (Trend Slope & Pullback to 200 EMA)
+DOGE-USD,Moderate Strong Buy,Consolidation (Trend Slope),0.2189,0.1996,0.2868,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 ED,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
