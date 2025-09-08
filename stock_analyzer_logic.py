@@ -1,5 +1,5 @@
 import yfinance as yf
-import pandas_ta as ta
+from finta import TA  # Replaced pandas_ta with finta
 import pandas as pd
 import numpy as np
 import time
@@ -8,16 +8,33 @@ import time
 
 def get_data(ticker, period="2y", interval="1d"):
     """Fetches and prepares data."""
-    if interval != "1d": 
+    if interval != "1d":
         period = "60d"
     data = yf.Ticker(ticker).history(period=period, interval=interval)
-    if data.empty or len(data) < 200: 
+    if data.empty or len(data) < 200:
         return None
-    
-    data.ta.ema(length=200, append=True)
-    data.ta.bbands(length=20, append=True)
-    data.ta.atr(length=14, append=True)
+
+    # --- INDICATOR CALCULATION UPDATED FOR FINTA ---
+    # Finta requires lowercase column names
+    data.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
+
+    # Calculate EMA
+    data['EMA_200'] = TA.EMA(data, period=200)
+
+    # Calculate Bollinger Bands
+    bbands = TA.BBANDS(data, period=20)
+    # Rename finta's default columns to match the old pandas-ta names
+    data['BBM_20_2.0'] = bbands['BB_MIDDLE']
+    data['BBU_20_2.0'] = bbands['BB_UPPER']
+    data['BBL_20_2.0'] = bbands['BB_LOWER']
+
+    # Calculate ATR
+    # Rename finta's default 'ATR' column to the old 'ATRr_14'
+    data['ATRr_14'] = TA.ATR(data, period=14)
+
+    # This calculation remains the same as it uses the columns created above
     data['BB_WIDTH'] = (data['BBU_20_2.0'] - data['BBL_20_2.0']) / data['BBM_20_2.0']
+    
     data = data.round(4)
     return data
 
@@ -47,9 +64,9 @@ def analyze_signal(df):
 
     # Strong Signal Check 1: Squeeze Breakout
     if is_squeeze_yesterday and not is_squeeze_today:
-        if crossover_signal == "Buy" and latest['Close'] > latest['BBU_20_2.0']:
+        if crossover_signal == "Buy" and latest['close'] > latest['BBU_20_2.0']:
             return "Strong Buy", "Breakout"
-        if crossover_signal == "Sell" and latest['Close'] < latest['BBL_20_2.0']:
+        if crossover_signal == "Sell" and latest['close'] < latest['BBL_20_2.0']:
             return "Strong Sell", "Breakout"
 
     # Strong Signal Check 2: Squeeze Consolidation
@@ -59,20 +76,20 @@ def analyze_signal(df):
         prices_for_trend = df.iloc[-trend_lookback:-1]
         time_index = np.arange(len(prices_for_trend))
         if crossover_signal == "Buy":
-            slope, _ = np.polyfit(time_index, prices_for_trend['Low'], 1)
+            slope, _ = np.polyfit(time_index, prices_for_trend['low'], 1)
             if slope > 0: context_check_2 = True
         if crossover_signal == "Sell":
-            slope, _ = np.polyfit(time_index, prices_for_trend['High'], 1)
+            slope, _ = np.polyfit(time_index, prices_for_trend['high'], 1)
             if slope < 0: context_check_2 = True
         
         context_check_3 = False # Pullback to 200 EMA
         is_near_ema = abs(middle_bb - ema_200) / ema_200 < 0.03
 
         if is_near_ema:
-            past_price_period = df['Close'].iloc[-80:-20]
-            if crossover_signal == "Buy" and past_price_period.max() > ema_200 and past_price_period.max() > latest['Close']:
+            past_price_period = df['close'].iloc[-80:-20]
+            if crossover_signal == "Buy" and past_price_period.max() > ema_200 and past_price_period.max() > latest['close']:
                 context_check_3 = True
-            if crossover_signal == "Sell" and past_price_period.min() < ema_200 and past_price_period.min() < latest['Close']:
+            if crossover_signal == "Sell" and past_price_period.min() < ema_200 and past_price_period.min() < latest['close']:
                 context_check_3 = True
         
         setup_details = []
@@ -94,11 +111,11 @@ def calculate_stop_loss(daily_df, direction):
     
     if direction == "Buy":
         sl_ema = latest_ema_200 - latest_atr
-        swing_low = daily_df['Low'].iloc[-swing_lookback:-1].min()
+        swing_low = daily_df['low'].iloc[-swing_lookback:-1].min()
         return max(sl_ema, swing_low - latest_atr)
     elif direction == "Sell":
         sl_ema = latest_ema_200 + latest_atr
-        swing_high = daily_df['High'].iloc[-swing_lookback:-1].max()
+        swing_high = daily_df['high'].iloc[-swing_lookback:-1].max()
         return min(sl_ema, swing_high + latest_atr)
     return None
 
@@ -115,28 +132,28 @@ def calculate_take_profit(df, direction):
     }
     try:
         if direction == "Buy":
-            a_price_struct = data['Low'].min()
-            a_index_struct = data['Low'].idxmin()
+            a_price_struct = data['low'].min()
+            a_index_struct = data['low'].idxmin()
             b_data_struct = data[a_index_struct:]
-            b_price_struct = b_data_struct['High'].max()
+            b_price_struct = b_data_struct['high'].max()
             targets["TP1 (Structure)"] = f"{b_price_struct:.4f}"
-            b_index_fib = b_data_struct['High'].idxmin()
+            b_index_fib = b_data_struct['high'].idxmin()
             c_data_fib = data[b_index_fib:]
-            c_price_fib = c_data_fib['Low'].min()
+            c_price_fib = c_data_fib['low'].min()
             if c_price_fib > a_price_struct:
                 trend_range = b_price_struct - a_price_struct
                 targets["TP2 (Fib 0.718)"] = f"{c_price_fib + trend_range * 0.718:.4f}"
                 targets["TP3 (Fib 1.0)"] = f"{c_price_fib + trend_range * 1.0:.4f}"
                 targets["TP4 (Fib 1.618)"] = f"{c_price_fib + trend_range * 1.618:.4f}"
         elif direction == "Sell":
-            a_price_struct = data['High'].max()
-            a_index_struct = data['High'].idxmax()
+            a_price_struct = data['high'].max()
+            a_index_struct = data['high'].idxmax()
             b_data_struct = data[a_index_struct:]
-            b_price_struct = b_data_struct['Low'].min()
+            b_price_struct = b_data_struct['low'].min()
             targets["TP1 (Structure)"] = f"{b_price_struct:.4f}"
-            b_index_fib = b_data_struct['Low'].idxmin()
+            b_index_fib = b_data_struct['low'].idxmin()
             c_data_fib = data[b_index_fib:]
-            c_price_fib = c_data_fib['High'].max()
+            c_price_fib = c_data_fib['high'].max()
             if c_price_fib < a_price_struct:
                 trend_range = a_price_struct - b_price_struct
                 targets["TP2 (Fib 0.718)"] = f"{c_price_fib - trend_range * 0.718:.4f}"
@@ -158,12 +175,12 @@ def confirm_30m_trend(df, direction):
         recent_half = df.iloc[-int(lookback/2):]
         prior_half = df.iloc[-lookback:-int(lookback/2)]
         if direction == "Buy":
-            is_higher_high = recent_half['High'].max() > prior_half['High'].max()
-            is_higher_low = recent_half['Low'].min() > prior_half['Low'].min()
+            is_higher_high = recent_half['high'].max() > prior_half['high'].max()
+            is_higher_low = recent_half['low'].min() > prior_half['low'].min()
             return is_higher_high and is_higher_low
         elif direction == "Sell":
-            is_lower_high = recent_half['High'].max() < prior_half['High'].max()
-            is_lower_low = recent_half['Low'].min() < prior_half['Low'].min()
+            is_lower_high = recent_half['high'].max() < prior_half['high'].max()
+            is_lower_low = recent_half['low'].min() < prior_half['low'].min()
             return is_lower_high and is_lower_low
     except Exception:
         return False
@@ -218,7 +235,7 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
                 else:
                     confirmation_status = "Fail"
                 
-                entry_price = f"{intraday_df['Close'].iloc[-1]:.4f}"
+                entry_price = f"{intraday_df['close'].iloc[-1]:.4f}"
                 stop_loss_val = calculate_stop_loss(daily_df, direction)
                 if stop_loss_val is not None:
                     stop_loss = f"{stop_loss_val:.4f}"
