@@ -27,8 +27,9 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
+          pip install --upgrade setuptools wheel
           pip install --pre pandas-ta==0.4.67b0 pandas==2.3.2 yfinance==0.2.65 numpy==1.23.5
-
+    
       - name: Run stock analysis script
         env:
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
