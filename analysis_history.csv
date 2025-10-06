@@ -5,7 +5,7 @@ AMZN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ASML,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDCHF=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDJPY=X,Moderate Strong Buy,Consolidation (Trend Slope),99.1650,95.2712,99.1960,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+AUDJPY=X,Moderate Strong Buy,Consolidation (Trend Slope),99.2420,95.2642,99.3050,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 AUDNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 BNB-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -21,11 +21,11 @@ EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURGBP=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURUSD=X,Strong Buy,Consolidation (Trend Slope),1.1729,1.1311,1.1873,N/A,N/A,N/A,Fail,N/A
+EURUSD=X,Strong Buy,Consolidation (Trend Slope),1.1722,1.1311,1.1873,N/A,N/A,N/A,Fail,N/A
 FTNT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-GBPAUD=X,Moderate Strong Sell,Consolidation (Trend Slope),2.0361,2.0546,2.0291,1.9943,1.9733,1.9274,Pass (Reversal),Lower Lows/Highs
-GBPCAD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8762,1.8276,1.8838,1.8713,1.8884,1.9260,Fail,N/A
-GBPJPY=X,Moderate Strong Buy,Breakout,201.9240,194.8293,201.9740,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
+GBPAUD=X,Moderate Strong Sell,Consolidation (Trend Slope),2.0364,2.0546,2.0291,1.9943,1.9733,1.9274,Pass (Reversal),Lower Lows/Highs
+GBPCAD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8761,1.8276,1.8838,1.8713,1.8884,1.9260,Fail,N/A
+GBPJPY=X,Moderate Strong Buy,Breakout,202.1030,194.8144,202.2080,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GOOG,Moderate Strong Buy,Consolidation (Trend Slope),246.4500,188.0032,256.7000,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
