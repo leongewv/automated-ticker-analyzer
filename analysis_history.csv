@@ -18,13 +18,13 @@ DOGE-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+EURGBP=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8695,0.8564,0.8752,N/A,N/A,N/A,Pass (Reversal),Higher Highs/Lows
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURUSD=X,Strong Buy,Consolidation (Trend Slope),1.1620,1.1319,1.1873,1.1735,1.1876,1.2186,Fail,N/A
+EURUSD=X,Strong Buy,Consolidation (Trend Slope),1.1608,1.1318,1.1873,1.1735,1.1876,1.2186,Fail,N/A
 FTNT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-GBPAUD=X,Moderate Strong Sell,Consolidation (Trend Slope),2.0301,2.0533,2.0290,1.9822,1.9612,1.9152,Pass (Reversal),Lower Lows/Highs
-GBPCAD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8646,1.8292,1.8838,1.8713,1.8884,1.9260,Fail,N/A
+GBPAUD=X,Moderate Strong Sell,Consolidation (Trend Slope),2.0306,2.0534,2.0277,1.9812,1.9599,1.9131,Pass (Reversal),Lower Lows/Highs
+GBPCAD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8626,1.8291,1.8838,1.8713,1.8884,1.9260,Fail,N/A
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -46,7 +46,7 @@ TRX-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 TSLA,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-USDCHF=X,Strong Sell,Consolidation (Trend Slope),0.8028,0.8222,0.7857,0.7752,0.7642,0.7401,Fail,N/A
+USDCHF=X,Strong Sell,Consolidation (Trend Slope),0.8033,0.8222,0.7857,0.7755,0.7645,0.7404,Fail,N/A
 USDJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDT-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 WETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
