@@ -23,8 +23,8 @@ EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 FTNT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-GBPAUD=X,Strong Sell,Consolidation (Trend Slope),2.0291,2.0536,2.0247,1.9791,1.9569,1.9083,Fail,N/A
-GBPCAD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8643,1.8290,1.8838,1.8713,1.8884,1.9260,Fail,N/A
+GBPAUD=X,Strong Sell,Consolidation (Trend Slope),2.0282,2.0535,2.0247,1.9791,1.9569,1.9083,Fail,N/A
+GBPCAD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8642,1.8290,1.8838,1.8713,1.8884,1.9260,Fail,N/A
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
