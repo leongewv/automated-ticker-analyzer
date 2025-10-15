@@ -1,5 +1,3 @@
-# File: scheduled_analysis.py
-
 import os
 import glob
 import smtplib
@@ -9,6 +7,7 @@ from datetime import datetime
 import pandas as pd
 
 # Import the main analysis function from our logic file
+# Make sure your main analysis file is named 'stock_analyzer_logic.py'
 from stock_analyzer_logic import run_full_analysis
 
 # --- Configuration ---
@@ -48,9 +47,13 @@ def send_email_notification(subject, html_body):
 
 
 def generate_recommendations(current_df, previous_df):
-    """Compares current signals with previous ones to generate new recommendations."""
+    """
+    MODIFIED: Compares signals to generate recommendations, now including 'Crazy Strong'.
+    """
     if previous_df.empty:
-        current_df['Recommendation'] = 'First run, no prior data to compare.'
+        current_df['Recommendation'] = current_df['Signal'].apply(
+            lambda x: f"🔥 New Signal: {x}" if 'Strong' in x else "No Signal"
+        )
         return current_df
 
     merged_df = pd.merge(
@@ -59,53 +62,51 @@ def generate_recommendations(current_df, previous_df):
         on='Instrument',
         how='left',
         suffixes=('', '_prev')
-    ).fillna({'Signal_prev': 'N/A'})
+    ).fillna({'Signal_prev': 'Hold for now'})
 
     def get_recommendation(row):
-        current = row['Signal']
-        previous = row['Signal_prev']
+        current, previous = row['Signal'], row['Signal_prev']
 
-        if not isinstance(current, str):
-            return "Invalid signal data."
-        
         if current == previous:
-            if current == 'Hold for now':
-                return "No change."
-            else:
-                return "Monitor signal change."
+            return "No change."
 
-        direction = 'long' if 'Buy' in current else 'short'
-
-        # Logic for when the signal HAS changed
-        if 'Super Strong' in previous and current in ['Strong Buy', 'Strong Sell']:
-            return f"📉 Degradation: Consider reducing {direction} positions."
+        # --- NEW LOGIC FOR 'CRAZY STRONG' ---
+        if 'Crazy Strong' in current:
+            if 'Crazy Strong' not in previous:
+                return f"🚀🚀 Ultimate Confirmation: New '{current}' signal!"
         
-        elif 'Moderate Strong' in previous and 'Strong' in current:
-            return f"📉 Degradation: Confirmation lost, consider reducing {direction} positions."
+        if 'Crazy Strong' in previous and 'Crazy Strong' not in current:
+            return f"📉 Degradation: Lost top-tier signal, was '{previous}'."
 
-        elif 'Strong' in previous and 'Moderate Strong' in current:
-            return f"📈 Improvement: Consider re-entering {direction} positions."
-        
-        elif 'Moderate Strong' in previous and 'Super Strong' in current:
-            return f"🚀 Alignment: Accumulate {direction} positions."
+        # --- ORIGINAL LOGIC FOR OTHER TRANSITIONS ---
+        if 'Super Strong' in current and 'Super Strong' not in previous:
+            return f"🔥 Strengthening: Upgraded to '{current}'."
             
-        elif 'Strong' in previous and 'Super Strong' in current:
-            return f"🔥 Strengthening: Accumulate {direction} positions."
+        if 'Moderate Strong' in current and 'Strong' in previous:
+             return f"📈 Improvement: Confirmation developing for '{current}'."
 
-        elif 'Hold' in previous or previous == 'N/A':
-             return f"New Signal: {current}"
-        
-        # Default for any other unhandled signal CHANGE
+        if 'Hold' in current and 'Strong' in previous:
+            return f"📉 Signal Lost: Was '{previous}'."
+
+        if 'Strong' in current and 'Hold' in previous:
+            return f"🔥 New Signal: '{current}'."
+
         return "Monitor signal change."
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
     all_cols = list(merged_df.columns)
-    signal_index = all_cols.index('Signal')
     rec_col = merged_df.pop('Recommendation')
-    merged_df.insert(signal_index + 1, 'Recommendation', rec_col)
+    # Use try-except to handle cases where 'Signal' might be missing
+    try:
+        signal_index = all_cols.index('Signal')
+        merged_df.insert(signal_index + 1, 'Recommendation', rec_col)
+    except ValueError:
+        merged_df['Recommendation'] = rec_col # Append to the end if 'Signal' column not found
     
-    merged_df.drop(columns=['Signal_prev'], inplace=True)
+    if 'Signal_prev' in merged_df.columns:
+        merged_df.drop(columns=['Signal_prev'], inplace=True)
+        
     return merged_df
 
 
@@ -121,7 +122,6 @@ def main():
         print("History file not found. This must be the first run.")
         previous_results_df = pd.DataFrame()
 
-    # Define the folder where you store your CSV files
     source_folder = 'ticker_sources'
     csv_files = glob.glob(os.path.join(source_folder, '*.csv'))
 
@@ -153,7 +153,7 @@ def main():
     # --- 3. Generate Contextual Recommendations ---
     results_with_recs_df = generate_recommendations(full_results_df.copy(), previous_results_df)
 
-    actionable_df = results_with_recs_df[results_with_recs_df['Signal'] != 'Hold for now'].reset_index(drop=True)
+    actionable_df = results_with_recs_df[results_with_recs_df['Signal'].str.contains('Strong', na=False)].reset_index(drop=True)
 
     today_str = datetime.now().strftime('%Y-%m-%d')
 
