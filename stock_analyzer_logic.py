@@ -1,5 +1,5 @@
 import yfinance as yf
-from finta import TA  # Replaced pandas_ta with finta
+from finta import TA
 import pandas as pd
 import numpy as np
 import time
@@ -11,28 +11,18 @@ def get_data(ticker, period="2y", interval="1d"):
     if interval != "1d":
         period = "60d"
     data = yf.Ticker(ticker).history(period=period, interval=interval)
-    if data.empty or len(data) < 200:
+    
+    min_length = 200 if interval == "1d" else 100
+    if data.empty or len(data) < min_length:
         return None
 
-    # --- INDICATOR CALCULATION UPDATED FOR FINTA ---
-    # Finta requires lowercase column names
     data.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
-
-    # Calculate EMA
     data['EMA_200'] = TA.EMA(data, period=200)
-
-    # Calculate Bollinger Bands
     bbands = TA.BBANDS(data, period=20)
-    # Rename finta's default columns to match the old pandas-ta names
     data['BBM_20_2.0'] = bbands['BB_MIDDLE']
     data['BBU_20_2.0'] = bbands['BB_UPPER']
     data['BBL_20_2.0'] = bbands['BB_LOWER']
-
-    # Calculate ATR
-    # Rename finta's default 'ATR' column to the old 'ATRr_14'
     data['ATRr_14'] = TA.ATR(data, period=14)
-
-    # This calculation remains the same as it uses the columns created above
     data['BB_WIDTH'] = (data['BBU_20_2.0'] - data['BBL_20_2.0']) / data['BBM_20_2.0']
     
     data = data.round(4)
@@ -62,14 +52,12 @@ def analyze_signal(df):
     is_squeeze_today = latest['BB_WIDTH'] < squeeze_threshold
     is_squeeze_yesterday = previous['BB_WIDTH'] < squeeze_threshold
 
-    # Strong Signal Check 1: Squeeze Breakout
     if is_squeeze_yesterday and not is_squeeze_today:
         if crossover_signal == "Buy" and latest['close'] > latest['BBU_20_2.0']:
             return "Strong Buy", "Breakout"
         if crossover_signal == "Sell" and latest['close'] < latest['BBL_20_2.0']:
             return "Strong Sell", "Breakout"
 
-    # Strong Signal Check 2: Squeeze Consolidation
     if is_squeeze_today:
         context_check_2 = False # Trend Slope
         trend_lookback = 60
@@ -84,7 +72,6 @@ def analyze_signal(df):
         
         context_check_3 = False # Pullback to 200 EMA
         is_near_ema = abs(middle_bb - ema_200) / ema_200 < 0.03
-
         if is_near_ema:
             past_price_period = df['close'].iloc[-80:-20]
             if crossover_signal == "Buy" and past_price_period.max() > ema_200 and past_price_period.max() > latest['close']:
@@ -95,7 +82,6 @@ def analyze_signal(df):
         setup_details = []
         if context_check_2: setup_details.append("Trend Slope")
         if context_check_3: setup_details.append("Pullback to 200 EMA")
-
         if setup_details:
             signal = "Strong Buy" if crossover_signal == "Buy" else "Strong Sell"
             setup_type = "Consolidation (" + " & ".join(setup_details) + ")"
@@ -163,33 +149,53 @@ def calculate_take_profit(df, direction):
         return targets
     return targets
 
+def confirm_30m_reversal(df, direction):
+    """Top-tier check for 'Crazy Strong' signal."""
+    if df is None or len(df) < 50 or 'EMA_200' not in df.columns or df['EMA_200'].isna().all(): return False
+    try:
+        lookback_period = 48
+        recent_data = df.iloc[-lookback_period:]
+        latest_ema_200 = recent_data['EMA_200'].iloc[-1]
+        
+        if direction == "Buy":
+            was_below_ema = (recent_data['low'] < recent_data['EMA_200']).any()
+            recent_half = recent_data.iloc[-int(lookback_period/2):]
+            prior_half = recent_data.iloc[-lookback_period:-int(lookback_period/2)]
+            is_making_hh_hl = (recent_half['high'].max() > prior_half['high'].max()) and \
+                              (recent_half['low'].min() > prior_half['low'].min())
+            recent_high_reclaimed_ema = recent_half['high'].max() >= latest_ema_200
+            return was_below_ema and is_making_hh_hl and recent_high_reclaimed_ema
+            
+        elif direction == "Sell":
+            was_above_ema = (recent_data['high'] > recent_data['EMA_200']).any()
+            recent_half = recent_data.iloc[-int(lookback_period/2):]
+            prior_half = recent_data.iloc[-lookback_period:-int(lookback_period/2)]
+            is_making_ll_lh = (recent_half['low'].min() < prior_half['low'].min()) and \
+                              (recent_half['high'].max() < prior_half['high'].max())
+            recent_low_breached_ema = recent_half['low'].min() <= latest_ema_200
+            return was_above_ema and is_making_ll_lh and recent_low_breached_ema
+            
+    except Exception: return False
+    return False
+
 def confirm_30m_trend(df, direction):
-    """
-    Checks for a developing trend (reversal) on the 30-minute chart.
-    Looks for higher highs & lows (for a buy) or lower lows & highs (for a sell).
-    """
-    if df is None or len(df) < 24:
-        return False
+    """Second-tier check for 'Moderate Strong' signal."""
+    if df is None or len(df) < 24: return False
     try:
         lookback = 24
         recent_half = df.iloc[-int(lookback/2):]
         prior_half = df.iloc[-lookback:-int(lookback/2)]
         if direction == "Buy":
-            is_higher_high = recent_half['high'].max() > prior_half['high'].max()
-            is_higher_low = recent_half['low'].min() > prior_half['low'].min()
-            return is_higher_high and is_higher_low
+            return (recent_half['high'].max() > prior_half['high'].max()) and \
+                   (recent_half['low'].min() > prior_half['low'].min())
         elif direction == "Sell":
-            is_lower_high = recent_half['high'].max() < prior_half['high'].max()
-            is_lower_low = recent_half['low'].min() < prior_half['low'].min()
-            return is_lower_high and is_lower_low
-    except Exception:
-        return False
+            return (recent_half['low'].min() < prior_half['low'].min()) and \
+                   (recent_half['high'].max() < prior_half['high'].max())
+    except Exception: return False
     return False
 
 def run_full_analysis(tickers_to_analyze, status_callback=None):
-    """
-    Runs the complete analysis for a list of tickers.
-    """
+    """Runs the complete analysis with the new signal hierarchy."""
     results_list = []
     total_tickers = len(tickers_to_analyze)
     for i, ticker in enumerate(tickers_to_analyze):
@@ -210,48 +216,51 @@ def run_full_analysis(tickers_to_analyze, status_callback=None):
         }
         
         if daily_signal in ["Strong Buy", "Strong Sell"]:
-            intraday_df = get_data(ticker=ticker, interval="30m")
             direction = "Buy" if "Buy" in daily_signal else "Sell"
+            intraday_df = get_data(ticker=ticker, interval="30m")
             
             if intraday_df is not None:
-                # Standard confirmation check
-                confirmed_signal, confirmed_setup_type = analyze_signal(intraday_df)
-                
-                # --- NEW CONFIRMATION LOGIC ---
-                # 1. Check for "Super Strong" signal (perfect alignment)
-                if (daily_signal == "Strong Buy" and confirmed_signal == "Strong Buy") or \
-                   (daily_signal == "Strong Sell" and confirmed_signal == "Strong Sell"):
-                    final_signal = "Super Strong Buy" if direction == "Buy" else "Super Strong Sell"
-                    confirmation_status = "Pass"
-                    confirmation_setup_type = confirmed_setup_type
-                
-                # 2. Check for "Moderate Strong" signal (early reversal)
-                elif confirm_30m_trend(intraday_df, direction):
-                    final_signal = "Moderate Strong Buy" if direction == "Buy" else "Moderate Strong Sell"
+                # --- NEW CONFIRMATION HIERARCHY ---
+                # 1. Check for "Crazy Strong" (Top Priority)
+                if confirm_30m_reversal(intraday_df, direction):
+                    final_signal = f"Crazy Strong {direction}"
                     confirmation_status = "Pass (Reversal)"
-                    confirmation_setup_type = "Higher Highs/Lows" if direction == "Buy" else "Lower Lows/Highs"
-
-                # 3. If neither, confirmation fails
+                    confirmation_setup_type = "30m Reclaimed EMA"
                 else:
-                    confirmation_status = "Fail"
+                    # 2. Check for "Super Strong" (Alignment)
+                    confirmed_signal, confirmed_setup = analyze_signal(intraday_df)
+                    if f"Strong {direction}" == confirmed_signal:
+                        final_signal = f"Super Strong {direction}"
+                        confirmation_status = "Pass (Alignment)"
+                        confirmation_setup_type = confirmed_setup
+                    # 3. Check for "Moderate Strong" (Early Trend)
+                    elif confirm_30m_trend(intraday_df, direction):
+                        final_signal = f"Moderate Strong {direction}"
+                        confirmation_status = "Pass (Early Trend)"
+                        confirmation_setup_type = "Higher Highs/Lows" if direction == "Buy" else "Lower Lows/Highs"
+                    # 4. If none pass, confirmation fails
+                    else:
+                        confirmation_status = "Fail"
                 
-                entry_price = f"{intraday_df['close'].iloc[-1]:.4f}"
-                stop_loss_val = calculate_stop_loss(daily_df, direction)
-                if stop_loss_val is not None:
-                    stop_loss = f"{stop_loss_val:.4f}"
-                take_profit_levels = calculate_take_profit(daily_df, direction)
+                # Calculate trade params if ANY confirmation passed
+                if "Pass" in confirmation_status:
+                    entry_price = f"{intraday_df['close'].iloc[-1]:.4f}"
+                    stop_loss_val = calculate_stop_loss(daily_df, direction)
+                    if stop_loss_val is not None:
+                        stop_loss = f"{stop_loss_val:.4f}"
+                    take_profit_levels = calculate_take_profit(daily_df, direction)
             else:
                 confirmation_status = "30m Data Error"
 
         display_signal = final_signal if "Strong" in final_signal else "Hold for now"
-
+        
         result_row = {"Instrument": ticker, "Signal": display_signal, "Daily Setup": daily_setup_type,
                       "Entry Price": entry_price, "Stop Loss": stop_loss}
         result_row.update(take_profit_levels)
         result_row.update({"30m Confirmed": confirmation_status, "30m Setup": confirmation_setup_type})
         results_list.append(result_row)
         
-        time.sleep(1)
+        time.sleep(1) # To avoid rate limiting
     
     column_order = ["Instrument", "Signal", "Daily Setup", "Entry Price", "Stop Loss", "TP1 (Structure)",
                     "TP2 (Fib 0.718)", "TP3 (Fib 1.0)", "TP4 (Fib 1.618)", "30m Confirmed", "30m Setup"]
