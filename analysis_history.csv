@@ -4,7 +4,7 @@ ADA-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AMZN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ASML,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDCHF=X,Super Strong Sell,Consolidation (Pullback to 200 EMA),0.5214,0.5360,0.5154,0.5182,0.5132,0.5023,Pass (Alignment),Consolidation (Pullback to 200 EMA)
+AUDCHF=X,Super Strong Sell,Consolidation (Pullback to 200 EMA),0.5211,0.5360,0.5154,0.5182,0.5132,0.5023,Pass (Alignment),Consolidation (Pullback to 200 EMA)
 AUDJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -16,15 +16,15 @@ COIN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CPRT,Strong Sell,Consolidation (Trend Slope),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
 DOGE-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURAUD=X,Super Strong Buy,Consolidation (Pullback to 200 EMA),1.7838,1.7440,1.7944,N/A,N/A,N/A,Pass (Alignment),Consolidation (Pullback to 200 EMA)
+EURAUD=X,Super Strong Buy,Consolidation (Pullback to 200 EMA),1.7841,1.7440,1.7944,N/A,N/A,N/A,Pass (Alignment),Consolidation (Pullback to 200 EMA)
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8703,0.8560,0.8752,0.8691,0.8769,0.8940,Pass (Early Trend),Higher Highs/Lows
+EURGBP=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8705,0.8560,0.8752,0.8691,0.8769,0.8940,Pass (Early Trend),Higher Highs/Lows
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 FTNT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPAUD=X,Crazy Strong Sell,Consolidation (Trend Slope & Pullback to 200 EMA),2.0496,2.0566,2.0245,2.0084,1.9862,1.9374,Pass (Reversal),30m Reclaimed EMA
-GBPCAD=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8750,1.8313,1.8838,1.8713,1.8884,1.9260,Pass (Reversal),30m Reclaimed EMA
+GBPCAD=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.8747,1.8313,1.8838,1.8713,1.8884,1.9260,Pass (Reversal),30m Reclaimed EMA
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
