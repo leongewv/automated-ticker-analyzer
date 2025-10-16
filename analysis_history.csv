@@ -4,7 +4,7 @@ ADA-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AMZN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ASML,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-AUDCHF=X,Moderate Strong Sell,Breakout,0.5177,0.5361,0.5144,0.5055,0.5002,0.4886,Pass (Early Trend),Lower Lows/Highs
+AUDCHF=X,Moderate Strong Sell,Breakout,0.5182,0.5361,0.5144,0.5055,0.5002,0.4886,Pass (Early Trend),Lower Lows/Highs
 AUDJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 AUDUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
@@ -26,7 +26,7 @@ FTNT,Strong Sell,Consolidation (Trend Slope),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
 GBPAUD=X,Strong Sell,Consolidation (Trend Slope & Pullback to 200 EMA),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
 GBPCAD=X,Strong Buy,Consolidation (Trend Slope),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-GBPNZD=X,Strong Buy,Consolidation (Trend Slope),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
+GBPNZD=X,Strong Buy,Breakout,N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
 GBPUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GEHC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GOOG,Crazy Strong Buy,Consolidation (Trend Slope),251.7290,191.4254,256.7000,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
@@ -50,7 +50,7 @@ TRX-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 TSLA,Crazy Strong Buy,Consolidation (Trend Slope),435.1900,316.8231,470.7500,424.4002,477.6700,594.4102,Pass (Reversal),30m Reclaimed EMA
 USDC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-USDCHF=X,Moderate Strong Sell,Consolidation (Trend Slope),0.7960,0.8227,0.7857,0.7811,0.7710,0.7489,Pass (Early Trend),Lower Lows/Highs
+USDCHF=X,Moderate Strong Sell,Consolidation (Trend Slope),0.7967,0.8227,0.7857,0.7811,0.7710,0.7489,Pass (Early Trend),Lower Lows/Highs
 USDJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDT-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 WETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
