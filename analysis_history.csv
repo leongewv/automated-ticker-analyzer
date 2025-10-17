@@ -13,24 +13,24 @@ BTC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CADJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 CELH,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 COIN,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-CPRT,Crazy Strong Sell,Consolidation (Trend Slope),44.0500,50.9657,43.3200,39.1604,37.0200,32.3294,Pass (Reversal),30m Reclaimed EMA
+CPRT,Crazy Strong Sell,Consolidation (Trend Slope),44.0500,50.9914,43.3200,39.5204,37.3800,32.6894,Pass (Reversal),30m Reclaimed EMA
 DOGE-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
+EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8705,0.8560,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 FTNT,Crazy Strong Sell,Consolidation (Trend Slope),83.1500,92.6327,70.1200,59.4893,48.5900,24.7043,Pass (Reversal),30m Reclaimed EMA
-GBPAUD=X,Moderate Strong Buy,Breakout,2.0735,2.0291,2.0759,2.0797,2.0942,2.1260,Pass (Early Trend),Higher Highs/Lows
-GBPCAD=X,Super Strong Buy,Breakout,1.8883,1.8322,1.8895,1.8753,1.8941,1.9352,Pass (Alignment),Consolidation (Trend Slope & Pullback to 200 EMA)
+GBPAUD=X,Moderate Strong Buy,Breakout,2.0766,2.0290,2.0770,2.0805,2.0953,2.1277,Pass (Early Trend),Higher Highs/Lows
+GBPCAD=X,Super Strong Buy,Breakout,1.8882,1.8322,1.8895,1.8753,1.8941,1.9352,Pass (Alignment),Consolidation (Trend Slope & Pullback to 200 EMA)
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-GBPUSD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
+GBPUSD=X,Super Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.3443,1.3185,1.3671,N/A,N/A,N/A,Pass (Alignment),Consolidation (Trend Slope & Pullback to 200 EMA)
 GEHC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GOOG,Crazy Strong Buy,Consolidation (Trend Slope),251.8800,191.7359,257.5800,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
-GOOGL,Crazy Strong Buy,Consolidation (Trend Slope),251.3900,190.6160,256.9600,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
+GOOGL,Crazy Strong Buy,Consolidation (Trend Slope),251.3900,190.6159,256.9600,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
 ISRG,Super Strong Sell,Consolidation (Trend Slope),434.6900,501.0789,427.8400,352.6065,317.9600,242.0325,Pass (Alignment),Consolidation (Pullback to 200 EMA)
 LINK-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 MDT,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
