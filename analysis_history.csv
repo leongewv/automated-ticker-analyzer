@@ -18,16 +18,16 @@ DOGE-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8705,0.8560,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
+EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8708,0.8560,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 FTNT,Crazy Strong Sell,Consolidation (Trend Slope),83.1500,92.6327,70.1200,59.4893,48.5900,24.7043,Pass (Reversal),30m Reclaimed EMA
-GBPAUD=X,Moderate Strong Buy,Breakout,2.0789,2.0287,2.0809,2.0833,2.0992,2.1341,Pass (Early Trend),Higher Highs/Lows
-GBPCAD=X,Super Strong Buy,Breakout,1.8890,1.8321,1.8896,1.8754,1.8942,1.9354,Pass (Alignment),Consolidation (Trend Slope & Pullback to 200 EMA)
+GBPAUD=X,Moderate Strong Buy,Breakout,2.0781,2.0287,2.0812,2.0835,2.0995,2.1345,Pass (Early Trend),Higher Highs/Lows
+GBPCAD=X,Moderate Strong Buy,Breakout,1.8899,1.8320,1.8915,1.8768,1.8961,1.9384,Pass (Early Trend),Higher Highs/Lows
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-GBPUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+GBPUSD=X,Moderate Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),1.3454,1.3184,1.3671,N/A,N/A,N/A,Pass (Early Trend),Higher Highs/Lows
 GEHC,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GOOG,Crazy Strong Buy,Consolidation (Trend Slope),251.8800,191.7359,257.5800,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
 GOOGL,Crazy Strong Buy,Consolidation (Trend Slope),251.3900,190.6159,256.9600,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
