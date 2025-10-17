@@ -18,13 +18,13 @@ DOGE-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8710,0.8559,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
+EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8721,0.8558,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 FTNT,Crazy Strong Sell,Consolidation (Trend Slope),83.1500,92.6327,70.1200,59.4893,48.5900,24.7043,Pass (Reversal),30m Reclaimed EMA
-GBPAUD=X,Moderate Strong Buy,Breakout,2.0814,2.0285,2.0850,2.0862,2.1033,2.1407,Pass (Early Trend),Higher Highs/Lows
-GBPCAD=X,Moderate Strong Buy,Breakout,1.8885,1.8320,1.8915,1.8768,1.8961,1.9384,Pass (Early Trend),Higher Highs/Lows
+GBPAUD=X,Moderate Strong Buy,Breakout,2.0780,2.0284,2.0850,2.0862,2.1033,2.1407,Pass (Early Trend),Higher Highs/Lows
+GBPCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPUSD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
@@ -50,7 +50,7 @@ TRX-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 TSLA,Strong Buy,Consolidation (Trend Slope),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
 USDC-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-USDCHF=X,Moderate Strong Sell,Breakout,0.7891,0.8230,0.7857,0.7811,0.7710,0.7489,Pass (Early Trend),Lower Lows/Highs
+USDCHF=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 USDT-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 WETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
