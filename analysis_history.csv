@@ -18,13 +18,13 @@ DOGE-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 ETH-USD,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURAUD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
-EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8712,0.8558,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
+EURGBP=X,Crazy Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),0.8706,0.8558,0.8752,N/A,N/A,N/A,Pass (Reversal),30m Reclaimed EMA
 EURJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 EURUSD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 FTNT,Crazy Strong Sell,Consolidation (Trend Slope),83.1500,92.6327,70.1200,59.4893,48.5900,24.7043,Pass (Reversal),30m Reclaimed EMA
-GBPAUD=X,Moderate Strong Buy,Breakout,2.0776,2.0284,2.0850,2.0862,2.1033,2.1407,Pass (Early Trend),Higher Highs/Lows
-GBPCAD=X,Strong Buy,Breakout,N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
+GBPAUD=X,Moderate Strong Buy,Breakout,2.0782,2.0284,2.0850,2.0862,2.1033,2.1407,Pass (Early Trend),Higher Highs/Lows
+GBPCAD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPJPY=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPNZD=X,Hold for now,Crossover,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
 GBPUSD=X,Strong Buy,Consolidation (Trend Slope & Pullback to 200 EMA),N/A,N/A,N/A,N/A,N/A,N/A,Fail,N/A
