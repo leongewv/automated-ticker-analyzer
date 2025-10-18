@@ -8,22 +8,18 @@ import time
 
 def get_data(ticker, period="2y", interval="1d"):
     """Fetches and prepares historical market data for a given ticker."""
-    # For shorter intervals, yfinance limits the period
     if interval not in ["1d", "1wk", "1mo"]:
         period = "730d" if interval in ["2h", "4h"] else "60d"
 
     data = yf.Ticker(ticker).history(period=period, interval=interval)
     
-    # Ensure there's enough data to calculate a 200-period EMA
     if data.empty or len(data) < 200:
         return None
 
-    # Standardize column names
     data.rename(columns={
         "Open": "open", "High": "high", "Low": "low", 
         "Close": "close", "Volume": "volume"}, inplace=True)
 
-    # Calculate required indicators
     data['EMA_200'] = TA.EMA(data, period=200)
     bbands = TA.BBANDS(data, period=20)
     data['BBM_20'] = bbands['BB_MIDDLE']
@@ -31,7 +27,6 @@ def get_data(ticker, period="2y", interval="1d"):
     data['BBL_20'] = bbands['BB_LOWER']
     data['BB_WIDTH'] = (data['BBU_20'] - data['BBL_20']) / data['BBM_20']
     
-    # Clean up by removing rows with missing indicator values
     data.dropna(inplace=True)
     return data
 
@@ -39,51 +34,94 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
     """
     Analyzes the trend structure of the 20 SMA (sma_series)
     and checks for flush-outs against the 200 EMA (ema_series).
-    
-    Returns: "Super Bullish", "Bullish", "Super Bearish", "Bearish", or "Indeterminate"
     """
     if len(sma_series) < lookback:
         return "Indeterminate"
 
-    # Split the 20 SMA series
     recent_half_sma = sma_series.iloc[-int(lookback/2):]
     prior_half_sma = sma_series.iloc[-lookback:-int(lookback/2)]
     
-    # Split the 200 EMA series for the same periods
     recent_half_ema = ema_series.iloc[-int(lookback/2):]
     prior_half_ema = ema_series.iloc[-lookback:-int(lookback/2)]
 
-    # 1. Determine Base Trend
     is_bullish = recent_half_sma.max() > prior_half_sma.max() and recent_half_sma.min() > prior_half_sma.min()
     is_bearish = recent_half_sma.min() < prior_half_sma.min() and recent_half_sma.max() < prior_half_sma.max()
     
-    # 2. Check for "Super" Trend conditions
     if is_bullish:
-        # Check for a flush-out: 
         was_below_ema = (prior_half_sma < prior_half_ema).any()
         is_above_now = sma_series.iloc[-1] > ema_series.iloc[-1]
-        
         if was_below_ema and is_above_now:
             return "Super Bullish"
         return "Bullish"
 
     if is_bearish:
-        # Check for a "fake-out" rally:
         was_above_ema = (prior_half_sma > prior_half_ema).any()
         is_below_now = sma_series.iloc[-1] < ema_series.iloc[-1]
-        
         if was_above_ema and is_below_now:
             return "Super Bearish"
         return "Bearish"
         
     return "Indeterminate"
 
+# *** UPDATED: Now returns A, B, and C prices ***
+def calculate_fib_extension(df, direction, lookback=90):
+    """
+    Calculates A-B-C Fibonacci extension levels based on price.
+    Returns a dictionary of levels (including A,B,C) or None if invalid.
+    """
+    data = df.iloc[-lookback:]
+    
+    try:
+        if direction == "Buy":
+            a_price = data['low'].min()
+            a_index = data['low'].idxmin()
+            b_data = data.loc[a_index:]
+            b_price = b_data['high'].max()
+            b_index = b_data['high'].idxmax()
+            c_data = data.loc[b_index:]
+            c_price = c_data['low'].min()
+
+            if c_price > a_price:
+                trend_range = b_price - a_price
+                return {
+                    "fib_A": a_price,
+                    "fib_B": b_price,
+                    "fib_C": c_price,
+                    "fib_0.786": c_price + trend_range * 0.786,
+                    "fib_1.0":   c_price + trend_range * 1.0,
+                    "fib_1.618": c_price + trend_range * 1.618,
+                }
+
+        elif direction == "Sell":
+            a_price = data['high'].max()
+            a_index = data['high'].idxmax()
+            b_data = data.loc[a_index:]
+            b_price = b_data['low'].min()
+            b_index = b_data['low'].idxmin()
+            c_data = data.loc[b_index:]
+            c_price = c_data['high'].max()
+
+            if c_price < a_price:
+                trend_range = a_price - b_price
+                return {
+                    "fib_A": a_price,
+                    "fib_B": b_price,
+                    "fib_C": c_price,
+                    "fib_0.786": c_price - trend_range * 0.786,
+                    "fib_1.0":   c_price - trend_range * 1.0,
+                    "fib_1.618": c_price - trend_range * 1.618,
+                }
+    except Exception:
+        return None
+    
+    return None # Invalid trend structure
+
 def analyze_instrument(df):
     """
     Performs the core analysis with a tiered signal system.
     Returns (Signal, Setup, Trend, debug_data)
     """
-    if df is None or len(df) < 120: # Ensure enough data for lookbacks
+    if df is None or len(df) < 120:
         return "Insufficient Data", "N/A", "N/A", {}
 
     # 1. Check Trend Structure
@@ -94,7 +132,6 @@ def analyze_instrument(df):
 
     latest = df.iloc[-1]
     
-    # Initialize debug_data dictionary
     debug_data = {
         'Price': latest['close'],
         'BBM_20': latest['BBM_20'],
@@ -105,7 +142,7 @@ def analyze_instrument(df):
     
     # 2. Check for BB Squeeze
     squeeze_lookback = 120
-    squeeze_percentile = 0.20 # Bottom 20% of BB Width values
+    squeeze_percentile = 0.20
     historical_bandwidth = df['BB_WIDTH'].iloc[-squeeze_lookback:-1]
     
     if historical_bandwidth.empty:
@@ -120,13 +157,9 @@ def analyze_instrument(df):
 
     # 3. Check Proximity to 200 EMA
     proximity_pct = 0.03 # 3%
-    # This logic check MUST use abs() because it only cares about distance
     is_near_ema = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < proximity_pct
     
-    # *** THIS IS THE CHANGED LINE for the *report* (abs() removed) ***
     debug_data['SMA_Dist_EMA(%)'] = ((latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'])
-    
-    # These were already correct (no abs())
     debug_data['Price_Dist_EMA_Low(%)'] = (latest['low'] - latest['EMA_200']) / latest['EMA_200']
     debug_data['Price_Dist_EMA_High(%)'] = (latest['high'] - latest['EMA_200']) / latest['EMA_200']
 
@@ -141,7 +174,20 @@ def analyze_instrument(df):
                 recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
                 is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
                 if is_at_higher_high:
-                    return "Moderate Buy", f"{trend_direction} Trend + Squeeze at Higher High", trend_direction, debug_data
+                    setup_text = f"{trend_direction} Trend + Squeeze at Higher High"
+                    fib_levels = calculate_fib_extension(df, "Buy")
+                    if fib_levels:
+                        # *** NEW: Add A, B, C prices to debug data ***
+                        debug_data["Fib_A"] = fib_levels["fib_A"]
+                        debug_data["Fib_B"] = fib_levels["fib_B"]
+                        debug_data["Fib_C"] = fib_levels["fib_C"]
+                        debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
+                        debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
+                        is_extended = (latest['close'] > fib_levels["fib_0.786"] and 
+                                       latest['close'] < fib_levels["fib_1.618"])
+                        if is_extended:
+                            setup_text += " (Fib Extended)"
+                    return "Moderate Buy", setup_text, trend_direction, debug_data
 
         elif "Bearish" in trend_direction:
             if is_near_ema:
@@ -150,7 +196,20 @@ def analyze_instrument(df):
                 recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
                 is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
                 if is_at_lower_low:
-                    return "Moderate Sell", f"{trend_direction} Trend + Squeeze at Lower Low", trend_direction, debug_data
+                    setup_text = f"{trend_direction} Trend + Squeeze at Lower Low"
+                    fib_levels = calculate_fib_extension(df, "Sell")
+                    if fib_levels:
+                        # *** NEW: Add A, B, C prices to debug data ***
+                        debug_data["Fib_A"] = fib_levels["fib_A"]
+                        debug_data["Fib_B"] = fib_levels["fib_B"]
+                        debug_data["Fib_C"] = fib_levels["fib_C"]
+                        debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
+                        debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
+                        is_extended = (latest['close'] < fib_levels["fib_0.786"] and 
+                                       latest['close'] > fib_levels["fib_1.618"])
+                        if is_extended:
+                            setup_text += " (Fib Extended)"
+                    return "Moderate Sell", setup_text, trend_direction, debug_data
 
     # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (PULLBACK LOGIC) ---
     elif not is_in_squeeze:
@@ -179,9 +238,7 @@ def analyze_instrument(df):
 
 def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
     """
-    Runs the full analysis pipeline:
-    - Analyzes the daily chart for a primary signal.
-    - If a strong/moderate signal exists, seeks confirmation on lower timeframes.
+    Runs the full analysis pipeline.
     """
     results_list = []
     confirmation_timeframes = ["4h", "1h", "30m"]
@@ -198,7 +255,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         final_signal = "Hold for now"
         confirmed_tfs = []
 
-        # 2. If Daily chart shows a signal, check lower timeframes
+        # 2. Check lower timeframes
         if "Strong" in daily_signal or "Moderate" in daily_signal:
             direction = "Buy" if "Buy" in daily_signal else "Sell"
             final_signal = daily_signal
@@ -211,7 +268,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
                 if direction in tf_signal: 
                     confirmed_tfs.append(tf)
 
-            # 3. Upgrade the signal if "Strong" and confirmed
+            # 3. Upgrade the signal
             if "Strong" in daily_signal and confirmed_tfs:
                 final_signal = f"Super Strong {direction}"
         
@@ -228,26 +285,25 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         formatted_debug_data = {}
         for k, v in debug_data.items():
             if isinstance(v, (float, np.floating)):
-                # Format percentages
                 if '%' in k:
                     formatted_debug_data[k] = f"{v * 100:.2f}%"
-                # Format prices and widths
                 else:
                     formatted_debug_data[k] = f"{v:.4f}"
             else:
-                formatted_debug_data[k] = v # For 'Is_Squeeze' (bool)
+                formatted_debug_data[k] = v
         
         result_row.update(formatted_debug_data)
         results_list.append(result_row)
         
         time.sleep(1) # Main delay between tickers
 
-    # Define the full column order
+    # *** NEW: Added Fib A, B, C to the column order ***
     column_order = [
         "Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs",
         "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
         "Squeeze_Thresh", "Is_Squeeze", "SMA_Dist_EMA(%)",
-        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)"
+        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)",
+        "Fib_A", "Fib_B", "Fib_C", "Fib_0.786", "Fib_1.618"
     ]
     
     return pd.DataFrame(results_list, columns=column_order)
