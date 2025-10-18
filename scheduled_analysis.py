@@ -88,18 +88,16 @@ def generate_recommendations(current_df, previous_df):
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
-    # *** NEW: Define the full list of columns to keep ***
-    # This list ensures the 'Recommendation' is placed correctly
-    # and all new debug columns are preserved.
+    # *** NEW: Added Fib A, B, C to the list of columns to keep ***
     cols_to_use = [
         "Instrument", "Trend", "Signal", "Recommendation", "Daily Setup", "Confirmation TFs",
         "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
         "Squeeze_Thresh", "Is_Squeeze", "SMA_Dist_EMA(%)",
-        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)"
+        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)",
+        "Fib_A", "Fib_B", "Fib_C", "Fib_0.786", "Fib_1.618"
     ]
     
     # Filter to only the columns that actually exist in the dataframe
-    # This makes it robust if a column is missing for some reason
     final_cols = [col for col in cols_to_use if col in merged_df.columns]
     
     return merged_df[final_cols]
@@ -157,8 +155,6 @@ def main():
     today_str = datetime.now().strftime('%Y-%m-%d')
 
     # --- 5. Send Email Report ---
-    # No changes needed here. The actionable_df.to_html() will automatically
-    # include all the new columns.
     if not actionable_df.empty:
         subject = f"Trading Signals & Recommendations - {today_str}"
         html_body = f"""
@@ -189,7 +185,6 @@ def main():
         send_email_notification(subject, html_body)
 
     # --- 6. Save Current State for Next Run ---
-    # full_results_df already has all the new columns
     try:
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print(f"Successfully saved current analysis to '{HISTORY_FILE}' for the next run.")
