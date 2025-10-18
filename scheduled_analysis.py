@@ -6,9 +6,8 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 import pandas as pd
 
-# --- MODIFIED IMPORT ---
 # Import the main analysis function from our logic file
-# Make sure your refactored script is saved as 'stock_analyzer_logic.py'
+# Make sure your logic file is named 'stock_analyzer_logic.py'
 from stock_analyzer_logic import run_multi_timeframe_analysis
 
 # --- Configuration ---
@@ -18,7 +17,7 @@ HISTORY_FILE = 'analysis_history.csv'  # File to store the last run's results
 # Load credentials from environment variables for security
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
-RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
+RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL") # Can be a comma-separated list
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
@@ -27,6 +26,7 @@ def send_email_notification(subject, html_body):
     """Sends an email with the given subject and HTML body."""
     if not all([SENDER_EMAIL, SENDER_PASSWORD, RECEIVER_EMAIL]):
         print("Error: Email credentials or recipient not set in environment variables.")
+        print("Set SENDER_EMAIL, SENDER_PASSWORD, and RECEIVER_EMAIL to run.")
         return
 
     msg = MIMEMultipart("alternative")
@@ -47,14 +47,14 @@ def send_email_notification(subject, html_body):
         print(f"Failed to send email: {e}")
 
 
-# --- MODIFIED FUNCTION ---
 def generate_recommendations(current_df, previous_df):
     """
-    MODIFIED: Compares signals from the refactored script (Strong vs. Super Strong).
+    MODIFIED: Compares signals including "Moderate" (Trend Squeeze) 
+    and "Strong" (Trend Squeeze at EMA) and "Super Strong" (Multi-TF).
     """
     if previous_df.empty:
         current_df['Recommendation'] = current_df['Signal'].apply(
-            lambda x: f"🔥 New Signal: {x}" if 'Strong' in x else "No Signal"
+            lambda x: f"🔥 New Signal: {x}" if 'Strong' in x or 'Moderate' in x else "No Signal"
         )
         return current_df
 
@@ -68,58 +68,60 @@ def generate_recommendations(current_df, previous_df):
 
     def get_recommendation(row):
         current, previous = row['Signal'], row['Signal_prev']
-
+        
         if current == previous:
             return "No change."
 
-        # --- New Logic for "Super Strong" ---
+        # --- Handle "Hold" transitions ---
+        if 'Hold' in current:
+            if 'Strong' in previous or 'Moderate' in previous:
+                return f"📉 Signal Lost: Was '{previous}'."
+            return "No change." # Was Hold, is Hold
+
+        # --- Handle "Moderate" transitions ---
+        if 'Moderate' in current:
+            if 'Hold' in previous:
+                return f"⚠️ New Signal: '{current}'."
+            if 'Strong' in previous:
+                return f"📉 Downgrade: From '{previous}' to '{current}'."
+            if 'Super Strong' in previous:
+                 return f"📉 Downgrade: From '{previous}' to '{current}'."
+            return "No change."
+
+        # --- Handle "Strong" (but not Super Strong) transitions ---
+        if 'Strong' in current and 'Super Strong' not in current:
+            if 'Hold' in previous:
+                return f"🔥 New Signal: '{current}'."
+            if 'Moderate' in previous:
+                return f"📈 Upgrade: From '{previous}' to '{current}'."
+            if 'Super Strong' in previous:
+                return f"📉 Downgrade: From '{previous}' to '{current}'."
+            return "No change."
+
+        # --- Handle "Super Strong" transitions ---
         if 'Super Strong' in current:
             if 'Super Strong' not in previous:
-                return f"🚀🚀 Upgraded: New '{current}' signal!"
-        
-        if 'Super Strong' in previous and 'Super Strong' not in current:
-            return f"📉 Downgrade: Lost 'Super Strong' signal, now '{current}'."
-
-        # --- Logic for "Strong" ---
-        if 'Strong' in current and 'Hold' in previous:
-            return f"🔥 New Signal: '{current}'."
-
-        if 'Hold' in current and 'Strong' in previous:
-            return f"📉 Signal Lost: Was '{previous}'."
+                return f"🚀🚀 Ultimate Upgrade: New '{current}' signal!"
+            return "No change." # Was Super Strong, is Super Strong
 
         return "Monitor signal change."
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
-    # Re-order columns to put 'Recommendation' after 'Signal'
-    cols_to_use = ["Instrument", "Signal", "Recommendation", "Daily Setup", "Confirmation TFs"]
-    # Filter to only the columns that exist in the dataframe
-    final_cols = [col for col in cols_to_use if col in merged_df.columns]
+    # Re-order columns to place 'Recommendation' nicely
+    all_cols = list(merged_df.columns)
+    if 'Signal_prev' in all_cols:
+        merged_df.drop(columns=['Signal_prev'], inplace=True)
+        all_cols.remove('Signal_prev')
     
-    # Ensure all original columns are preserved, with the new ones correctly placed
-    existing_cols = list(current_df.columns)
-    if "Recommendation" not in existing_cols:
-         try:
-             signal_index = existing_cols.index('Signal')
-             existing_cols.insert(signal_index + 1, 'Recommendation')
-         except ValueError:
-             existing_cols.append('Recommendation')
-
-    # Re-merge to ensure all original data is intact, just with the new recommendation
-    final_df = pd.merge(current_df, merged_df[['Instrument', 'Recommendation']], on='Instrument', how='left')
-
-    # Reorder columns to place Recommendation after Signal
-    cols = list(final_df.columns)
-    if 'Recommendation' in cols:
-        cols.remove('Recommendation')
-        try:
-            signal_index = cols.index('Signal')
-            cols.insert(signal_index + 1, 'Recommendation')
-        except ValueError:
-            cols.append('Recommendation') # Append to end if 'Signal' not found
-        final_df = final_df[cols]
-
-    return final_df
+    rec_col = merged_df.pop('Recommendation')
+    try:
+        signal_index = all_cols.index('Signal')
+        merged_df.insert(signal_index + 1, 'Recommendation', rec_col)
+    except ValueError:
+        merged_df['Recommendation'] = rec_col # Append to end if 'Signal' not found
+    
+    return merged_df
 
 
 def main():
@@ -134,6 +136,7 @@ def main():
         print("History file not found. This must be the first run.")
         previous_results_df = pd.DataFrame()
 
+    # --- 2. Load Tickers ---
     source_folder = 'ticker_sources'
     csv_files = glob.glob(os.path.join(source_folder, '*.csv'))
 
@@ -159,19 +162,23 @@ def main():
     
     print(f"\nFound a total of {len(tickers_to_analyze)} unique tickers to analyze.")
 
-    # --- 2. Run New Analysis (MODIFIED FUNCTION CALL) ---
+    # --- 3. Run New Analysis ---
+    # **UPDATED** to call the new function name
     full_results_df = run_multi_timeframe_analysis(tickers_to_analyze, status_callback=print)
     
-    # --- 3. Generate Contextual Recommendations ---
+    # --- 4. Generate Contextual Recommendations ---
     results_with_recs_df = generate_recommendations(full_results_df.copy(), previous_results_df)
 
-    # This filter still works, as "Strong" and "Super Strong" both contain "Strong"
-    actionable_df = results_with_recs_df[results_with_recs_df['Signal'].str.contains('Strong', na=False)].reset_index(drop=True)
+    # **UPDATED** to include "Moderate" signals in the actionable report
+    actionable_df = results_with_recs_df[
+        results_with_recs_df['Signal'].str.contains('Strong|Moderate', na=False)
+    ].reset_index(drop=True)
 
     today_str = datetime.now().strftime('%Y-%m-%d')
 
+    # --- 5. Send Email Report ---
     if not actionable_df.empty:
-        subject = f"Stock Signals & Recommendations - {today_str}"
+        subject = f"Trading Signals & Recommendations - {today_str}"
         html_body = f"""
         <html>
         <head>
@@ -184,7 +191,7 @@ def main():
             </style>
         </head>
         <body>
-            <h2>High-Conviction Stock Signals & Recommendations</h2>
+            <h2>Actionable Trading Signals & Recommendations</h2>
             <p>Analysis completed on {today_str}. The following signals were identified:</p>
             {actionable_df.to_html(index=False)}
             <br>
@@ -194,14 +201,13 @@ def main():
         """
         send_email_notification(subject, html_body)
     else:
-        subject = f"No Actionable Stock Signals Found - {today_str}"
-        html_body = f"<html><body><h2>No actionable signals were found for the monitored tickers on {today_str}.</h2></body></html>"
+        subject = f"No Actionable Trading Signals Found - {today_str}"
+        html_body = f"<html><body><h2>No actionable signals (Moderate, Strong, or Super Strong) were found for the monitored tickers on {today_str}.</h2></body></html>"
         print("No actionable signals found.")
         send_email_notification(subject, html_body)
 
-    # --- 4. Save Current State for Next Run ---
+    # --- 6. Save Current State for Next Run ---
     try:
-        # Save the full results (before recommendations) for a clean comparison next time
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print(f"Successfully saved current analysis to '{HISTORY_FILE}' for the next run.")
     except Exception as e:
