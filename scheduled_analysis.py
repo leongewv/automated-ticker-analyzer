@@ -51,6 +51,8 @@ def generate_recommendations(current_df, previous_df):
     """
     MODIFIED: Compares signals including "Moderate" (Trend Squeeze) 
     and "Strong" (Trend Squeeze at EMA) and "Super Strong" (Multi-TF).
+    
+    *** NOW also preserves the "Trend" column ***
     """
     if previous_df.empty:
         current_df['Recommendation'] = current_df['Signal'].apply(
@@ -58,6 +60,7 @@ def generate_recommendations(current_df, previous_df):
         )
         return current_df
 
+    # Merge, but now we keep the 'Trend' column from the current_df
     merged_df = pd.merge(
         current_df,
         previous_df[['Instrument', 'Signal']],
@@ -108,20 +111,14 @@ def generate_recommendations(current_df, previous_df):
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
-    # Re-order columns to place 'Recommendation' nicely
-    all_cols = list(merged_df.columns)
-    if 'Signal_prev' in all_cols:
-        merged_df.drop(columns=['Signal_prev'], inplace=True)
-        all_cols.remove('Signal_prev')
+    # Re-order columns
+    # *** CHANGED: Added "Trend" to this list to ensure it's kept ***
+    cols_to_use = ["Instrument", "Trend", "Signal", "Recommendation", "Daily Setup", "Confirmation TFs"]
     
-    rec_col = merged_df.pop('Recommendation')
-    try:
-        signal_index = all_cols.index('Signal')
-        merged_df.insert(signal_index + 1, 'Recommendation', rec_col)
-    except ValueError:
-        merged_df['Recommendation'] = rec_col # Append to end if 'Signal' not found
+    # Filter to only the columns that actually exist in the dataframe
+    final_cols = [col for col in cols_to_use if col in merged_df.columns]
     
-    return merged_df
+    return merged_df[final_cols]
 
 
 def main():
@@ -163,13 +160,12 @@ def main():
     print(f"\nFound a total of {len(tickers_to_analyze)} unique tickers to analyze.")
 
     # --- 3. Run New Analysis ---
-    # **UPDATED** to call the new function name
     full_results_df = run_multi_timeframe_analysis(tickers_to_analyze, status_callback=print)
     
     # --- 4. Generate Contextual Recommendations ---
     results_with_recs_df = generate_recommendations(full_results_df.copy(), previous_results_df)
 
-    # **UPDATED** to include "Moderate" signals in the actionable report
+    # Filter for actionable signals (Moderate or Strong)
     actionable_df = results_with_recs_df[
         results_with_recs_df['Signal'].str.contains('Strong|Moderate', na=False)
     ].reset_index(drop=True)
@@ -177,6 +173,9 @@ def main():
     today_str = datetime.now().strftime('%Y-%m-%d')
 
     # --- 5. Send Email Report ---
+    # No changes needed here. The actionable_df.to_html() will automatically
+    # include the new "Trend" column since we added it in step 4.
+    
     if not actionable_df.empty:
         subject = f"Trading Signals & Recommendations - {today_str}"
         html_body = f"""
@@ -208,6 +207,7 @@ def main():
 
     # --- 6. Save Current State for Next Run ---
     try:
+        # The full_results_df already has the new "Trend" column from the logic script
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print(f"Successfully saved current analysis to '{HISTORY_FILE}' for the next run.")
     except Exception as e:
