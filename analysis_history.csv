@@ -1,19 +1,19 @@
 Instrument,Signal,Daily Setup,Confirmation TFs
-AAPL,Hold for now,Squeeze not near 200 EMA,None
+AAPL,Moderate Buy,Bullish Trend + Squeeze at Higher High,None
 ADA-USD,Hold for now,Not in Squeeze,None
 AMZN,Strong Buy,Bullish Trend + Squeeze at 200 EMA,None
 ASML,Hold for now,Not in Squeeze,None
 AUDCAD=X,Hold for now,Not in Squeeze,None
-AUDCHF=X,Hold for now,Indeterminate Trend,None
+AUDCHF=X,Hold for now,Not in Squeeze,None
 AUDJPY=X,Hold for now,Not in Squeeze,None
 AUDNZD=X,Hold for now,Not in Squeeze,None
 AUDUSD=X,Hold for now,Not in Squeeze,None
 BNB-USD,Hold for now,Not in Squeeze,None
-BTC-USD,Hold for now,Indeterminate Trend,None
+BTC-USD,Hold for now,Not in Squeeze,None
 CADJPY=X,Hold for now,Not in Squeeze,None
 CELH,Hold for now,Not in Squeeze,None
 COIN,Hold for now,Not in Squeeze,None
-CPRT,Hold for now,Squeeze not near 200 EMA,None
+CPRT,Moderate Sell,Bearish Trend + Squeeze at Lower Low,4h
 DOGE-USD,Hold for now,Not in Squeeze,None
 ETH-USD,Hold for now,Not in Squeeze,None
 EURAUD=X,Hold for now,Not in Squeeze,None
@@ -29,32 +29,32 @@ GBPJPY=X,Hold for now,Not in Squeeze,None
 GBPNZD=X,Hold for now,Not in Squeeze,None
 GBPUSD=X,Hold for now,Indeterminate Trend,None
 GEHC,Hold for now,Not in Squeeze,None
-GOOG,Hold for now,Squeeze not near 200 EMA,None
-GOOGL,Hold for now,Squeeze not near 200 EMA,None
-ISRG,Hold for now,Squeeze not near 200 EMA,None
+GOOG,Moderate Buy,Bullish Trend + Squeeze at Higher High,30m
+GOOGL,Moderate Buy,Bullish Trend + Squeeze at Higher High,30m
+ISRG,Moderate Sell,Bearish Trend + Squeeze at Lower Low,None
 LINK-USD,Hold for now,Not in Squeeze,None
 MDT,Hold for now,Not in Squeeze,None
 META,Hold for now,Not in Squeeze,None
-MSFT,Hold for now,Squeeze not near 200 EMA,None
-NFLX,Hold for now,Indeterminate Trend,None
-NVDA,Hold for now,Squeeze not near 200 EMA,None
+MSFT,Moderate Buy,Bullish Trend + Squeeze at Higher High,None
+NFLX,Hold for now,Not in Squeeze,None
+NVDA,Moderate Buy,Bullish Trend + Squeeze at Higher High,None
 NZDCAD=X,Hold for now,Not in Squeeze,None
 NZDJPY=X,Hold for now,Not in Squeeze,None
 NZDUSD=X,Hold for now,Not in Squeeze,None
-PLTR,Hold for now,Squeeze not near 200 EMA,None
-QQQ,Hold for now,Squeeze not near 200 EMA,None
+PLTR,Moderate Buy,Bullish Trend + Squeeze at Higher High,4h
+QQQ,Moderate Buy,Bullish Trend + Squeeze at Higher High,None
 SOL-USD,Hold for now,Not in Squeeze,None
-SPY,Hold for now,Squeeze not near 200 EMA,None
-SUI-USD,Hold for now,Indeterminate Trend,None
+SPY,Moderate Buy,Bullish Trend + Squeeze at Higher High,None
+SUI-USD,Hold for now,Not in Squeeze,None
 TRX-USD,Hold for now,Not in Squeeze,None
-TSLA,Hold for now,Squeeze not near 200 EMA,None
+TSLA,Moderate Buy,Bullish Trend + Squeeze at Higher High,4h
 USDC-USD,Hold for now,Not in Squeeze,None
 USDCAD=X,Hold for now,Not in Squeeze,None
-USDCHF=X,Hold for now,Squeeze not near 200 EMA,None
+USDCHF=X,Moderate Sell,Bearish Trend + Squeeze at Lower Low,30m
 USDJPY=X,Hold for now,Not in Squeeze,None
-USDT-USD,Hold for now,Indeterminate Trend,None
+USDT-USD,Hold for now,Not in Squeeze,None
 WETH-USD,Hold for now,Not in Squeeze,None
 XAGUSD=X,Hold for now,N/A,None
 XAUUSD=X,Hold for now,N/A,None
-XLM-USD,Hold for now,Indeterminate Trend,None
-XRP-USD,Hold for now,Indeterminate Trend,None
+XLM-USD,Hold for now,Not in Squeeze,None
+XRP-USD,Hold for now,Not in Squeeze,None
