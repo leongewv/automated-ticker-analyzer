@@ -63,7 +63,6 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
         
     return "Indeterminate"
 
-# *** UPDATED: Calculates Fibs based on the *previous* wave ***
 def calculate_fib_extension(df, direction, trend_lookback=120):
     """
     Calculates A-B-C Fibonacci extension levels based on the *previous* wave.
@@ -184,8 +183,6 @@ def analyze_instrument(df):
                 is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
                 if is_at_higher_high:
                     setup_text = f"{trend_direction} Trend + Squeeze at Higher High"
-                    
-                    # *** UPDATED: Call with trend_lookback ***
                     fib_levels = calculate_fib_extension(df, "Buy", trend_lookback)
                     
                     if fib_levels:
@@ -195,11 +192,13 @@ def analyze_instrument(df):
                         debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
                         debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
                         
-                        # *** UPDATED: is_extended logic checks if price > 0.786 ***
                         is_extended = (latest['close'] > fib_levels["fib_0.786"])
                         
+                        # *** NEW: Override signal if extended ***
                         if is_extended:
-                            setup_text += " (Fib Extended)"
+                            setup_text += " (Fib Extended - Too Risky)"
+                            return "Hold for now", setup_text, trend_direction, debug_data
+                            
                     return "Moderate Buy", setup_text, trend_direction, debug_data
 
         elif "Bearish" in trend_direction:
@@ -210,8 +209,6 @@ def analyze_instrument(df):
                 is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
                 if is_at_lower_low:
                     setup_text = f"{trend_direction} Trend + Squeeze at Lower Low"
-                    
-                    # *** UPDATED: Call with trend_lookback ***
                     fib_levels = calculate_fib_extension(df, "Sell", trend_lookback)
                     
                     if fib_levels:
@@ -221,11 +218,13 @@ def analyze_instrument(df):
                         debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
                         debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
                         
-                        # *** UPDATED: is_extended logic checks if price < 0.786 ***
                         is_extended = (latest['close'] < fib_levels["fib_0.786"])
                         
+                        # *** NEW: Override signal if extended ***
                         if is_extended:
-                            setup_text += " (Fib Extended)"
+                            setup_text += " (Fib Extended - Too Risky)"
+                            return "Hold for now", setup_text, trend_direction, debug_data
+                            
                     return "Moderate Sell", setup_text, trend_direction, debug_data
 
     # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (PULLBACK LOGIC) ---
@@ -273,6 +272,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         confirmed_tfs = []
 
         # 2. Check lower timeframes
+        # We only check for confirmation if the signal wasn't filtered to "Hold for now"
         if "Strong" in daily_signal or "Moderate" in daily_signal:
             direction = "Buy" if "Buy" in daily_signal else "Sell"
             final_signal = daily_signal
@@ -289,6 +289,10 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
             if "Strong" in daily_signal and confirmed_tfs:
                 final_signal = f"Super Strong {direction}"
         
+        # If the daily signal was "Hold for now", final_signal will also be "Hold for now"
+        elif "Hold" in daily_signal:
+            final_signal = "Hold for now"
+            
         # 4. Compile results
         result_row = {
             "Instrument": ticker,
@@ -314,7 +318,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         
         time.sleep(1) # Main delay between tickers
 
-    # Column order is already correct from the last change
+    # Column order is already correct
     column_order = [
         "Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs",
         "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
