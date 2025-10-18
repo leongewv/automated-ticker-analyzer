@@ -81,7 +81,7 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
 def analyze_instrument(df):
     """
     Performs the core analysis with a tiered signal system.
-    *** NOW RETURNS (Signal, Setup, Trend, debug_data) ***
+    Returns (Signal, Setup, Trend, debug_data)
     """
     if df is None or len(df) < 120: # Ensure enough data for lookbacks
         return "Insufficient Data", "N/A", "N/A", {}
@@ -94,7 +94,7 @@ def analyze_instrument(df):
 
     latest = df.iloc[-1]
     
-    # *** NEW: Initialize debug_data dictionary ***
+    # Initialize debug_data dictionary
     debug_data = {
         'Price': latest['close'],
         'BBM_20': latest['BBM_20'],
@@ -114,22 +114,23 @@ def analyze_instrument(df):
     squeeze_threshold = historical_bandwidth.quantile(squeeze_percentile)
     is_in_squeeze = latest['BB_WIDTH'] < squeeze_threshold
 
-    # *** NEW: Add squeeze values to debug_data ***
     debug_data['BB_Width'] = latest['BB_WIDTH']
     debug_data['Squeeze_Thresh'] = squeeze_threshold
     debug_data['Is_Squeeze'] = is_in_squeeze
 
     # 3. Check Proximity to 200 EMA
     proximity_pct = 0.03 # 3%
+    # This logic check MUST use abs() because it only cares about distance
     is_near_ema = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < proximity_pct
     
-    # *** NEW: Add proximity values to debug_data ***
-    debug_data['SMA_Dist_EMA(%)'] = (abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'])
+    # *** THIS IS THE CHANGED LINE for the *report* (abs() removed) ***
+    debug_data['SMA_Dist_EMA(%)'] = ((latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'])
+    
+    # These were already correct (no abs())
     debug_data['Price_Dist_EMA_Low(%)'] = (latest['low'] - latest['EMA_200']) / latest['EMA_200']
     debug_data['Price_Dist_EMA_High(%)'] = (latest['high'] - latest['EMA_200']) / latest['EMA_200']
 
     # --- MAIN SIGNAL LOGIC ---
-    # (All return statements must now include debug_data)
 
     # --- LOGIC BRANCH 1: SQUEEZE IS ACTIVE ---
     if is_in_squeeze:
@@ -192,8 +193,6 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         
         # 1. Analyze the Daily Chart
         daily_df = get_data(ticker=ticker, interval="1d")
-        
-        # *** CHANGED: Unpack the new debug_data dictionary ***
         daily_signal, daily_setup, daily_trend, debug_data = analyze_instrument(daily_df)
         
         final_signal = "Hold for now"
@@ -207,7 +206,6 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
             for tf in confirmation_timeframes:
                 time.sleep(0.5) 
                 intraday_df = get_data(ticker=ticker, interval=tf)
-                # We don't need the debug data for the confirmation TFs
                 tf_signal, _, _, _ = analyze_instrument(intraday_df) 
                 
                 if direction in tf_signal: 
@@ -226,7 +224,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
             "Confirmation TFs": ", ".join(confirmed_tfs) if confirmed_tfs else "None"
         }
         
-        # *** NEW: Format and add debug data to the result row ***
+        # Format and add debug data
         formatted_debug_data = {}
         for k, v in debug_data.items():
             if isinstance(v, (float, np.floating)):
@@ -244,7 +242,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         
         time.sleep(1) # Main delay between tickers
 
-    # *** NEW: Define the full column order including debug columns ***
+    # Define the full column order
     column_order = [
         "Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs",
         "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
@@ -252,7 +250,6 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)"
     ]
     
-    # Create DataFrame with all columns, will show 'NaN' if debug data was missing
     return pd.DataFrame(results_list, columns=column_order)
 
 # --- Example Usage (if you want to run this file directly) ---
