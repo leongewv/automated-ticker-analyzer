@@ -1,6 +1,6 @@
 Instrument,Trend,Signal,Daily Setup,Confirmation TFs,Price,BBM_20,EMA_200,Low,High,BB_Width,Squeeze_Thresh,Is_Squeeze,SMA_Dist_EMA(%),Price_Dist_EMA_Low(%),Price_Dist_EMA_High(%),Fib_A,Fib_B,Fib_C,Fib_0.786,Fib_1.618
 AAPL,Super Bullish,Hold for now,Super Bullish Trend + Squeeze at Higher High (Fib Extended - Too Risky),None,252.2900,253.4930,224.7207,247.2700,253.3800,0.0621,0.0746,True,12.80%,10.03%,12.75%,192.7781,215.9849,201.2716,219.5121,238.8201
-ADA-USD,Bullish,Hold for now,Conditions Not Met,None,0.6354,0.7598,0.7666,0.6245,0.6406,0.4969,0.1836,False,-0.89%,-18.54%,-16.43%,,,,,
+ADA-USD,Bullish,Hold for now,Conditions Not Met,None,0.6370,0.7599,0.7666,0.6245,0.6406,0.4962,0.1836,False,-0.88%,-18.55%,-16.44%,,,,,
 AMZN,Super Bullish,Strong Buy,Super Bullish Trend + Squeeze at 200 EMA,None,213.0400,220.1160,214.2458,211.0300,214.8000,0.0709,0.0783,True,2.74%,-1.50%,0.26%,,,,,
 ASML,Super Bullish,Hold for now,Conditions Not Met,None,1029.2700,987.1165,797.2616,1015.0000,1032.7700,0.1322,0.1007,False,23.81%,27.31%,29.54%,,,,,
 AUDCAD=X,Super Bullish,Moderate Buy,Super Bullish Pullback to 200 EMA,4h,0.9099,0.9157,0.9015,0.9099,0.9099,0.0190,0.0142,False,1.57%,0.93%,0.93%,,,,,
@@ -8,14 +8,14 @@ AUDCHF=X,Indeterminate,Hold for now,Indeterminate Trend,None,0.5129,0.5231,0.535
 AUDJPY=X,Super Bullish,Hold for now,Conditions Not Met,None,97.8550,98.3945,96.2951,96.2470,97.8550,0.0421,0.0236,False,2.18%,-0.05%,1.62%,,,,,
 AUDNZD=X,Super Bullish,Hold for now,Conditions Not Met,None,1.1341,1.1346,1.1029,1.1341,1.1341,0.0146,0.0092,False,2.87%,2.82%,2.82%,,,,,
 AUDUSD=X,Super Bullish,Moderate Buy,Super Bullish Pullback to 200 EMA,None,0.6499,0.6561,0.6496,0.6499,0.6499,0.0282,0.0213,False,1.00%,0.05%,0.05%,,,,,
-BNB-USD,Bullish,Hold for now,Conditions Not Met,None,1096.8783,1164.3712,834.0548,1071.7242,1128.5587,0.3311,0.0809,False,39.60%,28.50%,35.31%,,,,,
-BTC-USD,Indeterminate,Hold for now,Indeterminate Trend,None,106893.4297,116358.4320,108116.3988,106408.5312,107370.1406,0.2040,0.0800,False,7.62%,-1.58%,-0.69%,,,,,
+BNB-USD,Bullish,Hold for now,Conditions Not Met,None,1103.2743,1164.6910,834.1184,1071.7242,1128.5587,0.3302,0.0809,False,39.63%,28.49%,35.30%,,,,,
+BTC-USD,Indeterminate,Hold for now,Indeterminate Trend,None,107204.3438,116373.9777,108119.4945,106408.5312,107370.1406,0.2031,0.0800,False,7.63%,-1.58%,-0.69%,,,,,
 CADJPY=X,Super Bullish,Hold for now,Conditions Not Met,None,107.4060,107.4526,106.8012,106.2260,107.4850,0.0411,0.0155,False,0.61%,-0.54%,0.64%,,,,,
 CELH,Bullish,Hold for now,Conditions Not Met,None,64.8600,58.6605,46.7846,63.2700,64.9100,0.3109,0.1240,False,25.38%,35.24%,38.74%,,,,,
 COIN,Super Bullish,Hold for now,Conditions Not Met,None,336.0200,347.8525,293.2656,317.7700,336.3000,0.2971,0.1644,False,18.61%,8.36%,14.67%,,,,,
 CPRT,Super Bearish,Moderate Sell,Super Bearish Trend + Squeeze at Lower Low,None,44.3400,44.6740,50.5538,43.8200,44.5900,0.0419,0.0610,True,-11.63%,-13.32%,-11.80%,63.8500,45.5200,50.1100,35.7026,20.4521
-DOGE-USD,Super Bullish,Hold for now,Conditions Not Met,None,0.1888,0.2261,0.2209,0.1845,0.1902,0.5265,0.1974,False,2.37%,-16.44%,-13.88%,,,,,
-ETH-USD,Super Bullish,Hold for now,Conditions Not Met,None,3888.8079,4224.5025,3557.3374,3823.3240,3923.0530,0.2682,0.1558,False,18.75%,7.48%,10.28%,,,,,
+DOGE-USD,Super Bullish,Hold for now,Conditions Not Met,None,0.1896,0.2261,0.2209,0.1845,0.1902,0.5255,0.1974,False,2.38%,-16.45%,-13.89%,,,,,
+ETH-USD,Super Bullish,Hold for now,Conditions Not Met,None,3894.9951,4224.8118,3557.3991,3823.3240,3923.0530,0.2678,0.1558,False,18.76%,7.48%,10.28%,,,,,
 EURAUD=X,Bullish,Hold for now,Conditions Not Met,None,1.7929,1.7799,1.7507,1.7928,1.8162,0.0191,0.0172,False,1.67%,2.40%,3.74%,,,,,
 EURCAD=X,Bullish,Hold for now,Conditions Not Met,None,1.6331,1.6298,1.5782,1.6326,1.6467,0.0137,0.0133,False,3.27%,3.45%,4.34%,,,,,
 EURGBP=X,Bullish,Strong Buy,Bullish Trend + Squeeze at 200 EMA,None,0.8678,0.8709,0.8565,0.8673,0.8725,0.0104,0.0128,True,1.68%,1.27%,1.87%,,,,,
@@ -32,7 +32,7 @@ GEHC,Bullish,Hold for now,Conditions Not Met,None,74.0500,74.0240,75.9421,72.650
 GOOG,Super Bullish,Hold for now,Super Bullish Trend + Squeeze at Higher High (Fib Extended - Too Risky),None,253.7900,247.2570,198.4173,248.5900,254.8800,0.0663,0.0976,True,24.61%,25.29%,28.46%,149.1772,198.7923,188.5315,227.5290,268.8087
 GOOGL,Super Bullish,Hold for now,Super Bullish Trend + Squeeze at Higher High (Fib Extended - Too Risky),None,253.3000,246.5525,197.3142,247.8100,254.2200,0.0673,0.0979,True,24.95%,25.59%,28.84%,147.5293,197.7731,187.6522,227.1438,268.9467
 ISRG,Super Bearish,Moderate Sell,Super Bearish Trend + Squeeze at Lower Low,30m,446.1300,441.7965,489.9485,434.5700,449.0900,0.0532,0.0779,True,-9.83%,-11.30%,-8.34%,568.6900,486.5400,503.2200,438.6501,370.3013
-LINK-USD,Super Bullish,Hold for now,Conditions Not Met,None,16.8272,20.3179,19.0283,16.5959,16.9609,0.4649,0.1892,False,6.78%,-12.78%,-10.86%,,,,,
+LINK-USD,Super Bullish,Hold for now,Conditions Not Met,None,16.8766,20.3204,19.0288,16.5959,16.9609,0.4641,0.1892,False,6.79%,-12.79%,-10.87%,,,,,
 MDT,Super Bullish,Hold for now,Conditions Not Met,None,95.7800,95.7950,89.2958,94.9000,95.8100,0.0565,0.0476,False,7.28%,6.28%,7.30%,,,,,
 META,Super Bullish,Hold for now,Conditions Not Met,None,716.9200,728.1445,678.0274,706.1200,718.5400,0.1025,0.0754,False,7.39%,4.14%,5.98%,,,,,
 MSFT,Super Bullish,Moderate Buy,Super Bullish Trend + Squeeze at Higher High,1h,513.5800,515.7335,472.0036,507.3100,515.4800,0.0440,0.0522,True,9.26%,7.48%,9.21%,383.1057,513.7954,492.3700,595.0921,703.8259
@@ -44,18 +44,18 @@ NZDUSD=X,Super Bearish,Hold for now,Conditions Not Met,None,0.5728,0.5782,0.5890
 PLTR,Bullish,Moderate Buy,Bullish Trend + Squeeze at Higher High,4h,178.1500,180.1745,132.2282,173.9500,181.5900,0.0765,0.1587,True,36.26%,31.55%,37.33%,105.3200,155.6800,142.3400,181.9230,223.8225
 QQQ,Super Bullish,Moderate Buy,Super Bullish Trend + Squeeze at Higher High,None,603.9300,601.3635,541.8724,596.3700,605.5100,0.0362,0.0419,True,10.98%,10.06%,11.74%,461.3764,565.5843,551.0412,632.9486,719.6497
 SAP,Indeterminate,Hold for now,Indeterminate Trend,None,272.9000,269.5370,270.7158,267.6100,273.0200,0.0619,0.0790,True,-0.44%,-1.15%,0.85%,,,,,
-SOL-USD,Super Bullish,Hold for now,Conditions Not Met,None,186.0744,209.6450,186.8533,182.0242,188.2299,0.3664,0.2042,False,12.20%,-2.58%,0.74%,,,,,
+SOL-USD,Super Bullish,Hold for now,Conditions Not Met,None,187.1398,209.6983,186.8639,182.0242,188.2299,0.3650,0.2042,False,12.22%,-2.59%,0.73%,,,,,
 SPY,Super Bullish,Moderate Buy,Super Bullish Trend + Squeeze at Higher High,1h,664.3900,665.0625,611.6638,658.1400,665.7600,0.0299,0.0348,True,8.73%,7.60%,8.84%,538.4311,634.3912,617.5778,693.0024,772.8412
 SUI-USD,Indeterminate,Hold for now,Indeterminate Trend,None,0.0003,0.0003,0.0009,0.0003,0.0003,0.9785,0.9454,False,-64.43%,-67.11%,-67.11%,,,,,
-TRX-USD,Bullish,Hold for now,Conditions Not Met,None,0.3147,0.3300,0.3034,0.3090,0.3147,0.1486,0.0887,False,8.79%,1.85%,3.73%,,,,,
+TRX-USD,Bullish,Hold for now,Conditions Not Met,None,0.3143,0.3300,0.3033,0.3090,0.3147,0.1489,0.0887,False,8.79%,1.85%,3.74%,,,,,
 TSLA,Super Bullish,Hold for now,Super Bullish Trend + Squeeze at Higher High (Fib Extended - Too Risky),None,439.3100,436.1135,339.4828,423.6000,441.4600,0.0936,0.1441,True,28.46%,24.78%,30.04%,270.7800,367.7100,297.8200,374.0070,454.6527
-USDC-USD,Bearish,Moderate Sell,Bearish Pullback to 200 EMA,1h,0.9999,0.9999,0.9999,0.9997,1.0007,0.0006,0.0004,False,-0.00%,-0.02%,0.08%,,,,,
+USDC-USD,Bearish,Moderate Sell,Bearish Pullback to 200 EMA,None,0.9998,0.9999,0.9999,0.9997,1.0007,0.0006,0.0004,False,-0.00%,-0.02%,0.08%,,,,,
 USDCAD=X,Super Bullish,Hold for now,Conditions Not Met,None,1.4020,1.3961,1.3885,1.4020,1.4020,0.0184,0.0142,False,0.54%,0.97%,0.97%,,,,,
 USDCHF=X,Bearish,Moderate Sell,Bearish Trend + Squeeze at Lower Low,30m,0.7930,0.7978,0.8260,0.7873,0.7937,0.0194,0.0197,True,-3.41%,-4.68%,-3.91%,0.8473,0.7874,0.8170,0.7699,0.7201
 USDJPY=X,Super Bullish,Hold for now,Conditions Not Met,None,150.5840,149.8843,148.2837,149.3700,150.6400,0.0525,0.0223,False,1.08%,0.73%,1.59%,,,,,
-USDT-USD,Indeterminate,Hold for now,Indeterminate Trend,None,1.0005,1.0006,1.0002,1.0002,1.0008,0.0016,0.0008,False,0.03%,-0.01%,0.06%,,,,,
-WETH-USD,Super Bullish,Hold for now,Conditions Not Met,None,3886.3823,4225.4288,3557.5189,3835.1309,3887.5920,0.2680,0.1568,False,18.77%,7.80%,9.28%,,,,,
+USDT-USD,Indeterminate,Hold for now,Indeterminate Trend,None,1.0003,1.0006,1.0002,1.0002,1.0008,0.0017,0.0008,False,0.03%,-0.01%,0.06%,,,,,
+WETH-USD,Super Bullish,Hold for now,Conditions Not Met,None,3891.5303,4225.6862,3557.5702,3835.1309,3891.5303,0.2677,0.1568,False,18.78%,7.80%,9.39%,,,,,
 XAGUSD=X,N/A,Hold for now,N/A,None,,,,,,,,,,,,,,,,
 XAUUSD=X,N/A,Hold for now,N/A,None,,,,,,,,,,,,,,,,
 XLM-USD,Indeterminate,Hold for now,Indeterminate Trend,None,0.3168,0.3617,0.3449,0.3086,0.3195,0.3989,0.1790,False,4.87%,-10.53%,-7.39%,,,,,
-XRP-USD,Indeterminate,Hold for now,Indeterminate Trend,None,2.3630,2.7010,2.6242,2.2947,2.3908,0.4067,0.1374,False,2.93%,-12.55%,-8.89%,,,,,
+XRP-USD,Indeterminate,Hold for now,Indeterminate Trend,None,2.3684,2.7013,2.6242,2.2947,2.3908,0.4062,0.1374,False,2.94%,-12.56%,-8.89%,,,,,
