@@ -60,9 +60,7 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
     # 2. Check for "Super" Trend conditions
     if is_bullish:
         # Check for a flush-out: 
-        # 1. Did the SMA dip below the EMA in the prior wave?
         was_below_ema = (prior_half_sma < prior_half_ema).any()
-        # 2. Has it now firmly reclaimed the EMA?
         is_above_now = sma_series.iloc[-1] > ema_series.iloc[-1]
         
         if was_below_ema and is_above_now:
@@ -71,9 +69,7 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
 
     if is_bearish:
         # Check for a "fake-out" rally:
-        # 1. Did the SMA spike above the EMA in the prior wave?
         was_above_ema = (prior_half_sma > prior_half_ema).any()
-        # 2. Has it now firmly fallen back below the EMA?
         is_below_now = sma_series.iloc[-1] < ema_series.iloc[-1]
         
         if was_above_ema and is_below_now:
@@ -85,10 +81,10 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
 def analyze_instrument(df):
     """
     Performs the core analysis with a tiered signal system.
-    Returns: (Signal, Setup, Trend)
+    *** NOW RETURNS (Signal, Setup, Trend, debug_data) ***
     """
     if df is None or len(df) < 120: # Ensure enough data for lookbacks
-        return "Insufficient Data", "N/A", "N/A"
+        return "Insufficient Data", "N/A", "N/A", {}
 
     # 1. Check Trend Structure
     trend_lookback = 120
@@ -98,81 +94,85 @@ def analyze_instrument(df):
 
     latest = df.iloc[-1]
     
+    # *** NEW: Initialize debug_data dictionary ***
+    debug_data = {
+        'Price': latest['close'],
+        'BBM_20': latest['BBM_20'],
+        'EMA_200': latest['EMA_200'],
+        'Low': latest['low'],
+        'High': latest['high'],
+    }
+    
     # 2. Check for BB Squeeze
     squeeze_lookback = 120
     squeeze_percentile = 0.20 # Bottom 20% of BB Width values
     historical_bandwidth = df['BB_WIDTH'].iloc[-squeeze_lookback:-1]
     
     if historical_bandwidth.empty:
-        return "Insufficient Data", "Not enough squeeze data", trend_direction
+        return "Insufficient Data", "Not enough squeeze data", trend_direction, debug_data
         
     squeeze_threshold = historical_bandwidth.quantile(squeeze_percentile)
     is_in_squeeze = latest['BB_WIDTH'] < squeeze_threshold
 
+    # *** NEW: Add squeeze values to debug_data ***
+    debug_data['BB_Width'] = latest['BB_WIDTH']
+    debug_data['Squeeze_Thresh'] = squeeze_threshold
+    debug_data['Is_Squeeze'] = is_in_squeeze
+
     # 3. Check Proximity to 200 EMA
-    # Proximity for "Strong" Squeeze AND "Moderate Pullback"
     proximity_pct = 0.03 # 3%
     is_near_ema = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < proximity_pct
     
+    # *** NEW: Add proximity values to debug_data ***
+    debug_data['SMA_Dist_EMA(%)'] = (abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'])
+    debug_data['Price_Dist_EMA_Low(%)'] = (latest['low'] - latest['EMA_200']) / latest['EMA_200']
+    debug_data['Price_Dist_EMA_High(%)'] = (latest['high'] - latest['EMA_200']) / latest['EMA_200']
+
     # --- MAIN SIGNAL LOGIC ---
+    # (All return statements must now include debug_data)
 
     # --- LOGIC BRANCH 1: SQUEEZE IS ACTIVE ---
     if is_in_squeeze:
         if "Bullish" in trend_direction:
             if is_near_ema:
-                # Strong Signal: Trend + Squeeze + EMA Proximity
-                return "Strong Buy", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
+                return "Strong Buy", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction, debug_data
             else:
-                # Moderate Squeeze Signal: Trend + Squeeze + at Higher High
                 recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
                 is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
-                
                 if is_at_higher_high:
-                    return "Moderate Buy", f"{trend_direction} Trend + Squeeze at Higher High", trend_direction
+                    return "Moderate Buy", f"{trend_direction} Trend + Squeeze at Higher High", trend_direction, debug_data
 
         elif "Bearish" in trend_direction:
             if is_near_ema:
-                # Strong Signal: Trend + Squeeze + EMA Proximity
-                return "Strong Sell", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
+                return "Strong Sell", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction, debug_data
             else:
-                # Moderate Squeeze Signal: Trend + Squeeze + at Lower Low
                 recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
                 is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
-                
                 if is_at_lower_low:
-                    return "Moderate Sell", f"{trend_direction} Trend + Squeeze at Lower Low", trend_direction
+                    return "Moderate Sell", f"{trend_direction} Trend + Squeeze at Lower Low", trend_direction, debug_data
 
     # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (PULLBACK LOGIC) ---
     elif not is_in_squeeze:
-        # Check for a non-squeeze pullback to the 200 EMA
         if is_near_ema:
             if "Bullish" in trend_direction:
-                # Check 1: Is it actually pulling back (SMA slope is negative)?
                 slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
-                
-                # *** NEW CHECK 2: Is the PRICE respecting the 200 EMA? ***
-                # (Allowing for a 3% dip below)
                 price_respects_support = latest['low'] > (latest['EMA_200'] * (1 - proximity_pct))
                 
                 if slope < 0 and price_respects_support:
-                    return "Moderate Buy", f"{trend_direction} Pullback to 200 EMA", trend_direction
+                    return "Moderate Buy", f"{trend_direction} Pullback to 200 EMA", trend_direction, debug_data
             
             elif "Bearish" in trend_direction:
-                # Check 1: Is it actually pulling back (SMA slope is positive)?
                 slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
-                
-                # *** NEW CHECK 2: Is the PRICE respecting the 200 EMA? ***
-                # (Allowing for a 3% spike above)
                 price_respects_resistance = latest['high'] < (latest['EMA_200'] * (1 + proximity_pct))
 
                 if slope > 0 and price_respects_resistance:
-                    return "Moderate Sell", f"{trend_direction} Pullback to 200 EMA", trend_direction
+                    return "Moderate Sell", f"{trend_direction} Pullback to 200 EMA", trend_direction, debug_data
 
     # --- Default Case ---
     if trend_direction == "Indeterminate":
-        return "Hold", "Indeterminate Trend", trend_direction
+        return "Hold", "Indeterminate Trend", trend_direction, debug_data
     
-    return "Hold", "Conditions Not Met", trend_direction
+    return "Hold", "Conditions Not Met", trend_direction, debug_data
 
 # --- Main Execution ---
 
@@ -192,7 +192,9 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         
         # 1. Analyze the Daily Chart
         daily_df = get_data(ticker=ticker, interval="1d")
-        daily_signal, daily_setup, daily_trend = analyze_instrument(daily_df)
+        
+        # *** CHANGED: Unpack the new debug_data dictionary ***
+        daily_signal, daily_setup, daily_trend, debug_data = analyze_instrument(daily_df)
         
         final_signal = "Hold for now"
         confirmed_tfs = []
@@ -205,7 +207,8 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
             for tf in confirmation_timeframes:
                 time.sleep(0.5) 
                 intraday_df = get_data(ticker=ticker, interval=tf)
-                tf_signal, _, _ = analyze_instrument(intraday_df) 
+                # We don't need the debug data for the confirmation TFs
+                tf_signal, _, _, _ = analyze_instrument(intraday_df) 
                 
                 if direction in tf_signal: 
                     confirmed_tfs.append(tf)
@@ -215,17 +218,41 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
                 final_signal = f"Super Strong {direction}"
         
         # 4. Compile results
-        results_list.append({
+        result_row = {
             "Instrument": ticker,
             "Trend": daily_trend, 
             "Signal": final_signal,
             "Daily Setup": daily_setup,
             "Confirmation TFs": ", ".join(confirmed_tfs) if confirmed_tfs else "None"
-        })
+        }
+        
+        # *** NEW: Format and add debug data to the result row ***
+        formatted_debug_data = {}
+        for k, v in debug_data.items():
+            if isinstance(v, (float, np.floating)):
+                # Format percentages
+                if '%' in k:
+                    formatted_debug_data[k] = f"{v * 100:.2f}%"
+                # Format prices and widths
+                else:
+                    formatted_debug_data[k] = f"{v:.4f}"
+            else:
+                formatted_debug_data[k] = v # For 'Is_Squeeze' (bool)
+        
+        result_row.update(formatted_debug_data)
+        results_list.append(result_row)
+        
         time.sleep(1) # Main delay between tickers
 
-    # Define the final output columns
-    column_order = ["Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs"]
+    # *** NEW: Define the full column order including debug columns ***
+    column_order = [
+        "Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs",
+        "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
+        "Squeeze_Thresh", "Is_Squeeze", "SMA_Dist_EMA(%)",
+        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)"
+    ]
+    
+    # Create DataFrame with all columns, will show 'NaN' if debug data was missing
     return pd.DataFrame(results_list, columns=column_order)
 
 # --- Example Usage (if you want to run this file directly) ---
@@ -238,4 +265,6 @@ if __name__ == '__main__':
     analysis_results = run_multi_timeframe_analysis(tickers, status_callback=print_status)
     
     print("\n--- Trading Analysis Results ---")
-    print(analysis_results.to_string())
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', 2000)
+    print(analysis_results)
