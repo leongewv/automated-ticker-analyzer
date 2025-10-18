@@ -92,8 +92,6 @@ def analyze_instrument(df):
 
     # 1. Check Trend Structure
     trend_lookback = 120
-    
-    # *** CHANGED: Pass both SMA and EMA to check_trend_structure ***
     trend_direction = check_trend_structure(
         df['BBM_20'], df['EMA_200'], lookback=trend_lookback
     )
@@ -111,40 +109,64 @@ def analyze_instrument(df):
     squeeze_threshold = historical_bandwidth.quantile(squeeze_percentile)
     is_in_squeeze = latest['BB_WIDTH'] < squeeze_threshold
 
-    if not is_in_squeeze:
-        return "Hold", "Not in Squeeze", trend_direction
-        
-    # 3. Check Proximity of Squeeze to 200 EMA
-    proximity_threshold = 0.03 # Within 3%
-    is_near_ema = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < proximity_threshold
+    # 3. Check Proximity to 200 EMA (Two different thresholds)
+    # Proximity for "Strong" Squeeze signal
+    strong_proximity_pct = 0.03 # 3%
+    is_near_ema_strong = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < strong_proximity_pct
+    
+    # Proximity for "Moderate Pullback" signal
+    pullback_proximity_pct = 0.01 # 1%
+    is_near_ema_pullback = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < pullback_proximity_pct
 
     # --- MAIN SIGNAL LOGIC ---
 
-    if "Bullish" in trend_direction: # Catches "Bullish" and "Super Bullish"
-        if is_near_ema:
-            return "Strong Buy", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
-        else:
-            recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
-            is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
-            
-            if is_at_higher_high:
-                return "Moderate Buy", f"{trend_direction} Trend + Squeeze at Higher High", trend_direction
+    # --- LOGIC BRANCH 1: SQUEEZE IS ACTIVE ---
+    if is_in_squeeze:
+        if "Bullish" in trend_direction:
+            if is_near_ema_strong:
+                # Strong Signal: Trend + Squeeze + EMA Proximity
+                return "Strong Buy", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
+            else:
+                # Moderate Squeeze Signal: Trend + Squeeze + at Higher High
+                recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
+                is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
+                
+                if is_at_higher_high:
+                    return "Moderate Buy", f"{trend_direction} Trend + Squeeze at Higher High", trend_direction
 
-    elif "Bearish" in trend_direction: # Catches "Bearish" and "Super Bearish"
-        if is_near_ema:
-            return "Strong Sell", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
-        else:
-            recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
-            is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
-            
-            if is_at_lower_low:
-                return "Moderate Sell", f"{trend_direction} Trend + Squeeze at Lower Low", trend_direction
+        elif "Bearish" in trend_direction:
+            if is_near_ema_strong:
+                # Strong Signal: Trend + Squeeze + EMA Proximity
+                return "Strong Sell", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
+            else:
+                # Moderate Squeeze Signal: Trend + Squeeze + at Lower Low
+                recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
+                is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
+                
+                if is_at_lower_low:
+                    return "Moderate Sell", f"{trend_direction} Trend + Squeeze at Lower Low", trend_direction
 
-    # Default case
+    # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (NEW PULLBACK LOGIC) ---
+    elif not is_in_squeeze:
+        # Check for a non-squeeze pullback to the 200 EMA
+        if is_near_ema_pullback:
+            if "Bullish" in trend_direction:
+                # Check if it's actually pulling back (SMA slope is negative)
+                slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
+                if slope < 0:
+                    return "Moderate Buy", f"{trend_direction} Pullback to 200 EMA", trend_direction
+            
+            elif "Bearish" in trend_direction:
+                # Check if it's actually pulling back (SMA slope is positive)
+                slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
+                if slope > 0:
+                    return "Moderate Sell", f"{trend_direction} Pullback to 200 EMA", trend_direction
+
+    # --- Default Case ---
     if trend_direction == "Indeterminate":
         return "Hold", "Indeterminate Trend", trend_direction
     
-    return "Hold", "Squeeze conditions not met", trend_direction
+    return "Hold", "Conditions Not Met", trend_direction
 
 # --- Main Execution ---
 
