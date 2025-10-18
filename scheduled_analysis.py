@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 import pandas as pd
+import numpy as np # Often needed for pandas
 
 # Import the main analysis function from our logic file
 # Make sure your logic file is named 'stock_analyzer_logic.py'
@@ -49,10 +50,7 @@ def send_email_notification(subject, html_body):
 
 def generate_recommendations(current_df, previous_df):
     """
-    MODIFIED: Compares signals including "Moderate" (Trend Squeeze) 
-    and "Strong" (Trend Squeeze at EMA) and "Super Strong" (Multi-TF).
-    
-    *** NOW also preserves the "Trend" column ***
+    Compares signals and preserves all data columns for the report.
     """
     if previous_df.empty:
         current_df['Recommendation'] = current_df['Signal'].apply(
@@ -60,7 +58,7 @@ def generate_recommendations(current_df, previous_df):
         )
         return current_df
 
-    # Merge, but now we keep the 'Trend' column from the current_df
+    # Merge, keeping all columns from the current_df
     merged_df = pd.merge(
         current_df,
         previous_df[['Instrument', 'Signal']],
@@ -74,48 +72,34 @@ def generate_recommendations(current_df, previous_df):
         
         if current == previous:
             return "No change."
-
-        # --- Handle "Hold" transitions ---
-        if 'Hold' in current:
-            if 'Strong' in previous or 'Moderate' in previous:
-                return f"📉 Signal Lost: Was '{previous}'."
-            return "No change." # Was Hold, is Hold
-
-        # --- Handle "Moderate" transitions ---
+        if 'Hold' in current and ('Strong' in previous or 'Moderate' in previous):
+            return f"📉 Signal Lost: Was '{previous}'."
         if 'Moderate' in current:
-            if 'Hold' in previous:
-                return f"⚠️ New Signal: '{current}'."
-            if 'Strong' in previous:
-                return f"📉 Downgrade: From '{previous}' to '{current}'."
-            if 'Super Strong' in previous:
-                 return f"📉 Downgrade: From '{previous}' to '{current}'."
-            return "No change."
-
-        # --- Handle "Strong" (but not Super Strong) transitions ---
+            if 'Hold' in previous: return f"⚠️ New Signal: '{current}'."
+            if 'Strong' in previous: return f"📉 Downgrade: From '{previous}' to '{current}'."
+            if 'Super Strong' in previous: return f"📉 Downgrade: From '{previous}' to '{current}'."
         if 'Strong' in current and 'Super Strong' not in current:
-            if 'Hold' in previous:
-                return f"🔥 New Signal: '{current}'."
-            if 'Moderate' in previous:
-                return f"📈 Upgrade: From '{previous}' to '{current}'."
-            if 'Super Strong' in previous:
-                return f"📉 Downgrade: From '{previous}' to '{current}'."
-            return "No change."
-
-        # --- Handle "Super Strong" transitions ---
-        if 'Super Strong' in current:
-            if 'Super Strong' not in previous:
-                return f"🚀🚀 Ultimate Upgrade: New '{current}' signal!"
-            return "No change." # Was Super Strong, is Super Strong
-
+            if 'Hold' in previous: return f"🔥 New Signal: '{current}'."
+            if 'Moderate' in previous: return f"📈 Upgrade: From '{previous}' to '{current}'."
+            if 'Super Strong' in previous: return f"📉 Downgrade: From '{previous}' to '{current}'."
+        if 'Super Strong' in current and 'Super Strong' not in previous:
+            return f"🚀🚀 Ultimate Upgrade: New '{current}' signal!"
         return "Monitor signal change."
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
-    # Re-order columns
-    # *** CHANGED: Added "Trend" to this list to ensure it's kept ***
-    cols_to_use = ["Instrument", "Trend", "Signal", "Recommendation", "Daily Setup", "Confirmation TFs"]
+    # *** NEW: Define the full list of columns to keep ***
+    # This list ensures the 'Recommendation' is placed correctly
+    # and all new debug columns are preserved.
+    cols_to_use = [
+        "Instrument", "Trend", "Signal", "Recommendation", "Daily Setup", "Confirmation TFs",
+        "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
+        "Squeeze_Thresh", "Is_Squeeze", "SMA_Dist_EMA(%)",
+        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)"
+    ]
     
     # Filter to only the columns that actually exist in the dataframe
+    # This makes it robust if a column is missing for some reason
     final_cols = [col for col in cols_to_use if col in merged_df.columns]
     
     return merged_df[final_cols]
@@ -154,7 +138,7 @@ def main():
 
     tickers_to_analyze = sorted(list(set(all_tickers)))
     if not tickers_to_analyze:
-        print("No tickers were loaded. Exiting.")
+        print("No tickers loaded. Exiting.")
         return
     
     print(f"\nFound a total of {len(tickers_to_analyze)} unique tickers to analyze.")
@@ -174,8 +158,7 @@ def main():
 
     # --- 5. Send Email Report ---
     # No changes needed here. The actionable_df.to_html() will automatically
-    # include the new "Trend" column since we added it in step 4.
-    
+    # include all the new columns.
     if not actionable_df.empty:
         subject = f"Trading Signals & Recommendations - {today_str}"
         html_body = f"""
@@ -183,8 +166,8 @@ def main():
         <head>
             <style>
                 body {{ font-family: sans-serif; }}
-                table {{ border-collapse: collapse; width: 100%; }}
-                th, td {{ border: 1px solid #dddddd; text-align: left; padding: 8px; }}
+                table {{ border-collapse: collapse; width: auto; font-size: 12px; }}
+                th, td {{ border: 1px solid #dddddd; text-align: left; padding: 6px; }}
                 th {{ background-color: #f2f2f2; }}
                 tr:nth-child(even) {{ background-color: #f9f9f9; }}
             </style>
@@ -192,7 +175,7 @@ def main():
         <body>
             <h2>Actionable Trading Signals & Recommendations</h2>
             <p>Analysis completed on {today_str}. The following signals were identified:</p>
-            {actionable_df.to_html(index=False)}
+            {actionable_df.to_html(index=False, float_format='{:,.4f}'.format)}
             <br>
             <p><em>This is an automated report. Please perform your own due diligence.</em></p>
         </body>
@@ -206,8 +189,8 @@ def main():
         send_email_notification(subject, html_body)
 
     # --- 6. Save Current State for Next Run ---
+    # full_results_df already has all the new columns
     try:
-        # The full_results_df already has the new "Trend" column from the logic script
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print(f"Successfully saved current analysis to '{HISTORY_FILE}' for the next run.")
     except Exception as e:
