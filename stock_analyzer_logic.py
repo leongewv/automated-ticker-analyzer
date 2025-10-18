@@ -115,7 +115,8 @@ def analyze_instrument(df):
     is_near_ema_strong = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < strong_proximity_pct
     
     # Proximity for "Moderate Pullback" signal
-    pullback_proximity_pct = 0.01 # 1%
+    # *** THIS IS THE CHANGED LINE ***
+    pullback_proximity_pct = 0.03 # 3% (was 1%)
     is_near_ema_pullback = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < pullback_proximity_pct
 
     # --- MAIN SIGNAL LOGIC ---
@@ -146,7 +147,7 @@ def analyze_instrument(df):
                 if is_at_lower_low:
                     return "Moderate Sell", f"{trend_direction} Trend + Squeeze at Lower Low", trend_direction
 
-    # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (NEW PULLBACK LOGIC) ---
+    # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (PULLBACK LOGIC) ---
     elif not is_in_squeeze:
         # Check for a non-squeeze pullback to the 200 EMA
         if is_near_ema_pullback:
