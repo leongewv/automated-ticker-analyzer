@@ -109,22 +109,17 @@ def analyze_instrument(df):
     squeeze_threshold = historical_bandwidth.quantile(squeeze_percentile)
     is_in_squeeze = latest['BB_WIDTH'] < squeeze_threshold
 
-    # 3. Check Proximity to 200 EMA (Two different thresholds)
-    # Proximity for "Strong" Squeeze signal
-    strong_proximity_pct = 0.03 # 3%
-    is_near_ema_strong = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < strong_proximity_pct
+    # 3. Check Proximity to 200 EMA
+    # Proximity for "Strong" Squeeze AND "Moderate Pullback"
+    proximity_pct = 0.03 # 3%
+    is_near_ema = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < proximity_pct
     
-    # Proximity for "Moderate Pullback" signal
-    # *** THIS IS THE CHANGED LINE ***
-    pullback_proximity_pct = 0.03 # 3% (was 1%)
-    is_near_ema_pullback = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < pullback_proximity_pct
-
     # --- MAIN SIGNAL LOGIC ---
 
     # --- LOGIC BRANCH 1: SQUEEZE IS ACTIVE ---
     if is_in_squeeze:
         if "Bullish" in trend_direction:
-            if is_near_ema_strong:
+            if is_near_ema:
                 # Strong Signal: Trend + Squeeze + EMA Proximity
                 return "Strong Buy", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
             else:
@@ -136,7 +131,7 @@ def analyze_instrument(df):
                     return "Moderate Buy", f"{trend_direction} Trend + Squeeze at Higher High", trend_direction
 
         elif "Bearish" in trend_direction:
-            if is_near_ema_strong:
+            if is_near_ema:
                 # Strong Signal: Trend + Squeeze + EMA Proximity
                 return "Strong Sell", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction
             else:
@@ -150,17 +145,27 @@ def analyze_instrument(df):
     # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (PULLBACK LOGIC) ---
     elif not is_in_squeeze:
         # Check for a non-squeeze pullback to the 200 EMA
-        if is_near_ema_pullback:
+        if is_near_ema:
             if "Bullish" in trend_direction:
-                # Check if it's actually pulling back (SMA slope is negative)
+                # Check 1: Is it actually pulling back (SMA slope is negative)?
                 slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
-                if slope < 0:
+                
+                # *** NEW CHECK 2: Is the PRICE respecting the 200 EMA? ***
+                # (Allowing for a 3% dip below)
+                price_respects_support = latest['low'] > (latest['EMA_200'] * (1 - proximity_pct))
+                
+                if slope < 0 and price_respects_support:
                     return "Moderate Buy", f"{trend_direction} Pullback to 200 EMA", trend_direction
             
             elif "Bearish" in trend_direction:
-                # Check if it's actually pulling back (SMA slope is positive)
+                # Check 1: Is it actually pulling back (SMA slope is positive)?
                 slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
-                if slope > 0:
+                
+                # *** NEW CHECK 2: Is the PRICE respecting the 200 EMA? ***
+                # (Allowing for a 3% spike above)
+                price_respects_resistance = latest['high'] < (latest['EMA_200'] * (1 + proximity_pct))
+
+                if slope > 0 and price_respects_resistance:
                     return "Moderate Sell", f"{trend_direction} Pullback to 200 EMA", trend_direction
 
     # --- Default Case ---
