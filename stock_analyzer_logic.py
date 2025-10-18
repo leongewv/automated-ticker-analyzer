@@ -62,14 +62,16 @@ def check_trend_structure(series, lookback=120):
 
 def analyze_instrument(df):
     """
-    Performs the core analysis with a tiered signal system:
+    Performs the core analysis with a tiered signal system.
     1. Trend Structure (HH/HL or LL/LH on the 20 SMA)
     2. Bollinger Band Squeeze
     3. 'Strong' Signal: Squeeze is near the 200 EMA.
     4. 'Moderate' Signal: Squeeze is NOT near EMA, but is at a trend peak (HH/LL).
+    
+    *** NOW RETURNS (Signal, Setup, Trend) ***
     """
     if df is None or len(df) < 120: # Ensure enough data for lookbacks
-        return "Insufficient Data", "N/A"
+        return "Insufficient Data", "N/A", "N/A"
 
     # 1. Check Trend Structure
     trend_lookback = 120
@@ -83,13 +85,13 @@ def analyze_instrument(df):
     historical_bandwidth = df['BB_WIDTH'].iloc[-squeeze_lookback:-1]
     
     if historical_bandwidth.empty:
-        return "Insufficient Data", "Not enough squeeze data"
+        return "Insufficient Data", "Not enough squeeze data", trend_direction
         
     squeeze_threshold = historical_bandwidth.quantile(squeeze_percentile)
     is_in_squeeze = latest['BB_WIDTH'] < squeeze_threshold
 
     if not is_in_squeeze:
-        return "Hold", "Not in Squeeze"
+        return "Hold", "Not in Squeeze", trend_direction
         
     # 3. Check Proximity of Squeeze to 200 EMA
     proximity_threshold = 0.03 # Within 3%
@@ -100,7 +102,7 @@ def analyze_instrument(df):
     if trend_direction == "Bullish":
         if is_near_ema:
             # Condition 1: Strong Buy (Trend + Squeeze + EMA Proximity)
-            return "Strong Buy", "Bullish Trend + Squeeze at 200 EMA"
+            return "Strong Buy", "Bullish Trend + Squeeze at 200 EMA", trend_direction
         else:
             # Condition 2: Check for Moderate Buy (Trend + Squeeze + NOT near EMA + at Higher High)
             recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
@@ -108,12 +110,12 @@ def analyze_instrument(df):
             is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
             
             if is_at_higher_high:
-                return "Moderate Buy", "Bullish Trend + Squeeze at Higher High"
+                return "Moderate Buy", "Bullish Trend + Squeeze at Higher High", trend_direction
 
     elif trend_direction == "Bearish":
         if is_near_ema:
             # Condition 1: Strong Sell (Trend + Squeeze + EMA Proximity)
-            return "Strong Sell", "Bearish Trend + Squeeze at 200 EMA"
+            return "Strong Sell", "Bearish Trend + Squeeze at 200 EMA", trend_direction
         else:
             # Condition 2: Check for Moderate Sell (Trend + Squeeze + NOT near EMA + at Lower Low)
             recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
@@ -121,13 +123,13 @@ def analyze_instrument(df):
             is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
             
             if is_at_lower_low:
-                return "Moderate Sell", "Bearish Trend + Squeeze at Lower Low"
+                return "Moderate Sell", "Bearish Trend + Squeeze at Lower Low", trend_direction
 
     # Default case
     if trend_direction == "Indeterminate":
-        return "Hold", "Indeterminate Trend"
+        return "Hold", "Indeterminate Trend", trend_direction
     
-    return "Hold", "Squeeze conditions not met" # Squeeze was not near EMA or at HH/LL
+    return "Hold", "Squeeze conditions not met", trend_direction # Squeeze was not near EMA or at HH/LL
 
 # --- Main Execution ---
 
@@ -148,7 +150,9 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         
         # 1. Analyze the Daily Chart for the primary signal
         daily_df = get_data(ticker=ticker, interval="1d")
-        daily_signal, daily_setup = analyze_instrument(daily_df)
+        
+        # *** CHANGED: Now receives daily_trend as the 3rd value ***
+        daily_signal, daily_setup, daily_trend = analyze_instrument(daily_df)
         
         final_signal = "Hold for now"
         confirmed_tfs = []
@@ -165,10 +169,11 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
                 time.sleep(0.5) 
                 
                 intraday_df = get_data(ticker=ticker, interval=tf)
-                tf_signal, _ = analyze_instrument(intraday_df)
+                
+                # We only care about the signal from the sub-timeframe
+                tf_signal, _, _ = analyze_instrument(intraday_df) 
                 
                 # Check if the intraday signal matches the daily signal's direction
-                # (Matches "Strong Buy" or "Moderate Buy" to a "Buy" direction)
                 if direction in tf_signal: 
                     confirmed_tfs.append(tf)
 
@@ -178,8 +183,10 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
                 final_signal = f"Super Strong {direction}"
         
         # 4. Compile results for the report
+        # *** CHANGED: Added "Trend": daily_trend to the dictionary ***
         results_list.append({
             "Instrument": ticker,
+            "Trend": daily_trend, 
             "Signal": final_signal,
             "Daily Setup": daily_setup,
             "Confirmation TFs": ", ".join(confirmed_tfs) if confirmed_tfs else "None"
@@ -187,7 +194,8 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         time.sleep(1) # Main delay between tickers
 
     # Define the final output columns
-    column_order = ["Instrument", "Signal", "Daily Setup", "Confirmation TFs"]
+    # *** CHANGED: Added "Trend" to the column order ***
+    column_order = ["Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs"]
     return pd.DataFrame(results_list, columns=column_order)
 
 # --- Example Usage (if you want to run this file directly) ---
