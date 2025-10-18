@@ -63,25 +63,34 @@ def check_trend_structure(sma_series, ema_series, lookback=120):
         
     return "Indeterminate"
 
-# *** UPDATED: Now returns A, B, and C prices ***
-def calculate_fib_extension(df, direction, lookback=90):
+# *** UPDATED: Calculates Fibs based on the *previous* wave ***
+def calculate_fib_extension(df, direction, trend_lookback=120):
     """
-    Calculates A-B-C Fibonacci extension levels based on price.
+    Calculates A-B-C Fibonacci extension levels based on the *previous* wave.
+    A/B points are from the prior wave, C point is the start of the current wave.
     Returns a dictionary of levels (including A,B,C) or None if invalid.
     """
-    data = df.iloc[-lookback:]
-    
+    if len(df) < trend_lookback:
+        return None
+        
+    # Define the two most recent "waves"
+    prior_wave_data = df.iloc[-trend_lookback:-int(trend_lookback/2)]
+    current_wave_data = df.iloc[-int(trend_lookback/2):]
+
+    if prior_wave_data.empty or current_wave_data.empty:
+        return None
+
     try:
         if direction == "Buy":
-            a_price = data['low'].min()
-            a_index = data['low'].idxmin()
-            b_data = data.loc[a_index:]
-            b_price = b_data['high'].max()
-            b_index = b_data['high'].idxmax()
-            c_data = data.loc[b_index:]
-            c_price = c_data['low'].min()
+            # A: Lowest low of the previous wave
+            a_price = prior_wave_data['low'].min()
+            # B: Highest high of the previous wave
+            b_price = prior_wave_data['high'].max()
+            # C: Lowest low of the current wave (the pullback)
+            c_price = current_wave_data['low'].min()
 
-            if c_price > a_price:
+            # Check for valid uptrend structure (C > A and B > A)
+            if c_price > a_price and b_price > a_price:
                 trend_range = b_price - a_price
                 return {
                     "fib_A": a_price,
@@ -93,15 +102,15 @@ def calculate_fib_extension(df, direction, lookback=90):
                 }
 
         elif direction == "Sell":
-            a_price = data['high'].max()
-            a_index = data['high'].idxmax()
-            b_data = data.loc[a_index:]
-            b_price = b_data['low'].min()
-            b_index = b_data['low'].idxmin()
-            c_data = data.loc[b_index:]
-            c_price = c_data['high'].max()
+            # A: Highest high of the previous wave
+            a_price = prior_wave_data['high'].max()
+            # B: Lowest low of the previous wave
+            b_price = prior_wave_data['low'].min()
+            # C: Highest high of the current wave (the pullback)
+            c_price = current_wave_data['high'].max()
 
-            if c_price < a_price:
+            # Check for valid downtrend structure (C < A and B < A)
+            if c_price < a_price and b_price < a_price:
                 trend_range = a_price - b_price
                 return {
                     "fib_A": a_price,
@@ -175,16 +184,20 @@ def analyze_instrument(df):
                 is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
                 if is_at_higher_high:
                     setup_text = f"{trend_direction} Trend + Squeeze at Higher High"
-                    fib_levels = calculate_fib_extension(df, "Buy")
+                    
+                    # *** UPDATED: Call with trend_lookback ***
+                    fib_levels = calculate_fib_extension(df, "Buy", trend_lookback)
+                    
                     if fib_levels:
-                        # *** NEW: Add A, B, C prices to debug data ***
                         debug_data["Fib_A"] = fib_levels["fib_A"]
                         debug_data["Fib_B"] = fib_levels["fib_B"]
                         debug_data["Fib_C"] = fib_levels["fib_C"]
                         debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
                         debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
-                        is_extended = (latest['close'] > fib_levels["fib_0.786"] and 
-                                       latest['close'] < fib_levels["fib_1.618"])
+                        
+                        # *** UPDATED: is_extended logic checks if price > 0.786 ***
+                        is_extended = (latest['close'] > fib_levels["fib_0.786"])
+                        
                         if is_extended:
                             setup_text += " (Fib Extended)"
                     return "Moderate Buy", setup_text, trend_direction, debug_data
@@ -197,16 +210,20 @@ def analyze_instrument(df):
                 is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
                 if is_at_lower_low:
                     setup_text = f"{trend_direction} Trend + Squeeze at Lower Low"
-                    fib_levels = calculate_fib_extension(df, "Sell")
+                    
+                    # *** UPDATED: Call with trend_lookback ***
+                    fib_levels = calculate_fib_extension(df, "Sell", trend_lookback)
+                    
                     if fib_levels:
-                        # *** NEW: Add A, B, C prices to debug data ***
                         debug_data["Fib_A"] = fib_levels["fib_A"]
                         debug_data["Fib_B"] = fib_levels["fib_B"]
                         debug_data["Fib_C"] = fib_levels["fib_C"]
                         debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
                         debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
-                        is_extended = (latest['close'] < fib_levels["fib_0.786"] and 
-                                       latest['close'] > fib_levels["fib_1.618"])
+                        
+                        # *** UPDATED: is_extended logic checks if price < 0.786 ***
+                        is_extended = (latest['close'] < fib_levels["fib_0.786"])
+                        
                         if is_extended:
                             setup_text += " (Fib Extended)"
                     return "Moderate Sell", setup_text, trend_direction, debug_data
@@ -297,7 +314,7 @@ def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
         
         time.sleep(1) # Main delay between tickers
 
-    # *** NEW: Added Fib A, B, C to the column order ***
+    # Column order is already correct from the last change
     column_order = [
         "Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs",
         "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
