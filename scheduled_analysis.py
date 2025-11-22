@@ -7,8 +7,8 @@ from datetime import datetime
 import pandas as pd
 
 # --- Import the Analysis Logic ---
-# Matches the filename 'trend_scanner.py' and function 'run_scanner'
-from trend_scanner import run_scanner
+# Updated to match the restored filename 'stock_analyzer_logic.py'
+from stock_analyzer_logic import run_scanner
 
 # --- Configuration ---
 HISTORY_FILE = 'analysis_history.csv' 
