@@ -3,342 +3,259 @@ from finta import TA
 import pandas as pd
 import numpy as np
 import time
+from datetime import datetime, timedelta
 
-# --- Helper & Analysis Functions ---
+# --- Configuration ---
+SLOPE_LOOKBACK = 5  # Candles to calculate slope
+EMA_PERIOD = 200
+BB_PERIOD = 20
+BB_MULTIPLIER = 2.0
 
 def get_data(ticker, period="2y", interval="1d"):
-    """Fetches and prepares historical market data for a given ticker."""
-    if interval not in ["1d", "1wk", "1mo"]:
-        period = "730d" if interval in ["2h", "4h"] else "60d"
-
-    data = yf.Ticker(ticker).history(period=period, interval=interval)
-    
-    if data.empty or len(data) < 200:
-        return None
-
-    data.rename(columns={
-        "Open": "open", "High": "high", "Low": "low", 
-        "Close": "close", "Volume": "volume"}, inplace=True)
-
-    data['EMA_200'] = TA.EMA(data, period=200)
-    bbands = TA.BBANDS(data, period=20)
-    data['BBM_20'] = bbands['BB_MIDDLE']
-    data['BBU_20'] = bbands['BB_UPPER']
-    data['BBL_20'] = bbands['BB_LOWER']
-    data['BB_WIDTH'] = (data['BBU_20'] - data['BBL_20']) / data['BBM_20']
-    
-    data.dropna(inplace=True)
-    return data
-
-def check_trend_structure(sma_series, ema_series, lookback=120):
     """
-    Analyzes the trend structure of the 20 SMA (sma_series)
-    and checks for flush-outs against the 200 EMA (ema_series).
+    Fetches data and calculates indicators.
     """
-    if len(sma_series) < lookback:
-        return "Indeterminate"
-
-    recent_half_sma = sma_series.iloc[-int(lookback/2):]
-    prior_half_sma = sma_series.iloc[-lookback:-int(lookback/2)]
-    
-    recent_half_ema = ema_series.iloc[-int(lookback/2):]
-    prior_half_ema = ema_series.iloc[-lookback:-int(lookback/2)]
-
-    is_bullish = recent_half_sma.max() > prior_half_sma.max() and recent_half_sma.min() > prior_half_sma.min()
-    is_bearish = recent_half_sma.min() < prior_half_sma.min() and recent_half_sma.max() < prior_half_sma.max()
-    
-    if is_bullish:
-        was_below_ema = (prior_half_sma < prior_half_ema).any()
-        is_above_now = sma_series.iloc[-1] > ema_series.iloc[-1]
-        if was_below_ema and is_above_now:
-            return "Super Bullish"
-        return "Bullish"
-
-    if is_bearish:
-        was_above_ema = (prior_half_sma > prior_half_ema).any()
-        is_below_now = sma_series.iloc[-1] < ema_series.iloc[-1]
-        if was_above_ema and is_below_now:
-            return "Super Bearish"
-        return "Bearish"
+    if interval == "1h":
+        period = "1y" 
+    elif interval == "4h":
+        period = "1y" 
         
-    return "Indeterminate"
-
-def calculate_fib_extension(df, direction, trend_lookback=120):
-    """
-    Calculates A-B-C Fibonacci extension levels based on the *previous* wave.
-    A/B points are from the prior wave, C point is the start of the current wave.
-    Returns a dictionary of levels (including A,B,C) or None if invalid.
-    """
-    if len(df) < trend_lookback:
-        return None
-        
-    # Define the two most recent "waves"
-    prior_wave_data = df.iloc[-trend_lookback:-int(trend_lookback/2)]
-    current_wave_data = df.iloc[-int(trend_lookback/2):]
-
-    if prior_wave_data.empty or current_wave_data.empty:
-        return None
-
     try:
-        if direction == "Buy":
-            # A: Lowest low of the previous wave
-            a_price = prior_wave_data['low'].min()
-            # B: Highest high of the previous wave
-            b_price = prior_wave_data['high'].max()
-            # C: Lowest low of the current wave (the pullback)
-            c_price = current_wave_data['low'].min()
+        df = yf.Ticker(ticker).history(period=period, interval=interval)
+        
+        if df.empty or len(df) < 250:
+            return None
 
-            # Check for valid uptrend structure (C > A and B > A)
-            if c_price > a_price and b_price > a_price:
-                trend_range = b_price - a_price
-                return {
-                    "fib_A": a_price,
-                    "fib_B": b_price,
-                    "fib_C": c_price,
-                    "fib_0.786": c_price + trend_range * 0.786,
-                    "fib_1.0":   c_price + trend_range * 1.0,
-                    "fib_1.618": c_price + trend_range * 1.618,
-                }
+        df.rename(columns={
+            "Open": "open", "High": "high", "Low": "low", 
+            "Close": "close", "Volume": "volume"
+        }, inplace=True)
 
-        elif direction == "Sell":
-            # A: Highest high of the previous wave
-            a_price = prior_wave_data['high'].max()
-            # B: Lowest low of the previous wave
-            b_price = prior_wave_data['low'].min()
-            # C: Highest high of the current wave (the pullback)
-            c_price = current_wave_data['high'].max()
+        # Indicators
+        df['EMA_200'] = TA.EMA(df, period=EMA_PERIOD)
+        bbands = TA.BBANDS(df, period=BB_PERIOD, std_multiplier=BB_MULTIPLIER)
+        df['BBM_20'] = bbands['BB_MIDDLE']
+        df['BBU_20'] = bbands['BB_UPPER']
+        df['BBL_20'] = bbands['BB_LOWER']
+        df['BB_WIDTH'] = (df['BBU_20'] - df['BBL_20']) / df['BBM_20']
 
-            # Check for valid downtrend structure (C < A and B < A)
-            if c_price < a_price and b_price < a_price:
-                trend_range = a_price - b_price
-                return {
-                    "fib_A": a_price,
-                    "fib_B": b_price,
-                    "fib_C": c_price,
-                    "fib_0.786": c_price - trend_range * 0.786,
-                    "fib_1.0":   c_price - trend_range * 1.0,
-                    "fib_1.618": c_price - trend_range * 1.618,
-                }
-    except Exception:
+        df.dropna(inplace=True)
+        return df
+    
+    except Exception as e:
+        # print(f"Error fetching {ticker}: {e}") # Optional: uncomment for debug
         return None
-    
-    return None # Invalid trend structure
 
-def analyze_instrument(df):
+def get_slope(series, lookback=5):
+    """Calculates linear regression slope of the last N values."""
+    if len(series) < lookback: return 0
+    y = series.iloc[-lookback:].values
+    x = np.arange(lookback)
+    slope, _ = np.polyfit(x, y, 1)
+    return slope
+
+def check_slope_transition(series, lookback=5):
     """
-    Performs the core analysis with a tiered signal system.
-    Returns (Signal, Setup, Trend, debug_data)
+    Checks if the slope has shifted sign in the current window compared to the previous window.
+    Returns: 'Pos->Neg', 'Neg->Pos', or None
     """
-    if df is None or len(df) < 120:
-        return "Insufficient Data", "N/A", "N/A", {}
+    if len(series) < (lookback * 2): return None
 
-    # 1. Check Trend Structure
-    trend_lookback = 120
-    trend_direction = check_trend_structure(
-        df['BBM_20'], df['EMA_200'], lookback=trend_lookback
-    )
-
-    latest = df.iloc[-1]
+    # Slope of current window
+    curr_slope = get_slope(series.iloc[-lookback:], lookback)
     
-    debug_data = {
-        'Price': latest['close'],
-        'BBM_20': latest['BBM_20'],
-        'EMA_200': latest['EMA_200'],
-        'Low': latest['low'],
-        'High': latest['high'],
+    # Slope of previous window (shifted back by 1 candle to catch immediate turns)
+    prev_series = series.iloc[-(lookback+1):-1]
+    prev_slope = get_slope(prev_series, lookback)
+    
+    if prev_slope < 0 and curr_slope > 0:
+        return "Neg->Pos"
+    if prev_slope > 0 and curr_slope < 0:
+        return "Pos->Neg"
+        
+    return None
+
+def check_crossover(df, lookback=3):
+    """Checks for BBM crossing EMA_200."""
+    if len(df) < lookback + 1: return None
+    
+    # Check the relationship lookback periods ago vs now
+    prev_diff = df['BBM_20'].iloc[-lookback-1] - df['EMA_200'].iloc[-lookback-1]
+    curr_diff = df['BBM_20'].iloc[-1] - df['EMA_200'].iloc[-1]
+
+    if prev_diff < 0 and curr_diff > 0: return "Bullish Cross"
+    if prev_diff > 0 and curr_diff < 0: return "Bearish Cross"
+    return None
+
+def analyze_daily_chart(ticker):
+    """
+    Step 1: Identify Potential on Daily.
+    Scenarios:
+    A) Squeeze
+    B) Mean Reversion (Price near EMA) -> Sub-types: Bounce or Flip
+    """
+    df = get_data(ticker, period="2y", interval="1d")
+    if df is None: return None
+
+    last = df.iloc[-1]
+    
+    # 1. Mean Reversion (Within 2%)
+    dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
+    is_mean_rev = dist_pct <= 0.02
+    
+    # 2. Squeeze (Bottom 20% width)
+    lookback_squeeze = 126
+    if len(df) > lookback_squeeze:
+        recent_widths = df['BB_WIDTH'].iloc[-lookback_squeeze:]
+        rank = (recent_widths < last['BB_WIDTH']).mean()
+        is_squeeze = rank <= 0.20
+    else:
+        is_squeeze = False
+
+    if not (is_mean_rev or is_squeeze):
+        return None
+
+    # 3. Determine Direction & Setup Type
+    # Check if a crossover happened recently (last 5 days) to detect a "Flip"
+    recent_cross = check_crossover(df, lookback=5)
+    
+    current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
+    setup_type = ""
+
+    if recent_cross:
+        # If we just crossed, it's a Trend Flip
+        if current_direction == "Buy" and recent_cross == "Bullish Cross":
+            setup_type = "Trend Flip (Up)"
+        elif current_direction == "Sell" and recent_cross == "Bearish Cross":
+            setup_type = "Trend Flip (Down)"
+        else:
+            # Fallback if cross direction doesn't match current state (rare volatility)
+            setup_type = "Mean Rev"
+    else:
+        # No recent cross, so it's a standard Mean Reversion / Squeeze
+        setup_type = "Mean Rev / Squeeze"
+
+    return {
+        "ticker": ticker,
+        "direction": current_direction,
+        "setup_type": setup_type,
+        "is_squeeze": is_squeeze,
+        "is_mean_rev": is_mean_rev,
+        "price": last['BBM_20']
     }
-    
-    # 2. Check for BB Squeeze
-    squeeze_lookback = 120
-    squeeze_percentile = 0.20
-    historical_bandwidth = df['BB_WIDTH'].iloc[-squeeze_lookback:-1]
-    
-    if historical_bandwidth.empty:
-        return "Insufficient Data", "Not enough squeeze data", trend_direction, debug_data
-        
-    squeeze_threshold = historical_bandwidth.quantile(squeeze_percentile)
-    is_in_squeeze = latest['BB_WIDTH'] < squeeze_threshold
 
-    debug_data['BB_Width'] = latest['BB_WIDTH']
-    debug_data['Squeeze_Thresh'] = squeeze_threshold
-    debug_data['Is_Squeeze'] = is_in_squeeze
-
-    # 3. Check Proximity to 200 EMA
-    proximity_pct = 0.03 # 3%
-    is_near_ema = abs(latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'] < proximity_pct
-    
-    debug_data['SMA_Dist_EMA(%)'] = ((latest['BBM_20'] - latest['EMA_200']) / latest['EMA_200'])
-    debug_data['Price_Dist_EMA_Low(%)'] = (latest['low'] - latest['EMA_200']) / latest['EMA_200']
-    debug_data['Price_Dist_EMA_High(%)'] = (latest['high'] - latest['EMA_200']) / latest['EMA_200']
-
-    # --- MAIN SIGNAL LOGIC ---
-
-    # --- LOGIC BRANCH 1: SQUEEZE IS ACTIVE ---
-    if is_in_squeeze:
-        if "Bullish" in trend_direction:
-            if is_near_ema:
-                return "Strong Buy", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction, debug_data
-            else:
-                recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
-                is_at_higher_high = abs(latest['BBM_20'] - recent_half_sma.max()) / recent_half_sma.max() < 0.02 
-                if is_at_higher_high:
-                    setup_text = f"{trend_direction} Trend + Squeeze at Higher High"
-                    fib_levels = calculate_fib_extension(df, "Buy", trend_lookback)
-                    
-                    if fib_levels:
-                        debug_data["Fib_A"] = fib_levels["fib_A"]
-                        debug_data["Fib_B"] = fib_levels["fib_B"]
-                        debug_data["Fib_C"] = fib_levels["fib_C"]
-                        debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
-                        debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
-                        
-                        is_extended = (latest['close'] > fib_levels["fib_0.786"])
-                        
-                        # *** NEW: Override signal if extended ***
-                        if is_extended:
-                            setup_text += " (Fib Extended - Too Risky)"
-                            return "Hold for now", setup_text, trend_direction, debug_data
-                            
-                    return "Moderate Buy", setup_text, trend_direction, debug_data
-
-        elif "Bearish" in trend_direction:
-            if is_near_ema:
-                return "Strong Sell", f"{trend_direction} Trend + Squeeze at 200 EMA", trend_direction, debug_data
-            else:
-                recent_half_sma = df['BBM_20'].iloc[-int(trend_lookback/2):]
-                is_at_lower_low = abs(latest['BBM_20'] - recent_half_sma.min()) / recent_half_sma.min() < 0.02
-                if is_at_lower_low:
-                    setup_text = f"{trend_direction} Trend + Squeeze at Lower Low"
-                    fib_levels = calculate_fib_extension(df, "Sell", trend_lookback)
-                    
-                    if fib_levels:
-                        debug_data["Fib_A"] = fib_levels["fib_A"]
-                        debug_data["Fib_B"] = fib_levels["fib_B"]
-                        debug_data["Fib_C"] = fib_levels["fib_C"]
-                        debug_data["Fib_0.786"] = fib_levels["fib_0.786"]
-                        debug_data["Fib_1.618"] = fib_levels["fib_1.618"]
-                        
-                        is_extended = (latest['close'] < fib_levels["fib_0.786"])
-                        
-                        # *** NEW: Override signal if extended ***
-                        if is_extended:
-                            setup_text += " (Fib Extended - Too Risky)"
-                            return "Hold for now", setup_text, trend_direction, debug_data
-                            
-                    return "Moderate Sell", setup_text, trend_direction, debug_data
-
-    # --- LOGIC BRANCH 2: SQUEEZE IS *NOT* ACTIVE (PULLBACK LOGIC) ---
-    elif not is_in_squeeze:
-        if is_near_ema:
-            if "Bullish" in trend_direction:
-                slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
-                price_respects_support = latest['low'] > (latest['EMA_200'] * (1 - proximity_pct))
-                
-                if slope < 0 and price_respects_support:
-                    return "Moderate Buy", f"{trend_direction} Pullback to 200 EMA", trend_direction, debug_data
-            
-            elif "Bearish" in trend_direction:
-                slope, _ = np.polyfit(np.arange(10), df['BBM_20'].iloc[-10:], 1)
-                price_respects_resistance = latest['high'] < (latest['EMA_200'] * (1 + proximity_pct))
-
-                if slope > 0 and price_respects_resistance:
-                    return "Moderate Sell", f"{trend_direction} Pullback to 200 EMA", trend_direction, debug_data
-
-    # --- Default Case ---
-    if trend_direction == "Indeterminate":
-        return "Hold", "Indeterminate Trend", trend_direction, debug_data
-    
-    return "Hold", "Conditions Not Met", trend_direction, debug_data
-
-# --- Main Execution ---
-
-def run_multi_timeframe_analysis(tickers_to_analyze, status_callback=None):
+def analyze_lower_timeframes(ticker, daily_dir):
     """
-    Runs the full analysis pipeline.
+    Step 2: Check 4H and 1H independently for confirmation.
     """
-    results_list = []
-    confirmation_timeframes = ["4h", "1h", "30m"]
+    timeframes = ["4h", "1h"]
+    confirmations = []
     
-    total_tickers = len(tickers_to_analyze)
-    for i, ticker in enumerate(tickers_to_analyze):
-        if status_callback:
-            status_callback(f"Analyzing {ticker}... ({i+1}/{total_tickers})")
+    for tf in timeframes:
+        df = get_data(ticker, period="1y", interval=tf)
+        if df is None: continue
         
-        # 1. Analyze the Daily Chart
-        daily_df = get_data(ticker=ticker, interval="1d")
-        daily_signal, daily_setup, daily_trend, debug_data = analyze_instrument(daily_df)
+        last = df.iloc[-1]
+        bbm = df['BBM_20']
         
-        final_signal = "Hold for now"
-        confirmed_tfs = []
-
-        # 2. Check lower timeframes
-        # We only check for confirmation if the signal wasn't filtered to "Hold for now"
-        if "Strong" in daily_signal or "Moderate" in daily_signal:
-            direction = "Buy" if "Buy" in daily_signal else "Sell"
-            final_signal = daily_signal
-            
-            for tf in confirmation_timeframes:
-                time.sleep(0.5) 
-                intraday_df = get_data(ticker=ticker, interval=tf)
-                tf_signal, _, _, _ = analyze_instrument(intraday_df) 
+        # 1. Check Slope & Transition
+        current_slope = get_slope(bbm, SLOPE_LOOKBACK)
+        transition = check_slope_transition(bbm, SLOPE_LOOKBACK)
+        
+        # 2. Check Crossover
+        crossover = check_crossover(df)
+        
+        # 3. Check Position
+        is_above = last['BBM_20'] > last['EMA_200']
+        
+        tf_notes = []
+        is_valid_tf = False
+        
+        # --- Evaluate Logic based on Direction ---
+        if daily_dir == "Buy":
+            # Requirement: Must be Above EMA
+            if is_above:
+                # Check for specific triggers
+                if transition == "Neg->Pos":
+                    tf_notes.append("Slope Flip")
+                    is_valid_tf = True
+                elif current_slope > 0:
+                    tf_notes.append("Trend Up")
+                    is_valid_tf = True
                 
-                if direction in tf_signal: 
-                    confirmed_tfs.append(tf)
+                # Super Signal Check
+                if crossover == "Bullish Cross":
+                    tf_notes.append("GOLDEN CROSS")
+                    is_valid_tf = True
 
-            # 3. Upgrade the signal
-            if "Strong" in daily_signal and confirmed_tfs:
-                final_signal = f"Super Strong {direction}"
+        elif daily_dir == "Sell":
+            # Requirement: Must be Below EMA
+            if not is_above:
+                if transition == "Pos->Neg":
+                    tf_notes.append("Slope Flip")
+                    is_valid_tf = True
+                elif current_slope < 0:
+                    tf_notes.append("Trend Down")
+                    is_valid_tf = True
+                
+                if crossover == "Bearish Cross":
+                    tf_notes.append("DEATH CROSS")
+                    is_valid_tf = True
+
+        if is_valid_tf:
+            note_str = " + ".join(tf_notes)
+            confirmations.append(f"{tf}: {note_str}")
+
+    return confirmations
+
+def run_scanner(tickers):
+    results = []
+    print(f"Scanning {len(tickers)} tickers...")
+    
+    for ticker in tickers:
+        print(f"Checking {ticker}...", end="\r")
+        daily = analyze_daily_chart(ticker)
         
-        # If the daily signal was "Hold for now", final_signal will also be "Hold for now"
-        elif "Hold" in daily_signal:
-            final_signal = "Hold for now"
+        if daily:
+            time.sleep(1) # API pacing
+            confs = analyze_lower_timeframes(ticker, daily['direction'])
             
-        # 4. Compile results
-        result_row = {
-            "Instrument": ticker,
-            "Trend": daily_trend, 
-            "Signal": final_signal,
-            "Daily Setup": daily_setup,
-            "Confirmation TFs": ", ".join(confirmed_tfs) if confirmed_tfs else "None"
-        }
-        
-        # Format and add debug data
-        formatted_debug_data = {}
-        for k, v in debug_data.items():
-            if isinstance(v, (float, np.floating)):
-                if '%' in k:
-                    formatted_debug_data[k] = f"{v * 100:.2f}%"
-                else:
-                    formatted_debug_data[k] = f"{v:.4f}"
-            else:
-                formatted_debug_data[k] = v
-        
-        result_row.update(formatted_debug_data)
-        results_list.append(result_row)
-        
-        time.sleep(1) # Main delay between tickers
+            # Valid if AT LEAST ONE lower timeframe confirms
+            if confs:
+                # Build Setup Label
+                labels = []
+                if daily['is_squeeze']: labels.append("Squeeze")
+                labels.append(daily['setup_type'])
+                final_setup = " + ".join(labels)
+                
+                # Determine Signal Strength
+                full_notes = " | ".join(confs)
+                signal_type = "SUPER" if "CROSS" in full_notes else "Standard"
+                
+                results.append({
+                    "Ticker": ticker,
+                    "Signal": f"{signal_type} {daily['direction']}",
+                    "Daily Setup": final_setup,
+                    "Confirmations": full_notes,
+                    "Est. Price": round(daily['price'], 2)
+                })
+    
+    print("\nScan Complete.")
+    return pd.DataFrame(results)
 
-    # Column order is already correct
-    column_order = [
-        "Instrument", "Trend", "Signal", "Daily Setup", "Confirmation TFs",
-        "Price", "BBM_20", "EMA_200", "Low", "High", "BB_Width", 
-        "Squeeze_Thresh", "Is_Squeeze", "SMA_Dist_EMA(%)",
-        "Price_Dist_EMA_Low(%)", "Price_Dist_EMA_High(%)",
-        "Fib_A", "Fib_B", "Fib_C", "Fib_0.786", "Fib_1.618"
+if __name__ == "__main__":
+    # Tickers
+    ticker_list = [
+        "NVDA", "TSLA", "AAPL", "MSFT", "GOOGL", "AMZN", "META", # Tech
+        "EURUSD=X", "GBPUSD=X", "USDJPY=X", # Forex
+        "BTC-USD", "ETH-USD", "SOL-USD" # Crypto
     ]
     
-    return pd.DataFrame(results_list, columns=column_order)
-
-# --- Example Usage (if you want to run this file directly) ---
-if __name__ == '__main__':
-    tickers = ["MSFT", "AAPL", "GOOGL", "EURUSD=X", "GBPUSD=X"]
-
-    def print_status(message):
-        print(message)
-
-    analysis_results = run_multi_timeframe_analysis(tickers, status_callback=print_status)
+    df_results = run_scanner(ticker_list)
     
-    print("\n--- Trading Analysis Results ---")
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.width', 2000)
-    print(analysis_results)
+    if not df_results.empty:
+        print("\n=== SCAN RESULTS ===")
+        pd.set_option('display.max_colwidth', None)
+        print(df_results.to_string(index=False))
+    else:
+        print("\nNo matching setups found.")
