@@ -79,7 +79,6 @@ def check_crossover(df, lookback=3):
     """Checks for BBM crossing EMA_200."""
     if len(df) < lookback + 1: return None
     
-    # Check the relationship lookback periods ago vs now
     prev_diff = df['BBM_20'].iloc[-lookback-1] - df['EMA_200'].iloc[-lookback-1]
     curr_diff = df['BBM_20'].iloc[-1] - df['EMA_200'].iloc[-1]
 
@@ -89,10 +88,7 @@ def check_crossover(df, lookback=3):
 
 def analyze_daily_chart(ticker):
     """
-    Step 1: Identify Potential on Daily.
-    Scenarios:
-    A) Squeeze
-    B) Mean Reversion (Price near EMA) -> Sub-types: Bounce or Flip
+    Step 1: Identify Potential on Daily (Squeeze or Mean Reversion).
     """
     df = get_data(ticker, period="2y", interval="1d")
     if df is None: return None
@@ -115,30 +111,11 @@ def analyze_daily_chart(ticker):
     if not (is_mean_rev or is_squeeze):
         return None
 
-    # 3. Determine Direction & Setup Type
-    # Check if a crossover happened recently (last 5 days) to detect a "Flip"
-    recent_cross = check_crossover(df, lookback=5)
-    
-    current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
-    setup_type = ""
-
-    if recent_cross:
-        # If we just crossed, it's a Trend Flip
-        if current_direction == "Buy" and recent_cross == "Bullish Cross":
-            setup_type = "Trend Flip (Up)"
-        elif current_direction == "Sell" and recent_cross == "Bearish Cross":
-            setup_type = "Trend Flip (Down)"
-        else:
-            # Fallback if cross direction doesn't match current state (rare volatility)
-            setup_type = "Mean Rev"
-    else:
-        # No recent cross, so it's a standard Mean Reversion / Squeeze
-        setup_type = "Mean Rev / Squeeze"
-
+    direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
+        
     return {
         "ticker": ticker,
-        "direction": current_direction,
-        "setup_type": setup_type,
+        "direction": direction,
         "is_squeeze": is_squeeze,
         "is_mean_rev": is_mean_rev,
         "price": last['BBM_20']
@@ -157,6 +134,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
         
         last = df.iloc[-1]
         bbm = df['BBM_20']
+        ema = df['EMA_200']
         
         # 1. Check Slope & Transition
         current_slope = get_slope(bbm, SLOPE_LOOKBACK)
@@ -222,11 +200,11 @@ def run_scanner(tickers):
             
             # Valid if AT LEAST ONE lower timeframe confirms
             if confs:
-                # Build Setup Label
-                labels = []
-                if daily['is_squeeze']: labels.append("Squeeze")
-                labels.append(daily['setup_type'])
-                final_setup = " + ".join(labels)
+                # Determine Setup Label
+                setup_parts = []
+                if daily['is_squeeze']: setup_parts.append("Squeeze")
+                if daily['is_mean_rev']: setup_parts.append("MeanRev")
+                setup_label = " + ".join(setup_parts)
                 
                 # Determine Signal Strength
                 full_notes = " | ".join(confs)
@@ -235,7 +213,7 @@ def run_scanner(tickers):
                 results.append({
                     "Ticker": ticker,
                     "Signal": f"{signal_type} {daily['direction']}",
-                    "Daily Setup": final_setup,
+                    "Daily Setup": setup_label,
                     "Confirmations": full_notes,
                     "Est. Price": round(daily['price'], 2)
                 })
