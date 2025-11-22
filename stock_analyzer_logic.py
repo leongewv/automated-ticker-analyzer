@@ -6,10 +6,12 @@ import time
 from datetime import datetime, timedelta
 
 # --- Configuration ---
-SLOPE_LOOKBACK = 5  # Candles to calculate slope
+SLOPE_LOOKBACK = 5        # Candles to calculate slope
 EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
+MEAN_REV_TOLERANCE_MAX = 0.03 # Max distance (3%)
+TREND_FLIP_MIN = 0.02         # Min distance to confirm a Flip (2%)
 
 def get_data(ticker, period="2y", interval="1d"):
     """
@@ -88,16 +90,18 @@ def check_crossover(df, lookback=3):
 
 def analyze_daily_chart(ticker):
     """
-    Step 1: Identify Potential on Daily (Squeeze or Mean Reversion).
+    Step 1: Identify Potential on Daily (Squeeze, Mean Reversion, or Trend Flip).
     """
     df = get_data(ticker, period="2y", interval="1d")
     if df is None: return None
 
     last = df.iloc[-1]
     
-    # 1. Mean Reversion (Within 2%)
+    # 1. Calculate Distance Percentage
     dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
-    is_mean_rev = dist_pct <= 0.02
+    
+    # Condition: Must be within 3% max tolerance
+    is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
     
     # 2. Squeeze (Bottom 20% width)
     lookback_squeeze = 126
@@ -108,16 +112,70 @@ def analyze_daily_chart(ticker):
     else:
         is_squeeze = False
 
-    if not (is_mean_rev or is_squeeze):
+    # If neither in the zone (<=3%) nor in a squeeze, no setup possible
+    if not (is_in_zone or is_squeeze):
         return None
 
-    direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
-        
+    # 3. Determine Direction & Setup Type
+    recent_cross = check_crossover(df, lookback=5)
+    current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
+    bbm_slope = get_slope(df['BBM_20'], lookback=5)
+    
+    setup_type = ""
+    is_valid_setup = False
+
+    # --- SETUP VALIDATION LOGIC ---
+    
+    if recent_cross:
+        # SCENARIO A: TREND FLIP
+        # RULE: Must be >= 2% away to confirm the flip (avoid false signals)
+        if dist_pct >= TREND_FLIP_MIN: 
+            if current_direction == "Buy" and recent_cross == "Bullish Cross":
+                setup_type = "Trend Flip (Up)"
+                is_valid_setup = True
+            elif current_direction == "Sell" and recent_cross == "Bearish Cross":
+                setup_type = "Trend Flip (Down)"
+                is_valid_setup = True
+        else:
+            # It crossed, but distance is < 2%. 
+            # It fails the Trend Flip Confirmation (treated as noise).
+            is_valid_setup = False
+            
+    elif is_in_zone:
+        # SCENARIO B: PURE MEAN REVERSION (Bounce - No recent Cross)
+        # Approach Validation: Verify slope is "reverting" towards EMA
+        if current_direction == "Buy":
+            # If price is above EMA (Buy), BBM should be sloping DOWN (Pullback)
+            if bbm_slope < 0: 
+                setup_type = "Mean Rev (Bounce Up)"
+                is_valid_setup = True
+            
+        elif current_direction == "Sell":
+            # If price is below EMA (Sell), BBM should be sloping UP (Pullback)
+            if bbm_slope > 0: 
+                setup_type = "Mean Rev (Bounce Down)"
+                is_valid_setup = True
+
+    # SCENARIO C: SQUEEZE (Override validation if squeeze is present)
+    if is_squeeze:
+        # If we already have a valid setup (e.g. Trend Flip > 2%), append Squeeze label
+        if is_valid_setup:
+            setup_type = f"Squeeze ({setup_type})"
+        else:
+            # If we didn't have a valid setup (e.g. Flip was < 2%), 
+            # the Squeeze itself is the setup, regardless of flip distance.
+            setup_type = "Squeeze"
+        is_valid_setup = True
+
+    if not is_valid_setup:
+        return None
+
     return {
         "ticker": ticker,
-        "direction": direction,
+        "direction": current_direction,
+        "setup_type": setup_type,
         "is_squeeze": is_squeeze,
-        "is_mean_rev": is_mean_rev,
+        "is_mean_rev": is_in_zone,
         "price": last['BBM_20']
     }
 
@@ -200,11 +258,13 @@ def run_scanner(tickers):
             
             # Valid if AT LEAST ONE lower timeframe confirms
             if confs:
-                # Determine Setup Label
-                setup_parts = []
-                if daily['is_squeeze']: setup_parts.append("Squeeze")
-                if daily['is_mean_rev']: setup_parts.append("MeanRev")
-                setup_label = " + ".join(setup_parts)
+                # Build Setup Label
+                labels = []
+                # Clean up labels so we don't have "Squeeze (Mean Rev) + Squeeze"
+                if "Squeeze" not in daily['setup_type'] and daily['is_squeeze']:
+                    labels.append("Squeeze")
+                labels.append(daily['setup_type'])
+                final_setup = " + ".join(labels)
                 
                 # Determine Signal Strength
                 full_notes = " | ".join(confs)
@@ -213,7 +273,7 @@ def run_scanner(tickers):
                 results.append({
                     "Ticker": ticker,
                     "Signal": f"{signal_type} {daily['direction']}",
-                    "Daily Setup": setup_label,
+                    "Daily Setup": final_setup,
                     "Confirmations": full_notes,
                     "Est. Price": round(daily['price'], 2)
                 })
