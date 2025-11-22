@@ -280,20 +280,3 @@ def run_scanner(tickers):
     
     print("\nScan Complete.")
     return pd.DataFrame(results)
-
-if __name__ == "__main__":
-    # Tickers
-    ticker_list = [
-        "NVDA", "TSLA", "AAPL", "MSFT", "GOOGL", "AMZN", "META", # Tech
-        "EURUSD=X", "GBPUSD=X", "USDJPY=X", # Forex
-        "BTC-USD", "ETH-USD", "SOL-USD" # Crypto
-    ]
-    
-    df_results = run_scanner(ticker_list)
-    
-    if not df_results.empty:
-        print("\n=== SCAN RESULTS ===")
-        pd.set_option('display.max_colwidth', None)
-        print(df_results.to_string(index=False))
-    else:
-        print("\nNo matching setups found.")
