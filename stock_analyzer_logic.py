@@ -51,8 +51,11 @@ def get_slope(series, lookback):
     return slope
 
 def check_slope_transition(series, dates, lookback, label_suffix=""):
-    """Checks for fresh slope sign shift at the current moment."""
-    if len(series) < (lookback * 2): return None, None, None
+    """
+    Checks for slope sign shift.
+    Returns: (Signal, Text, Time, Price)
+    """
+    if len(series) < (lookback * 2): return None, None, None, None
 
     curr_slope = get_slope(series.iloc[-lookback:], lookback)
     prev_series = series.iloc[-(lookback*2):-lookback]
@@ -60,96 +63,80 @@ def check_slope_transition(series, dates, lookback, label_suffix=""):
     
     event_idx = -lookback
     event_time = dates[event_idx].strftime('%Y-%m-%d %H:%M')
+    event_price = series.iloc[event_idx] # Capture the price level of the flip
 
     sig_text = None
     if prev_slope < 0 and curr_slope > 0:
         sig_text = f"Slope Flip {label_suffix}"
-        return "Neg->Pos", sig_text, event_time
+        return "Neg->Pos", sig_text, event_time, event_price
     if prev_slope > 0 and curr_slope < 0:
         sig_text = f"Slope Flip {label_suffix}"
-        return "Pos->Neg", sig_text, event_time
+        return "Pos->Neg", sig_text, event_time, event_price
         
-    return None, None, None
+    return None, None, None, None
 
 def check_retest_validity(df, lookback_speed, direction):
     """
     Scans BACKWARDS to find the last valid slope flip.
-    Then checks if price retested that flip level (within tolerance) and bounced.
+    Returns: (IsValid, RetestPrice, FlipTime)
     """
     series = df['BBM_20']
     limit = 60 # Scan back limit
     
-    # We iterate backwards from 'now' to find the most recent flip
-    # Start loop from -1 down to -limit
     found_flip_idx = None
     flip_level = None
+    flip_time_str = None
     
-    # We need enough data history
-    if len(series) < limit + lookback_speed * 2: return False
+    if len(series) < limit + lookback_speed * 2: return False, None, None
 
     # 1. Find the Flip
     for i in range(1, limit):
-        # Slice for the historical window check
-        # 'end' is the point we are checking. 
-        # Window A: end-lookback to end
-        # Window B: end-2*lookback to end-lookback
-        
-        # Adjust indices for slicing relative to 'i' steps back
         idx_now = len(series) - i
         
-        # Current window at that historical point
         hist_curr = series.iloc[idx_now - lookback_speed : idx_now]
-        # Previous window
         hist_prev = series.iloc[idx_now - (lookback_speed*2) : idx_now - lookback_speed]
         
         s_curr = get_slope(hist_curr, lookback_speed)
         s_prev = get_slope(hist_prev, lookback_speed)
         
-        # Check Flip Logic
         if direction == "Buy" and s_prev < 0 and s_curr > 0:
-            found_flip_idx = idx_now - lookback_speed # The pivot point
+            found_flip_idx = idx_now - lookback_speed
             flip_level = series.iloc[found_flip_idx]
+            flip_time_str = df.index[found_flip_idx].strftime('%Y-%m-%d %H:%M')
             break
         elif direction == "Sell" and s_prev > 0 and s_curr < 0:
             found_flip_idx = idx_now - lookback_speed
             flip_level = series.iloc[found_flip_idx]
+            flip_time_str = df.index[found_flip_idx].strftime('%Y-%m-%d %H:%M')
             break
             
     if found_flip_idx is None:
-        return False # No structural flip found in recent history
+        return False, None, None
 
-    # 2. Verify Retest (The "Kiss")
-    # We look at price action from the Flip Index until Now
+    # 2. Verify Retest
     segment_lows = df['low'].iloc[found_flip_idx:]
     segment_highs = df['high'].iloc[found_flip_idx:]
     current_close = df['close'].iloc[-1]
 
     if direction == "Buy":
-        # Did price drop near the flip level?
         lowest_since_flip = segment_lows.min()
-        
-        # Tolerance Check: Is the Low within 1.5% of the Flip Level?
-        # Note: It can be slightly below or slightly above
         dist = abs(lowest_since_flip - flip_level) / flip_level
         is_retest_ok = dist <= RETEST_TOLERANCE
-        
-        # Bounce Check: Are we currently above the lows?
         is_bouncing = current_close > lowest_since_flip
         
-        return is_retest_ok and is_bouncing
+        if is_retest_ok and is_bouncing:
+            return True, lowest_since_flip, flip_time_str
 
     elif direction == "Sell":
-        # Did price rise near the flip level?
         highest_since_flip = segment_highs.max()
-        
         dist = abs(highest_since_flip - flip_level) / flip_level
         is_retest_ok = dist <= RETEST_TOLERANCE
-        
         is_bouncing = current_close < highest_since_flip
         
-        return is_retest_ok and is_bouncing
+        if is_retest_ok and is_bouncing:
+            return True, highest_since_flip, flip_time_str
 
-    return False
+    return False, None, None
 
 def check_crossover(df, lookback=5):
     """Checks for BBM crossing EMA_200."""
@@ -243,8 +230,8 @@ def analyze_lower_timeframes(ticker, daily_dir):
         bbm = df['BBM_20']
         
         # --- DUAL SPEED CHECK ---
-        trans_slow, sig_text_slow, time_slow = check_slope_transition(bbm, df.index, SLOPE_LOOKBACK_SLOW, "(Slow)")
-        trans_fast, sig_text_fast, time_fast = check_slope_transition(bbm, df.index, SLOPE_LOOKBACK_FAST, "(Fast)")
+        trans_slow, sig_text_slow, time_slow, price_slow = check_slope_transition(bbm, df.index, SLOPE_LOOKBACK_SLOW, "(Slow)")
+        trans_fast, sig_text_fast, time_fast, price_fast = check_slope_transition(bbm, df.index, SLOPE_LOOKBACK_FAST, "(Fast)")
         
         cross_sig, cross_time = check_crossover(df)
         is_above = last['BBM_20'] > last['EMA_200']
@@ -257,11 +244,12 @@ def analyze_lower_timeframes(ticker, daily_dir):
         active_trans = None
         active_trans_sig = None
         active_trans_time = None
+        active_trans_price = None
         
         if trans_fast:
-            active_trans, active_trans_sig, active_trans_time = trans_fast, sig_text_fast, time_fast
+            active_trans, active_trans_sig, active_trans_time, active_trans_price = trans_fast, sig_text_fast, time_fast, price_fast
         if trans_slow:
-            active_trans, active_trans_sig, active_trans_time = trans_slow, sig_text_slow, time_slow
+            active_trans, active_trans_sig, active_trans_time, active_trans_price = trans_slow, sig_text_slow, time_slow, price_slow
 
         current_slope_fast = get_slope(bbm, SLOPE_LOOKBACK_FAST)
 
@@ -271,20 +259,18 @@ def analyze_lower_timeframes(ticker, daily_dir):
                 # A. Fresh Flip
                 if active_trans == "Neg->Pos":
                     tf_notes.append(active_trans_sig)
-                    tf_time = active_trans_time
+                    tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
                 
                 # B. Trend Continuation (With Retest Check)
                 elif current_slope_fast > 0:
-                    # Check if we respected previous structure (Fast or Slow flip retest)
-                    # We check Slow first as it's more significant
-                    retest_ok = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Buy")
+                    retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Buy")
                     if not retest_ok:
-                        # Fallback to Fast flip retest
-                        retest_ok = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
+                        retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
                     
                     if retest_ok:
                         tf_notes.append("Trend Up (Retest Confirmed)")
+                        tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
                         is_valid_tf = True
                 
                 # C. Golden Cross
@@ -297,16 +283,17 @@ def analyze_lower_timeframes(ticker, daily_dir):
             if not is_above:
                 if active_trans == "Pos->Neg":
                     tf_notes.append(active_trans_sig)
-                    tf_time = active_trans_time
+                    tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
                 
                 elif current_slope_fast < 0:
-                    retest_ok = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Sell")
+                    retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Sell")
                     if not retest_ok:
-                        retest_ok = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
+                        retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
 
                     if retest_ok:
                         tf_notes.append("Trend Down (Retest Confirmed)")
+                        tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
                         is_valid_tf = True
                 
                 if cross_sig == "Bearish Cross":
