@@ -14,7 +14,7 @@ BCH,No Signal,None,"Not in Zone (Dist: 21.08%, Price: 35.89, EMA: 29.64)",-,-,-
 BEAM,No Signal,None,"Not in Zone (Dist: 3.56%, Price: 22.96, EMA: 22.17)",-,-,-
 BSV,Standard Buy,Squeeze,None,4h: Slope Flip (Fast) | 1h: Slope Flip (Slow),4h: 2025-11-18 09:30 @ 78.80 | 1h: 2025-11-19 10:30 @ 78.81,78.81
 BTC,No Signal,None,"Not in Zone (Dist: 3.69%, Price: 44.68, EMA: 46.39)",-,-,-
-CADJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.09695 pointing Up),-,-,-
+CADJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.09693 pointing Up),-,-,-
 CC,No Signal,None,"Not in Zone (Dist: 13.66%, Price: 12.23, EMA: 14.16)",-,-,-
 CELH,No Signal,None,"Not in Zone (Dist: 3.61%, Price: 49.57, EMA: 47.84)",-,-,-
 COIN,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,302.68
@@ -61,8 +61,8 @@ NEXA,No Signal,None,"Not in Zone (Dist: 5.47%, Price: 5.82, EMA: 5.51)",-,-,-
 NFLX,No Signal,None,Setup Invalid: Flip Dist Too Small (0.41% < 2%),-,-,-
 NVDA,No Signal,None,"Not in Zone (Dist: 19.08%, Price: 192.95, EMA: 162.03)",-,-,-
 NZDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00054 pointing Down),-,-,-
-NZDJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01857 pointing Up),-,-,-
-NZDUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00047 pointing Down),-,-,-
+NZDJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01861 pointing Up),-,-,-
+NZDUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00046 pointing Down),-,-,-
 OMG,No Signal,None,Data Fetch Error,-,-,-
 OPTI,No Signal,None,Setup Invalid: Flip Dist Too Small (0.65% < 2%),-,-,-
 PIVX,No Signal,None,Data Fetch Error,-,-,-
