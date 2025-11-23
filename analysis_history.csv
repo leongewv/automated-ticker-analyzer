@@ -1,5 +1,59 @@
-Ticker,Signal,Daily Setup,Confirmations,Switch Time,Est. Price
-AAPL,Standard Buy,Squeeze,1h: Slope Flip (Slow),1h: 2025-11-19 10:30 @ 269.28,269.94
-EURAUD=X,Standard Buy,Mean Rev (Bounce Up),4h: Trend Up (Retest Confirmed),4h: Retest @ 1.77 (Flip: 2025-11-17 04:00),1.77
-GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),1h: Trend Up (Retest Confirmed),1h: Retest @ 1.84 (Flip: 2025-11-20 18:00),1.84
-GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),4h: Slope Flip (Slow),4h: 2025-11-18 16:00 @ 2.32,2.32
+Ticker,Signal,Daily Setup,Failure Reason,Confirmations,Switch Time,Est. Price
+AAPL,Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 10:30 @ 269.28,269.94
+ADA-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+AMZN,No Signal,None,Not in Zone or Squeeze,-,-,-
+ASML,No Signal,None,Not in Zone or Squeeze,-,-,-
+AUDCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,0.91
+AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.52
+AUDJPY=X,No Signal,None,Not in Zone or Squeeze,-,-,-
+AUDNZD=X,No Signal,None,Not in Zone or Squeeze,-,-,-
+AUDUSD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.65
+BNB-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+BTC-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+CADJPY=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+CELH,No Signal,None,Not in Zone or Squeeze,-,-,-
+COIN,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,302.68
+CPRT,No Signal,None,Not in Zone or Squeeze,-,-,-
+DOGE-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+ETH-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+EURAUD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed),4h: Retest @ 1.77 (Flip: 2025-11-17 04:00),1.77
+EURCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.62
+EURGBP=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+EURJPY=X,No Signal,None,Not in Zone or Squeeze,-,-,-
+EURNZD=X,No Signal,None,Not in Zone or Squeeze,-,-,-
+EURUSD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.16
+FTNT,No Signal,None,Not in Zone or Squeeze,-,-,-
+GBPAUD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
+GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.84 (Flip: 2025-11-20 18:00),1.84
+GBPJPY=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Slope Flip (Slow),4h: 2025-11-18 16:00 @ 2.32,2.32
+GBPUSD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
+GEHC,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
+GOOG,No Signal,None,Not in Zone or Squeeze,-,-,-
+GOOGL,No Signal,None,Not in Zone or Squeeze,-,-,-
+ISRG,No Signal,None,Not in Zone or Squeeze,-,-,-
+LINK-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+MDT,No Signal,None,Not in Zone or Squeeze,-,-,-
+META,No Signal,None,Not in Zone or Squeeze,-,-,-
+MSFT,No Signal,None,Not in Zone or Squeeze,-,-,-
+NFLX,No Signal,None,Setup Invalid: Flip Distance Too Small (<2%),-,-,-
+NVDA,No Signal,None,Not in Zone or Squeeze,-,-,-
+NZDCAD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
+NZDJPY=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+NZDUSD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
+PLTR,No Signal,None,Not in Zone or Squeeze,-,-,-
+QQQ,No Signal,None,Not in Zone or Squeeze,-,-,-
+SAP,No Signal,None,Not in Zone or Squeeze,-,-,-
+SOL-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+SPY,No Signal,None,Not in Zone or Squeeze,-,-,-
+SUI-USD,No Signal,None,Data Fetch Error,-,-,-
+TRX-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+TSLA,No Signal,None,Not in Zone or Squeeze,-,-,-
+USDCAD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+USDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.8
+USDJPY=X,No Signal,None,Not in Zone or Squeeze,-,-,-
+WETH-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+XAGUSD=X,No Signal,None,Data Fetch Error,-,-,-
+XAUUSD=X,No Signal,None,Data Fetch Error,-,-,-
+XLM-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+XRP-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
