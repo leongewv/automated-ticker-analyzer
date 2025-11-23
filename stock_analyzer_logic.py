@@ -14,7 +14,7 @@ BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 MEAN_REV_TOLERANCE_MAX = 0.03 
 TREND_FLIP_MIN = 0.02
-RETEST_TOLERANCE = 0.015  # 1.5% tolerance for the retest "kiss"
+RETEST_TOLERANCE = 0.015
 
 def get_data(ticker, period="2y", interval="1d"):
     """Fetches data and calculates indicators."""
@@ -51,10 +51,7 @@ def get_slope(series, lookback):
     return slope
 
 def check_slope_transition(series, dates, lookback, label_suffix=""):
-    """
-    Checks for slope sign shift.
-    Returns: (Signal, Text, Time, Price)
-    """
+    """Checks for slope sign shift."""
     if len(series) < (lookback * 2): return None, None, None, None
 
     curr_slope = get_slope(series.iloc[-lookback:], lookback)
@@ -63,7 +60,7 @@ def check_slope_transition(series, dates, lookback, label_suffix=""):
     
     event_idx = -lookback
     event_time = dates[event_idx].strftime('%Y-%m-%d %H:%M')
-    event_price = series.iloc[event_idx] # Capture the price level of the flip
+    event_price = series.iloc[event_idx]
 
     sig_text = None
     if prev_slope < 0 and curr_slope > 0:
@@ -76,12 +73,9 @@ def check_slope_transition(series, dates, lookback, label_suffix=""):
     return None, None, None, None
 
 def check_retest_validity(df, lookback_speed, direction):
-    """
-    Scans BACKWARDS to find the last valid slope flip.
-    Returns: (IsValid, RetestPrice, FlipTime)
-    """
+    """Scans BACKWARDS to find the last valid slope flip and verify retest."""
     series = df['BBM_20']
-    limit = 60 # Scan back limit
+    limit = 60
     
     found_flip_idx = None
     flip_level = None
@@ -89,10 +83,8 @@ def check_retest_validity(df, lookback_speed, direction):
     
     if len(series) < limit + lookback_speed * 2: return False, None, None
 
-    # 1. Find the Flip
     for i in range(1, limit):
         idx_now = len(series) - i
-        
         hist_curr = series.iloc[idx_now - lookback_speed : idx_now]
         hist_prev = series.iloc[idx_now - (lookback_speed*2) : idx_now - lookback_speed]
         
@@ -110,10 +102,8 @@ def check_retest_validity(df, lookback_speed, direction):
             flip_time_str = df.index[found_flip_idx].strftime('%Y-%m-%d %H:%M')
             break
             
-    if found_flip_idx is None:
-        return False, None, None
+    if found_flip_idx is None: return False, None, None
 
-    # 2. Verify Retest
     segment_lows = df['low'].iloc[found_flip_idx:]
     segment_highs = df['high'].iloc[found_flip_idx:]
     current_close = df['close'].iloc[-1]
@@ -123,7 +113,6 @@ def check_retest_validity(df, lookback_speed, direction):
         dist = abs(lowest_since_flip - flip_level) / flip_level
         is_retest_ok = dist <= RETEST_TOLERANCE
         is_bouncing = current_close > lowest_since_flip
-        
         if is_retest_ok and is_bouncing:
             return True, lowest_since_flip, flip_time_str
 
@@ -132,7 +121,6 @@ def check_retest_validity(df, lookback_speed, direction):
         dist = abs(highest_since_flip - flip_level) / flip_level
         is_retest_ok = dist <= RETEST_TOLERANCE
         is_bouncing = current_close < highest_since_flip
-        
         if is_retest_ok and is_bouncing:
             return True, highest_since_flip, flip_time_str
 
@@ -149,16 +137,18 @@ def check_crossover(df, lookback=5):
         curr_diff = bbm.iloc[-i] - ema.iloc[-i]
         prev_diff = bbm.iloc[-(i+1)] - ema.iloc[-(i+1)]
         current_time = dates[-i].strftime('%Y-%m-%d %H:%M')
-
         if prev_diff < 0 and curr_diff > 0: return "Bullish Cross", current_time
         if prev_diff > 0 and curr_diff < 0: return "Bearish Cross", current_time
 
     return None, None
 
 def analyze_daily_chart(ticker):
-    """Step 1: Identify Potential on Daily."""
+    """
+    Step 1: Identify Potential on Daily.
+    Returns: (ResultDict, FailureReason)
+    """
     df = get_data(ticker, period="2y", interval="1d")
-    if df is None: return None
+    if df is None: return None, "Data Fetch Error"
 
     last = df.iloc[-1]
     dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
@@ -173,7 +163,8 @@ def analyze_daily_chart(ticker):
     else:
         is_squeeze = False
 
-    if not (is_in_zone or is_squeeze): return None
+    if not (is_in_zone or is_squeeze): 
+        return None, "Not in Zone or Squeeze"
 
     cross_signal, _ = check_crossover(df, lookback=5) 
     current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
@@ -181,6 +172,7 @@ def analyze_daily_chart(ticker):
     
     setup_type = ""
     is_valid_setup = False
+    fail_reason = ""
 
     if cross_signal:
         if dist_pct >= TREND_FLIP_MIN: 
@@ -190,22 +182,31 @@ def analyze_daily_chart(ticker):
             elif current_direction == "Sell" and cross_signal == "Bearish Cross":
                 setup_type = "Trend Flip (Down)"
                 is_valid_setup = True
-        else: is_valid_setup = False
+        else: 
+            is_valid_setup = False
+            fail_reason = "Flip Distance Too Small (<2%)"
             
     elif is_in_zone:
-        if current_direction == "Buy" and bbm_slope < 0: 
-            setup_type = "Mean Rev (Bounce Up)"
-            is_valid_setup = True
-        elif current_direction == "Sell" and bbm_slope > 0: 
-            setup_type = "Mean Rev (Bounce Down)"
-            is_valid_setup = True
+        if current_direction == "Buy":
+            if bbm_slope < 0: 
+                setup_type = "Mean Rev (Bounce Up)"
+                is_valid_setup = True
+            else:
+                fail_reason = "Slope Valid. Failed (Pointing Up)"
+        elif current_direction == "Sell": 
+            if bbm_slope > 0: 
+                setup_type = "Mean Rev (Bounce Down)"
+                is_valid_setup = True
+            else:
+                fail_reason = "Slope Valid. Failed (Pointing Down)"
 
     if is_squeeze:
         if is_valid_setup: setup_type = f"Squeeze ({setup_type})"
         else: setup_type = "Squeeze"
         is_valid_setup = True
 
-    if not is_valid_setup: return None
+    if not is_valid_setup: 
+        return None, f"Setup Invalid: {fail_reason}"
 
     return {
         "ticker": ticker,
@@ -214,10 +215,10 @@ def analyze_daily_chart(ticker):
         "is_squeeze": is_squeeze,
         "is_mean_rev": is_in_zone,
         "price": last['BBM_20']
-    }
+    }, None
 
 def analyze_lower_timeframes(ticker, daily_dir):
-    """Step 2: Check 4H and 1H using Dual-Speed + Retest Logic."""
+    """Step 2: Check 4H and 1H."""
     timeframes = ["4h", "1h"]
     confirmations = []
     time_logs = []
@@ -229,7 +230,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
         last = df.iloc[-1]
         bbm = df['BBM_20']
         
-        # --- DUAL SPEED CHECK ---
         trans_slow, sig_text_slow, time_slow, price_slow = check_slope_transition(bbm, df.index, SLOPE_LOOKBACK_SLOW, "(Slow)")
         trans_fast, sig_text_fast, time_fast, price_fast = check_slope_transition(bbm, df.index, SLOPE_LOOKBACK_FAST, "(Fast)")
         
@@ -240,7 +240,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
         tf_time = "Established" 
         is_valid_tf = False
         
-        # Prioritize Transition Signals
         active_trans = None
         active_trans_sig = None
         active_trans_time = None
@@ -253,27 +252,20 @@ def analyze_lower_timeframes(ticker, daily_dir):
 
         current_slope_fast = get_slope(bbm, SLOPE_LOOKBACK_FAST)
 
-        # --- Evaluate Logic ---
         if daily_dir == "Buy":
             if is_above:
-                # A. Fresh Flip
                 if active_trans == "Neg->Pos":
                     tf_notes.append(active_trans_sig)
                     tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
-                
-                # B. Trend Continuation (With Retest Check)
                 elif current_slope_fast > 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Buy")
                     if not retest_ok:
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
-                    
                     if retest_ok:
                         tf_notes.append("Trend Up (Retest Confirmed)")
                         tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
                         is_valid_tf = True
-                
-                # C. Golden Cross
                 if cross_sig == "Bullish Cross":
                     tf_notes.append("GOLDEN CROSS")
                     tf_time = cross_time
@@ -285,17 +277,14 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     tf_notes.append(active_trans_sig)
                     tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
-                
                 elif current_slope_fast < 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Sell")
                     if not retest_ok:
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
-
                     if retest_ok:
                         tf_notes.append("Trend Down (Retest Confirmed)")
                         tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
                         is_valid_tf = True
-                
                 if cross_sig == "Bearish Cross":
                     tf_notes.append("DEATH CROSS")
                     tf_time = cross_time
@@ -314,31 +303,55 @@ def run_scanner(tickers):
     
     for ticker in tickers:
         print(f"Checking {ticker}...", end="\r")
-        daily = analyze_daily_chart(ticker)
+        daily, failure_reason = analyze_daily_chart(ticker)
         
-        if daily:
-            time.sleep(1) # API pacing
-            confs, times = analyze_lower_timeframes(ticker, daily['direction'])
+        if not daily:
+             results.append({
+                "Ticker": ticker,
+                "Signal": "No Signal",
+                "Daily Setup": "None",
+                "Failure Reason": failure_reason,
+                "Confirmations": "-",
+                "Switch Time": "-",
+                "Est. Price": "-"
+            })
+             continue
+        
+        # If daily is good, check lower timeframes
+        time.sleep(1) # API pacing
+        confs, times = analyze_lower_timeframes(ticker, daily['direction'])
+        
+        if confs:
+            labels = []
+            if "Squeeze" not in daily['setup_type'] and daily['is_squeeze']:
+                labels.append("Squeeze")
+            labels.append(daily['setup_type'])
+            final_setup = " + ".join(labels)
             
-            if confs:
-                labels = []
-                if "Squeeze" not in daily['setup_type'] and daily['is_squeeze']:
-                    labels.append("Squeeze")
-                labels.append(daily['setup_type'])
-                final_setup = " + ".join(labels)
-                
-                full_notes = " | ".join(confs)
-                time_notes = " | ".join(times)
-                signal_type = "SUPER" if "CROSS" in full_notes else "Standard"
-                
-                results.append({
-                    "Ticker": ticker,
-                    "Signal": f"{signal_type} {daily['direction']}",
-                    "Daily Setup": final_setup,
-                    "Confirmations": full_notes,
-                    "Switch Time": time_notes,
-                    "Est. Price": round(daily['price'], 2)
-                })
+            full_notes = " | ".join(confs)
+            time_notes = " | ".join(times)
+            signal_type = "SUPER" if "CROSS" in full_notes else "Standard"
+            
+            results.append({
+                "Ticker": ticker,
+                "Signal": f"{signal_type} {daily['direction']}",
+                "Daily Setup": final_setup,
+                "Failure Reason": "None",
+                "Confirmations": full_notes,
+                "Switch Time": time_notes,
+                "Est. Price": round(daily['price'], 2)
+            })
+        else:
+            # Daily passed, but Lower TF failed
+            results.append({
+                "Ticker": ticker,
+                "Signal": "No Signal",
+                "Daily Setup": daily['setup_type'],
+                "Failure Reason": "Lower TF Mismatch",
+                "Confirmations": "-",
+                "Switch Time": "-",
+                "Est. Price": round(daily['price'], 2)
+            })
     
     print("\nScan Complete.")
     return pd.DataFrame(results)
