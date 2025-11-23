@@ -6,7 +6,10 @@ import time
 from datetime import datetime, timedelta
 
 # --- Configuration ---
-SLOPE_LOOKBACK = 5        # Candles to calculate slope
+# We now have two speeds for slope detection
+SLOPE_LOOKBACK_SLOW = 20  # 40-candle footprint (Smooth)
+SLOPE_LOOKBACK_FAST = 8   # 16-candle footprint (Responsive)
+
 EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
@@ -45,10 +48,9 @@ def get_data(ticker, period="2y", interval="1d"):
         return df
     
     except Exception as e:
-        # print(f"Error fetching {ticker}: {e}") # Optional: uncomment for debug
         return None
 
-def get_slope(series, lookback=5):
+def get_slope(series, lookback):
     """Calculates linear regression slope of the last N values."""
     if len(series) < lookback: return 0
     y = series.iloc[-lookback:].values
@@ -56,54 +58,67 @@ def get_slope(series, lookback=5):
     slope, _ = np.polyfit(x, y, 1)
     return slope
 
-def check_slope_transition(series, lookback=5):
+def check_slope_transition(series, dates, lookback, label_suffix=""):
     """
-    Checks if the slope has shifted sign in the current window compared to the previous window.
-    Returns: 'Pos->Neg', 'Neg->Pos', or None
+    Checks for slope sign shift using a specific lookback window.
+    Returns: (Signal String, Timestamp String) or (None, None)
     """
-    if len(series) < (lookback * 2): return None
+    if len(series) < (lookback * 2): return None, None
 
-    # Slope of current window
+    # 1. Slope of Current Window
     curr_slope = get_slope(series.iloc[-lookback:], lookback)
     
-    # Slope of previous window (shifted back by 1 candle to catch immediate turns)
-    prev_series = series.iloc[-(lookback+1):-1]
+    # 2. Slope of Previous Window
+    prev_series = series.iloc[-(lookback*2):-lookback]
     prev_slope = get_slope(prev_series, lookback)
     
+    # Event time is roughly start of current window
+    event_idx = -lookback
+    event_time = dates[event_idx].strftime('%Y-%m-%d %H:%M')
+
+    sig_text = None
     if prev_slope < 0 and curr_slope > 0:
-        return "Neg->Pos"
+        sig_text = f"Slope Flip {label_suffix}" # e.g. "Slope Flip (Fast)"
+        return "Neg->Pos", sig_text, event_time
     if prev_slope > 0 and curr_slope < 0:
-        return "Pos->Neg"
+        sig_text = f"Slope Flip {label_suffix}"
+        return "Pos->Neg", sig_text, event_time
         
-    return None
+    return None, None, None
 
-def check_crossover(df, lookback=3):
-    """Checks for BBM crossing EMA_200."""
-    if len(df) < lookback + 1: return None
+def check_crossover(df, lookback=5):
+    """
+    Checks for BBM crossing EMA_200 in the last N candles.
+    """
+    if len(df) < lookback + 1: return None, None
     
-    prev_diff = df['BBM_20'].iloc[-lookback-1] - df['EMA_200'].iloc[-lookback-1]
-    curr_diff = df['BBM_20'].iloc[-1] - df['EMA_200'].iloc[-1]
+    bbm = df['BBM_20']
+    ema = df['EMA_200']
+    dates = df.index
 
-    if prev_diff < 0 and curr_diff > 0: return "Bullish Cross"
-    if prev_diff > 0 and curr_diff < 0: return "Bearish Cross"
-    return None
+    for i in range(1, lookback + 1):
+        curr_diff = bbm.iloc[-i] - ema.iloc[-i]
+        prev_diff = bbm.iloc[-(i+1)] - ema.iloc[-(i+1)]
+        
+        current_time = dates[-i].strftime('%Y-%m-%d %H:%M')
+
+        if prev_diff < 0 and curr_diff > 0: 
+            return "Bullish Cross", current_time
+        if prev_diff > 0 and curr_diff < 0: 
+            return "Bearish Cross", current_time
+
+    return None, None
 
 def analyze_daily_chart(ticker):
-    """
-    Step 1: Identify Potential on Daily (Squeeze, Mean Reversion, or Trend Flip).
-    """
+    """Step 1: Identify Potential on Daily."""
     df = get_data(ticker, period="2y", interval="1d")
     if df is None: return None
 
     last = df.iloc[-1]
-    
-    # 1. Calculate Distance Percentage
     dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
     
-    # Condition: Must be within 3% max tolerance
     is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
     
-    # 2. Squeeze (Bottom 20% width)
     lookback_squeeze = 126
     if len(df) > lookback_squeeze:
         recent_widths = df['BB_WIDTH'].iloc[-lookback_squeeze:]
@@ -112,63 +127,44 @@ def analyze_daily_chart(ticker):
     else:
         is_squeeze = False
 
-    # If neither in the zone (<=3%) nor in a squeeze, no setup possible
     if not (is_in_zone or is_squeeze):
         return None
 
-    # 3. Determine Direction & Setup Type
-    recent_cross = check_crossover(df, lookback=5)
+    cross_signal, _ = check_crossover(df, lookback=5) 
     current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
-    bbm_slope = get_slope(df['BBM_20'], lookback=5)
+    
+    # Use Slow lookback for Daily structural analysis
+    bbm_slope = get_slope(df['BBM_20'], lookback=SLOPE_LOOKBACK_SLOW)
     
     setup_type = ""
     is_valid_setup = False
 
-    # --- SETUP VALIDATION LOGIC ---
-    
-    if recent_cross:
-        # SCENARIO A: TREND FLIP
-        # RULE: Must be >= 2% away to confirm the flip (avoid false signals)
+    # --- VALIDATION ---
+    if cross_signal:
         if dist_pct >= TREND_FLIP_MIN: 
-            if current_direction == "Buy" and recent_cross == "Bullish Cross":
+            if current_direction == "Buy" and cross_signal == "Bullish Cross":
                 setup_type = "Trend Flip (Up)"
                 is_valid_setup = True
-            elif current_direction == "Sell" and recent_cross == "Bearish Cross":
+            elif current_direction == "Sell" and cross_signal == "Bearish Cross":
                 setup_type = "Trend Flip (Down)"
                 is_valid_setup = True
         else:
-            # It crossed, but distance is < 2%. 
-            # It fails the Trend Flip Confirmation (treated as noise).
             is_valid_setup = False
             
     elif is_in_zone:
-        # SCENARIO B: PURE MEAN REVERSION (Bounce - No recent Cross)
-        # Approach Validation: Verify slope is "reverting" towards EMA
-        if current_direction == "Buy":
-            # If price is above EMA (Buy), BBM should be sloping DOWN (Pullback)
-            if bbm_slope < 0: 
-                setup_type = "Mean Rev (Bounce Up)"
-                is_valid_setup = True
-            
-        elif current_direction == "Sell":
-            # If price is below EMA (Sell), BBM should be sloping UP (Pullback)
-            if bbm_slope > 0: 
-                setup_type = "Mean Rev (Bounce Down)"
-                is_valid_setup = True
+        if current_direction == "Buy" and bbm_slope < 0: 
+            setup_type = "Mean Rev (Bounce Up)"
+            is_valid_setup = True
+        elif current_direction == "Sell" and bbm_slope > 0: 
+            setup_type = "Mean Rev (Bounce Down)"
+            is_valid_setup = True
 
-    # SCENARIO C: SQUEEZE (Override validation if squeeze is present)
     if is_squeeze:
-        # If we already have a valid setup (e.g. Trend Flip > 2%), append Squeeze label
-        if is_valid_setup:
-            setup_type = f"Squeeze ({setup_type})"
-        else:
-            # If we didn't have a valid setup (e.g. Flip was < 2%), 
-            # the Squeeze itself is the setup, regardless of flip distance.
-            setup_type = "Squeeze"
+        if is_valid_setup: setup_type = f"Squeeze ({setup_type})"
+        else: setup_type = "Squeeze"
         is_valid_setup = True
 
-    if not is_valid_setup:
-        return None
+    if not is_valid_setup: return None
 
     return {
         "ticker": ticker,
@@ -180,11 +176,10 @@ def analyze_daily_chart(ticker):
     }
 
 def analyze_lower_timeframes(ticker, daily_dir):
-    """
-    Step 2: Check 4H and 1H independently for confirmation.
-    """
+    """Step 2: Check 4H and 1H independently using Dual-Speed Logic."""
     timeframes = ["4h", "1h"]
     confirmations = []
+    time_logs = []
     
     for tf in timeframes:
         df = get_data(ticker, period="1y", interval=tf)
@@ -192,57 +187,88 @@ def analyze_lower_timeframes(ticker, daily_dir):
         
         last = df.iloc[-1]
         bbm = df['BBM_20']
-        ema = df['EMA_200']
         
-        # 1. Check Slope & Transition
-        current_slope = get_slope(bbm, SLOPE_LOOKBACK)
-        transition = check_slope_transition(bbm, SLOPE_LOOKBACK)
+        # --- DUAL SPEED CHECK ---
+        # Check Slow (20)
+        trans_slow, sig_text_slow, time_slow = check_slope_transition(
+            bbm, df.index, SLOPE_LOOKBACK_SLOW, "(Slow)"
+        )
+        # Check Fast (8)
+        trans_fast, sig_text_fast, time_fast = check_slope_transition(
+            bbm, df.index, SLOPE_LOOKBACK_FAST, "(Fast)"
+        )
         
         # 2. Check Crossover
-        crossover = check_crossover(df)
+        cross_sig, cross_time = check_crossover(df)
         
         # 3. Check Position
         is_above = last['BBM_20'] > last['EMA_200']
         
         tf_notes = []
+        tf_time = "Established" 
         is_valid_tf = False
         
-        # --- Evaluate Logic based on Direction ---
+        # Helper to decide which transition to prioritize
+        # If Fast happens, it's more recent. If Slow happens, it's stronger.
+        # We report whichever is valid.
+        active_trans = None
+        active_trans_sig = None
+        active_trans_time = None
+        
+        # Check Fast first (Early Warning)
+        if trans_fast:
+            active_trans = trans_fast
+            active_trans_sig = sig_text_fast
+            active_trans_time = time_fast
+        # Check Slow (Overwrite if valid, as it implies structural shift)
+        if trans_slow:
+            active_trans = trans_slow
+            active_trans_sig = sig_text_slow
+            active_trans_time = time_slow
+
+        # Current slope direction (use Fast for responsiveness)
+        current_slope_fast = get_slope(bbm, SLOPE_LOOKBACK_FAST)
+
+        # --- Evaluate Logic ---
         if daily_dir == "Buy":
-            # Requirement: Must be Above EMA
             if is_above:
-                # Check for specific triggers
-                if transition == "Neg->Pos":
-                    tf_notes.append("Slope Flip")
+                # A. Slope Flip (Fast or Slow)
+                if active_trans == "Neg->Pos":
+                    tf_notes.append(active_trans_sig)
+                    tf_time = active_trans_time
                     is_valid_tf = True
-                elif current_slope > 0:
+                # B. Trend Continuation
+                elif current_slope_fast > 0:
                     tf_notes.append("Trend Up")
                     is_valid_tf = True
                 
-                # Super Signal Check
-                if crossover == "Bullish Cross":
+                # C. Golden Cross
+                if cross_sig == "Bullish Cross":
                     tf_notes.append("GOLDEN CROSS")
+                    tf_time = cross_time
                     is_valid_tf = True
 
         elif daily_dir == "Sell":
-            # Requirement: Must be Below EMA
             if not is_above:
-                if transition == "Pos->Neg":
-                    tf_notes.append("Slope Flip")
+                if active_trans == "Pos->Neg":
+                    tf_notes.append(active_trans_sig)
+                    tf_time = active_trans_time
                     is_valid_tf = True
-                elif current_slope < 0:
+                elif current_slope_fast < 0:
                     tf_notes.append("Trend Down")
                     is_valid_tf = True
                 
-                if crossover == "Bearish Cross":
+                if cross_sig == "Bearish Cross":
                     tf_notes.append("DEATH CROSS")
+                    tf_time = cross_time
                     is_valid_tf = True
 
         if is_valid_tf:
             note_str = " + ".join(tf_notes)
             confirmations.append(f"{tf}: {note_str}")
+            time_logs.append(f"{tf}: {tf_time}")
 
-    return confirmations
+    return confirmations, time_logs
 
 def run_scanner(tickers):
     results = []
@@ -254,20 +280,17 @@ def run_scanner(tickers):
         
         if daily:
             time.sleep(1) # API pacing
-            confs = analyze_lower_timeframes(ticker, daily['direction'])
+            confs, times = analyze_lower_timeframes(ticker, daily['direction'])
             
-            # Valid if AT LEAST ONE lower timeframe confirms
             if confs:
-                # Build Setup Label
                 labels = []
-                # Clean up labels so we don't have "Squeeze (Mean Rev) + Squeeze"
                 if "Squeeze" not in daily['setup_type'] and daily['is_squeeze']:
                     labels.append("Squeeze")
                 labels.append(daily['setup_type'])
                 final_setup = " + ".join(labels)
                 
-                # Determine Signal Strength
                 full_notes = " | ".join(confs)
+                time_notes = " | ".join(times)
                 signal_type = "SUPER" if "CROSS" in full_notes else "Standard"
                 
                 results.append({
@@ -275,6 +298,7 @@ def run_scanner(tickers):
                     "Signal": f"{signal_type} {daily['direction']}",
                     "Daily Setup": final_setup,
                     "Confirmations": full_notes,
+                    "Switch Time": time_notes,
                     "Est. Price": round(daily['price'], 2)
                 })
     
