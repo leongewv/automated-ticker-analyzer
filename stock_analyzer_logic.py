@@ -151,8 +151,9 @@ def analyze_daily_chart(ticker):
     if df is None: return None, "Data Fetch Error"
 
     last = df.iloc[-1]
-    dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
     
+    # Calculate key metrics
+    dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
     is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
     
     lookback_squeeze = 126
@@ -163,8 +164,11 @@ def analyze_daily_chart(ticker):
     else:
         is_squeeze = False
 
+    # Validation 1: Zone or Squeeze
     if not (is_in_zone or is_squeeze): 
-        return None, "Not in Zone or Squeeze"
+        # UPDATED: Provide raw data for validation
+        raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.2f}, EMA: {last['EMA_200']:.2f}"
+        return None, f"Not in Zone ({raw_debug})"
 
     cross_signal, _ = check_crossover(df, lookback=5) 
     current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
@@ -174,6 +178,7 @@ def analyze_daily_chart(ticker):
     is_valid_setup = False
     fail_reason = ""
 
+    # Validation 2: Setup Logic
     if cross_signal:
         if dist_pct >= TREND_FLIP_MIN: 
             if current_direction == "Buy" and cross_signal == "Bullish Cross":
@@ -184,7 +189,8 @@ def analyze_daily_chart(ticker):
                 is_valid_setup = True
         else: 
             is_valid_setup = False
-            fail_reason = "Flip Distance Too Small (<2%)"
+            # UPDATED: Show raw distance vs threshold
+            fail_reason = f"Flip Dist Too Small ({dist_pct:.2%} < {TREND_FLIP_MIN:.0%})"
             
     elif is_in_zone:
         if current_direction == "Buy":
@@ -192,13 +198,13 @@ def analyze_daily_chart(ticker):
                 setup_type = "Mean Rev (Bounce Up)"
                 is_valid_setup = True
             else:
-                fail_reason = "Slope Valid. Failed (Pointing Up)"
+                fail_reason = f"Slope Invalid ({bbm_slope:.5f} pointing Up)"
         elif current_direction == "Sell": 
             if bbm_slope > 0: 
                 setup_type = "Mean Rev (Bounce Down)"
                 is_valid_setup = True
             else:
-                fail_reason = "Slope Valid. Failed (Pointing Down)"
+                fail_reason = f"Slope Invalid ({bbm_slope:.5f} pointing Down)"
 
     if is_squeeze:
         if is_valid_setup: setup_type = f"Squeeze ({setup_type})"
@@ -317,7 +323,6 @@ def run_scanner(tickers):
             })
              continue
         
-        # If daily is good, check lower timeframes
         time.sleep(1) # API pacing
         confs, times = analyze_lower_timeframes(ticker, daily['direction'])
         
@@ -342,7 +347,6 @@ def run_scanner(tickers):
                 "Est. Price": round(daily['price'], 2)
             })
         else:
-            # Daily passed, but Lower TF failed
             results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
