@@ -5,7 +5,7 @@ AMZN,No Signal,None,"Not in Zone (Dist: 8.07%, Price: 236.22, EMA: 218.58)",-,-,
 ANML,No Signal,None,Data Fetch Error,-,-,-
 ARRR,No Signal,None,Data Fetch Error,-,-,-
 ASML,No Signal,None,"Not in Zone (Dist: 21.65%, Price: 1031.87, EMA: 848.25)",-,-,-
-AUDCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,0.91
+AUDCAD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.91
 AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.52
 AUDJPY=X,No Signal,None,"Not in Zone (Dist: 3.53%, Price: 100.60, EMA: 97.17)",-,-,-
 AUDNZD=X,No Signal,None,"Not in Zone (Dist: 3.27%, Price: 1.15, EMA: 1.11)",-,-,-
