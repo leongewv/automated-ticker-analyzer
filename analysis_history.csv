@@ -1,4 +1,5 @@
-Ticker,Signal,Daily Setup,Confirmations,Est. Price
-AAPL,Standard Buy,Squeeze,1h: Trend Up,269.94
-EURAUD=X,Standard Buy,Mean Rev (Bounce Up),4h: Trend Up,1.77
-GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),1h: Trend Up,1.84
+Ticker,Signal,Daily Setup,Confirmations,Switch Time,Est. Price
+AAPL,Standard Buy,Squeeze,1h: Slope Flip (Slow),1h: 2025-11-19 10:30,269.94
+EURAUD=X,Standard Buy,Mean Rev (Bounce Up),4h: Trend Up,4h: Established,1.77
+GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),1h: Trend Up,1h: Established,1.84
+GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),4h: Slope Flip (Slow),4h: 2025-11-18 16:00,2.32
