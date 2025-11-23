@@ -2,3 +2,4 @@ Ticker,Signal,Daily Setup,Confirmations,Est. Price
 AAPL,Standard Buy,Squeeze,1h: Trend Up,269.94
 EURAUD=X,Standard Buy,Mean Rev (Bounce Up),4h: Trend Up,1.77
 GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),1h: Trend Up,1.84
+USDC-USD,Standard Sell,Mean Rev (Bounce Down),4h: Trend Down,1.0
