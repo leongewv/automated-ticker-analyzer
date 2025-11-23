@@ -7,7 +7,6 @@ from datetime import datetime
 import pandas as pd
 
 # --- Import the Analysis Logic ---
-# Updated to match the restored filename 'stock_analyzer_logic.py'
 from stock_analyzer_logic import run_scanner
 
 # --- Configuration ---
@@ -44,7 +43,6 @@ def send_email_notification(subject, html_body):
 def generate_recommendations(current_df, previous_df):
     """
     Compares current signals with history to generate actionable text.
-    Adapts to 'Standard' and 'SUPER' signal terminology.
     """
     if current_df.empty:
         return current_df
@@ -57,8 +55,7 @@ def generate_recommendations(current_df, previous_df):
         )
         return current_df
     
-    # Ensure Ticker is the key (Old script used 'Instrument', new uses 'Ticker')
-    # If loading old history file with 'Instrument', rename it
+    # Ensure Ticker is the key
     if 'Instrument' in previous_df.columns and 'Ticker' not in previous_df.columns:
         previous_df.rename(columns={'Instrument': 'Ticker'}, inplace=True)
 
@@ -71,7 +68,7 @@ def generate_recommendations(current_df, previous_df):
         suffixes=('', '_prev')
     ).fillna({'Signal_prev': 'None'})
 
-    # 3. Logic: Compare 'Standard/SUPER' (New) vs 'Standard/SUPER' (Old)
+    # 3. Logic: Compare Signals
     def get_recommendation(row):
         current = str(row['Signal'])
         previous = str(row['Signal_prev'])
@@ -79,19 +76,15 @@ def generate_recommendations(current_df, previous_df):
         if current == previous:
             return "No change."
         
-        # New Signal detection
         if previous == 'None' or previous == 'nan':
              return f"🔥 New Signal: {current}"
 
-        # Upgrades
         if 'Standard' in previous and 'SUPER' in current:
             return f"🚀 UPGRADE: Standard -> SUPER ({current})"
             
-        # Downgrades / Changes
         if 'SUPER' in previous and 'Standard' in current:
             return f"⚠️ Downgrade: SUPER -> Standard"
             
-        # Direction flip (Buy to Sell or vice versa)
         if ('Buy' in previous and 'Sell' in current) or ('Sell' in previous and 'Buy' in current):
             return f"🔄 FLIP: {previous} -> {current}"
 
@@ -99,11 +92,10 @@ def generate_recommendations(current_df, previous_df):
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
-    # 4. Select Columns for Report
-    # Matches the output of the new trend_scanner.py
+    # 4. Select Columns for Report (UPDATED to include Switch Time)
     cols_to_use = [
         "Ticker", "Signal", "Recommendation", "Daily Setup", 
-        "Confirmations", "Est. Price"
+        "Confirmations", "Switch Time", "Est. Price"
     ]
     
     # Filter to exist only
@@ -125,7 +117,7 @@ def main():
     # --- 2. Load Tickers ---
     source_folder = 'ticker_sources'
     if not os.path.exists(source_folder):
-        os.makedirs(source_folder) # Create if missing to prevent crash
+        os.makedirs(source_folder)
         print(f"Created '{source_folder}'. Please add CSV files with tickers there.")
         return
 
@@ -137,38 +129,40 @@ def main():
         for file in csv_files:
             try:
                 df = pd.read_csv(file)
-                # Assumes tickers are in the first column
                 tickers_from_file = df.iloc[:, 0].dropna().tolist()
                 all_tickers.extend(tickers_from_file)
             except Exception as e:
                 print(f"Skipping {file}: {e}")
     else:
-        # Fallback for testing if no CSVs provided
         print("No CSV files found in 'ticker_sources'. Using default test list.")
         all_tickers = ["NVDA", "BTC-USD", "EURUSD=X", "AAPL"]
 
     tickers_to_analyze = sorted(list(set(all_tickers)))
     
-    # --- 3. Run Analysis (Updated Function Call) ---
-    # Note: No status_callback arg needed anymore
+    # --- 3. Run Analysis ---
     full_results_df = run_scanner(tickers_to_analyze)
     
-    if full_results_df.empty:
-        print("No signals found this run.")
-        # We still save an empty history to record that we ran it
+    # --- 4. Save History (Moved UP to guarantee save) ---
+    # We save immediately after analysis so data is never lost if email fails
+    if not full_results_df.empty:
         full_results_df.to_csv(HISTORY_FILE, index=False)
+        print(f"History updated and saved to '{HISTORY_FILE}'.")
+    else:
+        # Even if empty, touch the file or keep previous? 
+        # Usually better to overwrite to reflect 'No Signals' state.
+        full_results_df.to_csv(HISTORY_FILE, index=False)
+        print("No signals found. History cleared.")
         return
 
-    # --- 4. Generate Report ---
+    # --- 5. Generate Report ---
     actionable_df = generate_recommendations(full_results_df.copy(), previous_results_df)
 
     today_str = datetime.now().strftime('%Y-%m-%d')
     
-    # --- 5. Email Logic ---
+    # --- 6. Email Logic ---
     if not actionable_df.empty:
         subject = f"Trading Signals - {today_str}"
         
-        # Style the HTML table
         html_body = f"""
         <html>
         <head>
@@ -178,7 +172,6 @@ def main():
                 th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
                 th {{ background-color: #4CAF50; color: white; }}
                 tr:nth-child(even) {{ background-color: #f2f2f2; }}
-                .super {{ color: green; font-weight: bold; }}
             </style>
         </head>
         <body>
@@ -190,13 +183,12 @@ def main():
         """
         
         send_email_notification(subject, html_body)
+        
+        # Also print to console for verification
+        print("\n--- Report Generated ---")
+        print(actionable_df.to_string(index=False))
     else:
         print("No actionable signals to email.")
-
-    # --- 6. Save History ---
-    # Save the raw results (without recommendation text) for next comparison
-    full_results_df.to_csv(HISTORY_FILE, index=False)
-    print("History updated.")
 
 if __name__ == "__main__":
     main()
