@@ -51,7 +51,7 @@ def generate_recommendations(current_df, previous_df):
     if previous_df.empty:
         # If no history, everything is new
         current_df['Recommendation'] = current_df['Signal'].apply(
-            lambda x: f"🔥 New Signal: {x}"
+            lambda x: f"🔥 New Signal: {x}" if "No Signal" not in x else "Monitoring"
         )
         return current_df
     
@@ -74,9 +74,14 @@ def generate_recommendations(current_df, previous_df):
         previous = str(row['Signal_prev'])
         
         if current == previous:
-            return "No change."
+            return "No change." if "No Signal" not in current else "Monitoring"
         
-        if previous == 'None' or previous == 'nan':
+        if "No Signal" in current:
+            if "Buy" in previous or "Sell" in previous:
+                return f"📉 Signal Lost (Was {previous})"
+            return "Monitoring"
+        
+        if previous == 'None' or previous == 'nan' or "No Signal" in previous:
              return f"🔥 New Signal: {current}"
 
         if 'Standard' in previous and 'SUPER' in current:
@@ -93,10 +98,9 @@ def generate_recommendations(current_df, previous_df):
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
     # 4. Select Columns for Report
-    # UPDATED: Added "Switch Time" to this list so it appears in the output
     cols_to_use = [
         "Ticker", "Signal", "Recommendation", "Daily Setup", 
-        "Confirmations", "Switch Time", "Est. Price"
+        "Failure Reason", "Confirmations", "Switch Time", "Est. Price"
     ]
     
     # Filter to exist only
@@ -143,11 +147,14 @@ def main():
     # --- 3. Run Analysis ---
     full_results_df = run_scanner(tickers_to_analyze)
     
-    # --- 4. Save History (MOVED UP) ---
-    # We save immediately here to ensure history is updated even if email fails later
+    # --- 4. Save History ---
     if not full_results_df.empty:
-        full_results_df.to_csv(HISTORY_FILE, index=False)
-        print(f"History updated and saved to '{HISTORY_FILE}'.")
+        try:
+            full_results_df.to_csv(HISTORY_FILE, index=False)
+            print(f"✅ History successfully updated and saved to '{HISTORY_FILE}'.")
+        except PermissionError:
+            print(f"❌ ERROR: Could not save to '{HISTORY_FILE}'. Is the file open in Excel? Please close it.")
+            return
     else:
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print("No signals found. History cleared.")
@@ -156,25 +163,34 @@ def main():
     # --- 5. Generate Report ---
     actionable_df = generate_recommendations(full_results_df.copy(), previous_results_df)
 
+    # Sort: Signals at the top, No Signal at the bottom
+    # We sort by 'Failure Reason' where 'None' (meaning Success) comes first
+    actionable_df = actionable_df.sort_values(
+        by='Failure Reason', 
+        key=lambda x: x != 'None'
+    )
+
     today_str = datetime.now().strftime('%Y-%m-%d')
     
     # --- 6. Email Logic ---
     if not actionable_df.empty:
-        subject = f"Trading Signals - {today_str}"
+        subject = f"Trading Signals & Report - {today_str}"
         
         html_body = f"""
         <html>
         <head>
             <style>
                 body {{ font-family: Arial, sans-serif; }}
-                table {{ border-collapse: collapse; width: 100%; }}
-                th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+                table {{ border-collapse: collapse; width: 100%; font-size: 12px; }}
+                th, td {{ border: 1px solid #ddd; padding: 6px; text-align: left; }}
                 th {{ background-color: #4CAF50; color: white; }}
                 tr:nth-child(even) {{ background-color: #f2f2f2; }}
+                tr:hover {{ background-color: #ddd; }}
             </style>
         </head>
         <body>
             <h2>Strategy Scan Results ({today_str})</h2>
+            <p><strong>Note:</strong> Rows with 'No Signal' did not meet strict strategy criteria.</p>
             {actionable_df.to_html(index=False)}
             <p><small>Automated Report. Not financial advice.</small></p>
         </body>
@@ -185,9 +201,10 @@ def main():
         
         # Also print to console for verification
         print("\n--- Report Generated ---")
-        print(actionable_df.to_string(index=False))
+        # Print first few columns to console for quick check
+        print(actionable_df[['Ticker', 'Signal', 'Failure Reason']].to_string(index=False))
     else:
-        print("No actionable signals to email.")
+        print("No results generated at all (empty input?).")
 
 if __name__ == "__main__":
     main()
