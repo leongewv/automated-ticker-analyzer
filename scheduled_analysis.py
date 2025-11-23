@@ -92,7 +92,8 @@ def generate_recommendations(current_df, previous_df):
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
-    # 4. Select Columns for Report (UPDATED to include Switch Time)
+    # 4. Select Columns for Report
+    # UPDATED: Added "Switch Time" to this list so it appears in the output
     cols_to_use = [
         "Ticker", "Signal", "Recommendation", "Daily Setup", 
         "Confirmations", "Switch Time", "Est. Price"
@@ -142,14 +143,12 @@ def main():
     # --- 3. Run Analysis ---
     full_results_df = run_scanner(tickers_to_analyze)
     
-    # --- 4. Save History (Moved UP to guarantee save) ---
-    # We save immediately after analysis so data is never lost if email fails
+    # --- 4. Save History (MOVED UP) ---
+    # We save immediately here to ensure history is updated even if email fails later
     if not full_results_df.empty:
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print(f"History updated and saved to '{HISTORY_FILE}'.")
     else:
-        # Even if empty, touch the file or keep previous? 
-        # Usually better to overwrite to reflect 'No Signals' state.
         full_results_df.to_csv(HISTORY_FILE, index=False)
         print("No signals found. History cleared.")
         return
