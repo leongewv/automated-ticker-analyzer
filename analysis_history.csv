@@ -1,28 +1,42 @@
 Ticker,Signal,Daily Setup,Failure Reason,Confirmations,Switch Time,Est. Price
+A,Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 10:30 @ 145.22,146.36
 AAPL,Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 10:30 @ 269.28,269.94
-ADA-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
 AMZN,No Signal,None,Not in Zone or Squeeze,-,-,-
+ANML,No Signal,None,Data Fetch Error,-,-,-
+ARRR,No Signal,None,Data Fetch Error,-,-,-
 ASML,No Signal,None,Not in Zone or Squeeze,-,-,-
 AUDCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,0.91
 AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.52
 AUDJPY=X,No Signal,None,Not in Zone or Squeeze,-,-,-
 AUDNZD=X,No Signal,None,Not in Zone or Squeeze,-,-,-
 AUDUSD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.65
-BNB-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
-BTC-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+BCH,No Signal,None,Not in Zone or Squeeze,-,-,-
+BEAM,No Signal,None,Not in Zone or Squeeze,-,-,-
+BSV,Standard Buy,Squeeze,None,4h: Slope Flip (Fast) | 1h: Slope Flip (Slow),4h: 2025-11-18 09:30 @ 78.80 | 1h: 2025-11-19 10:30 @ 78.81,78.81
+BTC,No Signal,None,Not in Zone or Squeeze,-,-,-
 CADJPY=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+CC,No Signal,None,Not in Zone or Squeeze,-,-,-
 CELH,No Signal,None,Not in Zone or Squeeze,-,-,-
 COIN,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,302.68
 CPRT,No Signal,None,Not in Zone or Squeeze,-,-,-
-DOGE-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
-ETH-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+DASH,No Signal,None,Setup Invalid: Flip Distance Too Small (<2%),-,-,-
+DCR,No Signal,None,Data Fetch Error,-,-,-
+DGB,No Signal,None,Data Fetch Error,-,-,-
+DINGO,No Signal,None,Data Fetch Error,-,-,-
+DOGE,No Signal,None,Data Fetch Error,-,-,-
+ELON,No Signal,None,Data Fetch Error,-,-,-
+ETN,No Signal,None,Not in Zone or Squeeze,-,-,-
 EURAUD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed),4h: Retest @ 1.77 (Flip: 2025-11-17 04:00),1.77
 EURCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.62
 EURGBP=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+EURI,No Signal,Squeeze,Lower TF Mismatch,-,-,0.0
 EURJPY=X,No Signal,None,Not in Zone or Squeeze,-,-,-
 EURNZD=X,No Signal,None,Not in Zone or Squeeze,-,-,-
 EURUSD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.16
+FIRO,No Signal,None,Data Fetch Error,-,-,-
+FORTH,No Signal,None,Data Fetch Error,-,-,-
 FTNT,No Signal,None,Not in Zone or Squeeze,-,-,-
+GAS,No Signal,None,Data Fetch Error,-,-,-
 GBPAUD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
 GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.84 (Flip: 2025-11-20 18:00),1.84
 GBPJPY=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
@@ -31,29 +45,58 @@ GBPUSD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
 GEHC,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
 GOOG,No Signal,None,Not in Zone or Squeeze,-,-,-
 GOOGL,No Signal,None,Not in Zone or Squeeze,-,-,-
+GRIN,No Signal,None,Data Fetch Error,-,-,-
+GRS,No Signal,None,Data Fetch Error,-,-,-
+HUAHUA,No Signal,None,Data Fetch Error,-,-,-
 ISRG,No Signal,None,Not in Zone or Squeeze,-,-,-
-LINK-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+KAS,No Signal,None,Data Fetch Error,-,-,-
+LTC,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
+MAY,No Signal,None,Data Fetch Error,-,-,-
 MDT,No Signal,None,Not in Zone or Squeeze,-,-,-
 META,No Signal,None,Not in Zone or Squeeze,-,-,-
 MSFT,No Signal,None,Not in Zone or Squeeze,-,-,-
+MTL,No Signal,None,Data Fetch Error,-,-,-
+NAV,No Signal,None,Data Fetch Error,-,-,-
+NEXA,No Signal,None,Not in Zone or Squeeze,-,-,-
 NFLX,No Signal,None,Setup Invalid: Flip Distance Too Small (<2%),-,-,-
 NVDA,No Signal,None,Not in Zone or Squeeze,-,-,-
 NZDCAD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
 NZDJPY=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
 NZDUSD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Down),-,-,-
+OMG,No Signal,None,Data Fetch Error,-,-,-
+OPTI,No Signal,None,Setup Invalid: Flip Distance Too Small (<2%),-,-,-
+PIVX,No Signal,None,Data Fetch Error,-,-,-
 PLTR,No Signal,None,Not in Zone or Squeeze,-,-,-
+PPC,Standard Sell,Squeeze,None,4h: Slope Flip (Slow),4h: 2025-11-10 09:30 @ 37.58,37.66
 QQQ,No Signal,None,Not in Zone or Squeeze,-,-,-
+QUAI,No Signal,None,Data Fetch Error,-,-,-
+RSR,No Signal,None,Data Fetch Error,-,-,-
+RVN,No Signal,None,Data Fetch Error,-,-,-
 SAP,No Signal,None,Not in Zone or Squeeze,-,-,-
-SOL-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+SHIB,No Signal,None,Data Fetch Error,-,-,-
+SKY,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,75.98
 SPY,No Signal,None,Not in Zone or Squeeze,-,-,-
-SUI-USD,No Signal,None,Data Fetch Error,-,-,-
-TRX-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+SXP,No Signal,None,Data Fetch Error,-,-,-
+TEL,No Signal,None,Not in Zone or Squeeze,-,-,-
+THE,No Signal,None,Data Fetch Error,-,-,-
 TSLA,No Signal,None,Not in Zone or Squeeze,-,-,-
 USDCAD=X,No Signal,None,Setup Invalid: Slope Valid. Failed (Pointing Up),-,-,-
 USDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.8
 USDJPY=X,No Signal,None,Not in Zone or Squeeze,-,-,-
-WETH-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+USDP,No Signal,Squeeze,Lower TF Mismatch,-,-,0.01
+USDUC,No Signal,None,Data Fetch Error,-,-,-
+VEX,No Signal,None,Data Fetch Error,-,-,-
+VOLT,No Signal,None,Data Fetch Error,-,-,-
+WBTC,No Signal,None,Data Fetch Error,-,-,-
 XAGUSD=X,No Signal,None,Data Fetch Error,-,-,-
 XAUUSD=X,No Signal,None,Data Fetch Error,-,-,-
-XLM-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
-XRP-USD,No Signal,None,Not in Zone or Squeeze,-,-,-
+XEC,No Signal,None,Data Fetch Error,-,-,-
+XEM,No Signal,None,Data Fetch Error,-,-,-
+XEP,No Signal,None,Data Fetch Error,-,-,-
+XLM,No Signal,None,Data Fetch Error,-,-,-
+XMR,No Signal,None,Data Fetch Error,-,-,-
+XNO,No Signal,None,Data Fetch Error,-,-,-
+XRP,No Signal,None,Data Fetch Error,-,-,-
+XVG,No Signal,None,Data Fetch Error,-,-,-
+ZANO,No Signal,None,Data Fetch Error,-,-,-
+ZEC,No Signal,None,Data Fetch Error,-,-,-
