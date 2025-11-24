@@ -101,7 +101,7 @@ def generate_recommendations(current_df, previous_df):
     cols_to_use = [
         "Ticker", "Signal", "Recommendation", "Daily Setup", 
         "Failure Reason", "Confirmations", "Switch Time", 
-        "Current 20d SMA Level", "Current Price" # UPDATED: Replaced Est. Price with new columns
+        "Current 20d SMA Level", "Current Price"
     ]
     
     # Filter to exist only
