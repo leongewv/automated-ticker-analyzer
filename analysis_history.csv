@@ -1,88 +1,88 @@
 Ticker,Signal,Daily Setup,Failure Reason,Confirmations,Switch Time,Current 20d SMA Level,Current Price
 A,Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 10:30 @ 145.2202,146.3605,151.25
 AAPL,Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 10:30 @ 269.2822,269.9424,271.49
-AMZN,No Signal,None,"Not in Zone (Dist: 8.07%, Price: 236.2240, EMA: 218.5766)",-,-,-,-
+AMZN,No Signal,None,"Not in Zone (Dist: 8.07%, Price: 236.2240, EMA: 218.5766)",-,-,236.224,220.69
 ANML,No Signal,None,Data Fetch Error,-,-,-,-
 ARRR,No Signal,None,Data Fetch Error,-,-,-,-
-ASML,No Signal,None,"Not in Zone (Dist: 21.65%, Price: 1031.8744, EMA: 848.2534)",-,-,-,-
-AUDCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,0.9148,0.91
-AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.5229,0.522
-AUDJPY=X,No Signal,None,"Not in Zone (Dist: 3.54%, Price: 100.6569, EMA: 97.2119)",-,-,-,-
-AUDNZD=X,No Signal,None,"Not in Zone (Dist: 3.27%, Price: 1.1490, EMA: 1.1126)",-,-,-,-
-AUDUSD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.652,0.6455
-BCH,No Signal,None,"Not in Zone (Dist: 21.08%, Price: 35.8880, EMA: 29.6391)",-,-,-,-
-BEAM,No Signal,None,"Not in Zone (Dist: 3.56%, Price: 22.9635, EMA: 22.1737)",-,-,-,-
+ASML,No Signal,None,"Not in Zone (Dist: 21.65%, Price: 1031.8744, EMA: 848.2534)",-,-,1031.8744,966.57
+AUDCAD=X,No Signal,Squeeze,Lower TF Mismatch,-,-,0.9148,0.9108
+AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.523,0.5226
+AUDJPY=X,No Signal,None,"Not in Zone (Dist: 3.55%, Price: 100.6631, EMA: 97.2131)",-,-,100.6631,101.278
+AUDNZD=X,No Signal,None,"Not in Zone (Dist: 3.27%, Price: 1.1490, EMA: 1.1126)",-,-,1.149,1.1513
+AUDUSD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.6521,0.6465
+BCH,No Signal,None,"Not in Zone (Dist: 21.08%, Price: 35.8880, EMA: 29.6391)",-,-,35.888,36.37
+BEAM,No Signal,None,"Not in Zone (Dist: 3.56%, Price: 22.9635, EMA: 22.1737)",-,-,22.9635,22.21
 BSV,Standard Buy,Squeeze,None,4h: Slope Flip (Fast) | 1h: Slope Flip (Slow),4h: 2025-11-18 09:30 @ 78.7965 | 1h: 2025-11-19 10:30 @ 78.8122,78.8052,79.04
-BTC,No Signal,None,"Not in Zone (Dist: 3.69%, Price: 44.6835, EMA: 46.3936)",-,-,-,-
-CADJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.09701 pointing Up),-,-,-,-
-CC,No Signal,None,"Not in Zone (Dist: 13.66%, Price: 12.2301, EMA: 14.1646)",-,-,-,-
-CELH,No Signal,None,"Not in Zone (Dist: 3.61%, Price: 49.5685, EMA: 47.8425)",-,-,-,-
+BTC,No Signal,None,"Not in Zone (Dist: 3.69%, Price: 44.6835, EMA: 46.3936)",-,-,44.6835,37.44
+CADJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.09702 pointing Up),-,-,110.0177,111.175
+CC,No Signal,None,"Not in Zone (Dist: 13.66%, Price: 12.2301, EMA: 14.1646)",-,-,12.2301,11.05
+CELH,No Signal,None,"Not in Zone (Dist: 3.61%, Price: 49.5685, EMA: 47.8425)",-,-,49.5685,38.99
 COIN,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,302.6815,240.41
-CPRT,No Signal,None,"Not in Zone (Dist: 14.13%, Price: 41.8495, EMA: 48.7379)",-,-,-,-
-DASH,No Signal,None,Setup Invalid: Flip Dist Too Small (1.14% < 2%),-,-,-,-
+CPRT,No Signal,None,"Not in Zone (Dist: 14.13%, Price: 41.8495, EMA: 48.7379)",-,-,41.8495,40.73
+DASH,No Signal,None,Setup Invalid: Flip Dist Too Small (1.14% < 2%),-,-,221.2908,189.63
 DCR,No Signal,None,Data Fetch Error,-,-,-,-
 DGB,No Signal,None,Data Fetch Error,-,-,-,-
 DINGO,No Signal,None,Data Fetch Error,-,-,-,-
 DOGE,No Signal,None,Data Fetch Error,-,-,-,-
 ELON,No Signal,None,Data Fetch Error,-,-,-,-
-ETN,No Signal,None,"Not in Zone (Dist: 5.42%, Price: 365.9490, EMA: 347.1480)",-,-,-,-
-EURAUD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed),4h: Retest @ 1.7739 (Flip: 2025-11-17 04:00),1.7739,1.7833
-EURCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.623,1.623
-EURGBP=X,No Signal,None,Setup Invalid: Slope Invalid (0.00055 pointing Up),-,-,-,-
+ETN,No Signal,None,"Not in Zone (Dist: 5.42%, Price: 365.9490, EMA: 347.1480)",-,-,365.949,331.71
+EURAUD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed),4h: Retest @ 1.7739 (Flip: 2025-11-17 04:00),1.7738,1.7814
+EURCAD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.623,1.6227
+EURGBP=X,No Signal,None,Setup Invalid: Slope Invalid (0.00055 pointing Up),-,-,0.8799,0.8792
 EURI,No Signal,Squeeze,Lower TF Mismatch,-,-,0.0,0.0
-EURJPY=X,No Signal,None,"Not in Zone (Dist: 4.56%, Price: 178.5849, EMA: 170.7936)",-,-,-,-
-EURNZD=X,No Signal,None,"Not in Zone (Dist: 4.25%, Price: 2.0384, EMA: 1.9552)",-,-,-,-
-EURUSD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.1568,1.1515
+EURJPY=X,No Signal,None,"Not in Zone (Dist: 4.56%, Price: 178.5858, EMA: 170.7938)",-,-,178.5858,180.426
+EURNZD=X,No Signal,None,"Not in Zone (Dist: 4.25%, Price: 2.0383, EMA: 1.9552)",-,-,2.0383,2.0511
+EURUSD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.1568,1.1518
 FIRO,No Signal,None,Data Fetch Error,-,-,-,-
 FORTH,No Signal,None,Data Fetch Error,-,-,-,-
-FTNT,No Signal,None,"Not in Zone (Dist: 6.84%, Price: 82.8605, EMA: 88.9484)",-,-,-,-
+FTNT,No Signal,None,"Not in Zone (Dist: 6.84%, Price: 82.8605, EMA: 88.9484)",-,-,82.8605,78.86
 GAS,No Signal,None,Data Fetch Error,-,-,-,-
-GBPAUD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00170 pointing Down),-,-,-,-
-GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.8392 (Flip: 2025-11-20 18:00),1.8444,1.8457
-GBPJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01172 pointing Up),-,-,-,-
-GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Slope Flip (Slow),4h: 2025-11-18 20:00 @ 2.3213,2.3164,2.3346
-GBPUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00129 pointing Down),-,-,-,-
-GEHC,No Signal,None,Setup Invalid: Slope Invalid (-0.01929 pointing Down),-,-,-,-
-GOOG,No Signal,None,"Not in Zone (Dist: 30.99%, Price: 283.4130, EMA: 216.3581)",-,-,-,-
-GOOGL,No Signal,None,"Not in Zone (Dist: 31.34%, Price: 282.8725, EMA: 215.3758)",-,-,-,-
+GBPAUD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00171 pointing Down),-,-,2.0158,2.026
+GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.8392 (Flip: 2025-11-20 18:00),1.8444,1.8455
+GBPJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01173 pointing Up),-,-,202.9398,205.19
+GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Slope Flip (Slow),4h: 2025-11-18 20:00 @ 2.3213,2.3163,2.3325
+GBPUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00129 pointing Down),-,-,1.3146,1.3097
+GEHC,No Signal,None,Setup Invalid: Slope Invalid (-0.01929 pointing Down),-,-,74.5415,76.45
+GOOG,No Signal,None,"Not in Zone (Dist: 30.99%, Price: 283.4130, EMA: 216.3581)",-,-,283.413,299.65
+GOOGL,No Signal,None,"Not in Zone (Dist: 31.34%, Price: 282.8725, EMA: 215.3758)",-,-,282.8725,299.66
 GRIN,No Signal,None,Data Fetch Error,-,-,-,-
 GRS,No Signal,None,Data Fetch Error,-,-,-,-
 HUAHUA,No Signal,None,Data Fetch Error,-,-,-,-
-ISRG,No Signal,None,"Not in Zone (Dist: 9.91%, Price: 552.2845, EMA: 502.4956)",-,-,-,-
+ISRG,No Signal,None,"Not in Zone (Dist: 9.91%, Price: 552.2845, EMA: 502.4956)",-,-,552.2845,561.61
 KAS,No Signal,None,Data Fetch Error,-,-,-,-
-LTC,No Signal,None,Setup Invalid: Slope Invalid (0.05002 pointing Up),-,-,-,-
+LTC,No Signal,None,Setup Invalid: Slope Invalid (0.05002 pointing Up),-,-,35.5142,35.97
 MAY,No Signal,None,Data Fetch Error,-,-,-,-
-MDT,No Signal,None,"Not in Zone (Dist: 4.79%, Price: 94.3945, EMA: 90.0829)",-,-,-,-
-META,No Signal,None,"Not in Zone (Dist: 5.14%, Price: 638.5500, EMA: 673.1639)",-,-,-,-
-MSFT,No Signal,None,"Not in Zone (Dist: 5.81%, Price: 507.6084, EMA: 479.7192)",-,-,-,-
+MDT,No Signal,None,"Not in Zone (Dist: 4.79%, Price: 94.3945, EMA: 90.0829)",-,-,94.3945,101.2
+META,No Signal,None,"Not in Zone (Dist: 5.14%, Price: 638.5500, EMA: 673.1639)",-,-,638.55,594.25
+MSFT,No Signal,None,"Not in Zone (Dist: 5.81%, Price: 507.6084, EMA: 479.7192)",-,-,507.6084,472.12
 MTL,No Signal,None,Data Fetch Error,-,-,-,-
 NAV,No Signal,None,Data Fetch Error,-,-,-,-
-NEXA,No Signal,None,"Not in Zone (Dist: 5.47%, Price: 5.8155, EMA: 5.5138)",-,-,-,-
-NFLX,No Signal,None,Setup Invalid: Flip Dist Too Small (0.41% < 2%),-,-,-,-
-NVDA,No Signal,None,"Not in Zone (Dist: 19.08%, Price: 192.9495, EMA: 162.0282)",-,-,-,-
-NZDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00054 pointing Down),-,-,-,-
-NZDJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01858 pointing Up),-,-,-,-
-NZDUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00047 pointing Down),-,-,-,-
+NEXA,No Signal,None,"Not in Zone (Dist: 5.47%, Price: 5.8155, EMA: 5.5138)",-,-,5.8155,6.29
+NFLX,No Signal,None,Setup Invalid: Flip Dist Too Small (0.41% < 2%),-,-,110.6076,104.31
+NVDA,No Signal,None,"Not in Zone (Dist: 19.08%, Price: 192.9495, EMA: 162.0282)",-,-,192.9495,178.88
+NZDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00054 pointing Down),-,-,0.7961,0.7911
+NZDJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01863 pointing Up),-,-,87.5923,87.958
+NZDUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00047 pointing Down),-,-,0.5675,0.5615
 OMG,No Signal,None,Data Fetch Error,-,-,-,-
-OPTI,No Signal,None,Setup Invalid: Flip Dist Too Small (0.65% < 2%),-,-,-,-
+OPTI,No Signal,None,Setup Invalid: Flip Dist Too Small (0.65% < 2%),-,-,0.0017,0.0023
 PIVX,No Signal,None,Data Fetch Error,-,-,-,-
-PLTR,No Signal,None,"Not in Zone (Dist: 27.03%, Price: 182.0447, EMA: 143.3086)",-,-,-,-
+PLTR,No Signal,None,"Not in Zone (Dist: 27.03%, Price: 182.0447, EMA: 143.3086)",-,-,182.0447,154.85
 PPC,Standard Sell,Squeeze,None,4h: Slope Flip (Slow),4h: 2025-11-10 09:30 @ 37.5838,37.657,38.8
-QQQ,No Signal,None,"Not in Zone (Dist: 10.24%, Price: 615.3320, EMA: 558.1903)",-,-,-,-
+QQQ,No Signal,None,"Not in Zone (Dist: 10.24%, Price: 615.3320, EMA: 558.1903)",-,-,615.332,590.07
 QUAI,No Signal,None,Data Fetch Error,-,-,-,-
 RSR,No Signal,None,Data Fetch Error,-,-,-,-
 RVN,No Signal,None,Data Fetch Error,-,-,-,-
-SAP,No Signal,None,"Not in Zone (Dist: 5.63%, Price: 252.6715, EMA: 267.7432)",-,-,-,-
+SAP,No Signal,None,"Not in Zone (Dist: 5.63%, Price: 252.6715, EMA: 267.7432)",-,-,252.6715,236.7
 SHIB,No Signal,None,Data Fetch Error,-,-,-,-
 SKY,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,75.9835,81.64
-SPY,No Signal,None,"Not in Zone (Dist: 7.80%, Price: 674.5375, EMA: 625.7472)",-,-,-,-
+SPY,No Signal,None,"Not in Zone (Dist: 7.80%, Price: 674.5375, EMA: 625.7472)",-,-,674.5375,659.03
 SXP,No Signal,None,Data Fetch Error,-,-,-,-
-TEL,No Signal,None,"Not in Zone (Dist: 23.70%, Price: 238.7950, EMA: 193.0453)",-,-,-,-
+TEL,No Signal,None,"Not in Zone (Dist: 23.70%, Price: 238.7950, EMA: 193.0453)",-,-,238.795,218.93
 THE,No Signal,None,Data Fetch Error,-,-,-,-
-TSLA,No Signal,None,"Not in Zone (Dist: 19.89%, Price: 432.1770, EMA: 360.4659)",-,-,-,-
-USDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (0.00019 pointing Up),-,-,-,-
-USDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.8021,0.8087
-USDJPY=X,No Signal,None,"Not in Zone (Dist: 3.22%, Price: 154.3938, EMA: 149.5769)",-,-,-,-
+TSLA,No Signal,None,"Not in Zone (Dist: 19.89%, Price: 432.1770, EMA: 360.4659)",-,-,432.177,391.09
+USDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (0.00019 pointing Up),-,-,1.4032,1.4093
+USDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.8021,0.8086
+USDJPY=X,No Signal,None,"Not in Zone (Dist: 3.22%, Price: 154.3930, EMA: 149.5767)",-,-,154.393,156.686
 USDP,No Signal,Squeeze,Lower TF Mismatch,-,-,0.0076,0.007
 USDUC,No Signal,None,Data Fetch Error,-,-,-,-
 VEX,No Signal,None,Data Fetch Error,-,-,-,-
