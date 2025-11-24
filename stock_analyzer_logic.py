@@ -152,6 +152,12 @@ def analyze_daily_chart(ticker):
 
     last = df.iloc[-1]
     
+    # Pre-calculate prices for reporting even if setup fails
+    prices = {
+        "price_sma": last['BBM_20'],
+        "price_current": last['close']
+    }
+    
     # Calculate key metrics
     dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
     is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
@@ -166,9 +172,9 @@ def analyze_daily_chart(ticker):
 
     # Validation 1: Zone or Squeeze
     if not (is_in_zone or is_squeeze): 
-        # UPDATED: Provide raw data for validation (4 decimal places)
+        # UPDATED: Return prices even on failure
         raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.4f}, EMA: {last['EMA_200']:.4f}"
-        return None, f"Not in Zone ({raw_debug})"
+        return prices, f"Not in Zone ({raw_debug})"
 
     cross_signal, _ = check_crossover(df, lookback=5) 
     current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
@@ -189,7 +195,6 @@ def analyze_daily_chart(ticker):
                 is_valid_setup = True
         else: 
             is_valid_setup = False
-            # UPDATED: Show raw distance vs threshold
             fail_reason = f"Flip Dist Too Small ({dist_pct:.2%} < {TREND_FLIP_MIN:.0%})"
             
     elif is_in_zone:
@@ -212,7 +217,8 @@ def analyze_daily_chart(ticker):
         is_valid_setup = True
 
     if not is_valid_setup: 
-        return None, f"Setup Invalid: {fail_reason}"
+        # UPDATED: Return prices even on failure
+        return prices, f"Setup Invalid: {fail_reason}"
 
     return {
         "ticker": ticker,
@@ -220,8 +226,8 @@ def analyze_daily_chart(ticker):
         "setup_type": setup_type,
         "is_squeeze": is_squeeze,
         "is_mean_rev": is_in_zone,
-        "price_sma": last['BBM_20'],    # UPDATED: Renamed from price
-        "price_current": last['close']  # UPDATED: Added current price
+        "price_sma": last['BBM_20'],    
+        "price_current": last['close']  
     }, None
 
 def analyze_lower_timeframes(ticker, daily_dir):
@@ -263,7 +269,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
             if is_above:
                 if active_trans == "Neg->Pos":
                     tf_notes.append(active_trans_sig)
-                    # UPDATED: 4 decimal places
                     tf_time = f"{active_trans_time} @ {active_trans_price:.4f}"
                     is_valid_tf = True
                 elif current_slope_fast > 0:
@@ -272,7 +277,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
                     if retest_ok:
                         tf_notes.append("Trend Up (Retest Confirmed)")
-                        # UPDATED: 4 decimal places
                         tf_time = f"Retest @ {retest_price:.4f} (Flip: {flip_time})"
                         is_valid_tf = True
                 if cross_sig == "Bullish Cross":
@@ -284,7 +288,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
             if not is_above:
                 if active_trans == "Pos->Neg":
                     tf_notes.append(active_trans_sig)
-                    # UPDATED: 4 decimal places
                     tf_time = f"{active_trans_time} @ {active_trans_price:.4f}"
                     is_valid_tf = True
                 elif current_slope_fast < 0:
@@ -293,7 +296,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
                     if retest_ok:
                         tf_notes.append("Trend Down (Retest Confirmed)")
-                        # UPDATED: 4 decimal places
                         tf_time = f"Retest @ {retest_price:.4f} (Flip: {flip_time})"
                         is_valid_tf = True
                 if cross_sig == "Bearish Cross":
@@ -316,7 +318,16 @@ def run_scanner(tickers):
         print(f"Checking {ticker}...", end="\r")
         daily, failure_reason = analyze_daily_chart(ticker)
         
-        if not daily:
+        # Prepare Price Strings (Default to "-" if data error)
+        sma_str = "-"
+        price_str = "-"
+        
+        # Extract prices if 'daily' dict exists (it now exists even on failure, unless Data Fetch Error)
+        if daily and 'price_sma' in daily:
+             sma_str = round(daily['price_sma'], 4)
+             price_str = round(daily['price_current'], 4)
+        
+        if failure_reason:
              results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
@@ -324,8 +335,8 @@ def run_scanner(tickers):
                 "Failure Reason": failure_reason,
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Current 20d SMA Level": "-", 
-                "Current Price": "-"          
+                "Current 20d SMA Level": sma_str,  # Now populated
+                "Current Price": price_str         # Now populated
             })
              continue
         
@@ -350,8 +361,8 @@ def run_scanner(tickers):
                 "Failure Reason": "None",
                 "Confirmations": full_notes,
                 "Switch Time": time_notes,
-                "Current 20d SMA Level": round(daily['price_sma'], 4),   # UPDATED: 4 decimals
-                "Current Price": round(daily['price_current'], 4)        # UPDATED: 4 decimals
+                "Current 20d SMA Level": sma_str,
+                "Current Price": price_str
             })
         else:
             results.append({
@@ -361,8 +372,8 @@ def run_scanner(tickers):
                 "Failure Reason": "Lower TF Mismatch",
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Current 20d SMA Level": round(daily['price_sma'], 4),   # UPDATED: 4 decimals
-                "Current Price": round(daily['price_current'], 4)        # UPDATED: 4 decimals
+                "Current 20d SMA Level": sma_str,
+                "Current Price": price_str
             })
     
     print("\nScan Complete.")
