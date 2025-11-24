@@ -1,89 +1,89 @@
 Ticker,Instrument Name,Signal,Daily Setup,Failure Reason,Confirmations,Switch Time,Current 20d SMA Level,Current Price
-A,"Agilent Technologies, Inc.",Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 15:30 @ 144.5998,146.68,152.98
-AAPL,Apple Inc.,Standard Buy,Squeeze,None,4h: Trend Up (Retest Confirmed) | 1h: Slope Flip (Slow),4h: Retest @ 255.4300 (Flip: 2025-10-21 13:30) | 1h: 2025-11-19 15:30 @ 268.5482,270.3209,276.12
-AMZN,"Amazon.com, Inc.",No Signal,None,"Not in Zone (Dist: 7.99%, Price: 236.1225, EMA: 218.6450)",-,-,236.1225,224.94
+A,"Agilent Technologies, Inc.",Standard Buy,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-19 15:30 @ 144.5998,146.6487,152.3548
+AAPL,Apple Inc.,Standard Buy,Squeeze,None,4h: Trend Up (Retest Confirmed) | 1h: Slope Flip (Slow),4h: Retest @ 255.4300 (Flip: 2025-10-21 13:30) | 1h: 2025-11-19 15:30 @ 268.5482,270.3284,276.27
+AMZN,"Amazon.com, Inc.",No Signal,None,"Not in Zone (Dist: 8.01%, Price: 236.1699, EMA: 218.6545)",-,-,236.1699,225.8876
 ANML,ANML,No Signal,None,Data Fetch Error,-,-,-,-
 ARRR,ARRR,No Signal,None,Data Fetch Error,-,-,-,-
-ASML,ASML Holding N.V.,No Signal,None,"Not in Zone (Dist: 21.04%, Price: 1028.4940, EMA: 849.6897)",-,-,1028.494,990.495
-AUDCAD=X,AUDCAD=X,No Signal,Squeeze,Lower TF Mismatch,-,-,0.9149,0.9118
-AUDCHF=X,AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.5229,0.5221
-AUDJPY=X,AUDJPY=X,No Signal,None,"Not in Zone (Dist: 3.55%, Price: 100.6672, EMA: 97.2139)",-,-,100.6672,101.36
-AUDNZD=X,AUDNZD=X,No Signal,None,"Not in Zone (Dist: 3.27%, Price: 1.1490, EMA: 1.1126)",-,-,1.149,1.1515
-AUDUSD=X,AUDUSD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.6521,0.6464
-BCH,Banco de Chile,No Signal,None,"Not in Zone (Dist: 21.24%, Price: 36.0215, EMA: 29.7110)",-,-,36.0215,36.75
-BEAM,Beam Therapeutics Inc.,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,22.7997,23.455
+ASML,ASML Holding N.V.,No Signal,None,"Not in Zone (Dist: 21.04%, Price: 1028.4310, EMA: 849.6771)",-,-,1028.431,989.235
+AUDCAD=X,AUDCAD=X,No Signal,Squeeze,Lower TF Mismatch,-,-,0.9149,0.9116
+AUDCHF=X,AUDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.5229,0.5222
+AUDJPY=X,AUDJPY=X,No Signal,None,"Not in Zone (Dist: 3.55%, Price: 100.6679, EMA: 97.2141)",-,-,100.6679,101.373
+AUDNZD=X,AUDNZD=X,No Signal,None,"Not in Zone (Dist: 3.28%, Price: 1.1490, EMA: 1.1126)",-,-,1.149,1.1517
+AUDUSD=X,AUDUSD=X,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,0.6521,0.6465
+BCH,Banco de Chile,No Signal,None,"Not in Zone (Dist: 21.25%, Price: 36.0270, EMA: 29.7121)",-,-,36.027,36.86
+BEAM,Beam Therapeutics Inc.,No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,22.7975,23.41
 BSV,Vanguard Short-Term Bond Index Fund ETF Shares,No Signal,None,Setup Invalid: Slope Invalid (0.00391 pointing Up),-,-,78.8145,79.06
-BTC,Grayscale Bitcoin Mini Trust ETF,No Signal,None,"Not in Zone (Dist: 4.80%, Price: 44.0955, EMA: 46.3187)",-,-,44.0955,39.1399
-CADJPY=X,CADJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.09701 pointing Up),-,-,110.0168,111.157
-CC,The Chemours Company,No Signal,None,"Not in Zone (Dist: 14.34%, Price: 12.1100, EMA: 14.1372)",-,-,12.11,11.4977
-CELH,"Celsius Holdings, Inc.",No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,48.3737,38.3242
-COIN,"Coinbase Global, Inc.",No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,297.3325,254.45
-CPRT,"Copart, Inc.",No Signal,None,"Not in Zone (Dist: 14.49%, Price: 41.5950, EMA: 48.6409)",-,-,41.595,39.07
+BTC,Grayscale Bitcoin Mini Trust ETF,No Signal,None,"Not in Zone (Dist: 4.79%, Price: 44.1023, EMA: 46.3201)",-,-,44.1023,39.276
+CADJPY=X,CADJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.09704 pointing Up),-,-,110.0192,111.204
+CC,The Chemours Company,No Signal,None,"Not in Zone (Dist: 14.34%, Price: 12.1096, EMA: 14.1371)",-,-,12.1096,11.49
+CELH,"Celsius Holdings, Inc.",No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,48.3715,38.28
+COIN,"Coinbase Global, Inc.",No Signal,Mean Rev (Bounce Up),Lower TF Mismatch,-,-,297.3974,255.7485
+CPRT,"Copart, Inc.",No Signal,None,"Not in Zone (Dist: 14.49%, Price: 41.5942, EMA: 48.6407)",-,-,41.5942,39.055
 DASH,"DoorDash, Inc.",Standard Sell,Trend Flip (Down),None,4h: Trend Down (Retest Confirmed) | 1h: Slope Flip (Slow),4h: Retest @ 269.0000 (Flip: 2025-10-22 09:30) | 1h: 2025-11-19 15:30 @ 208.1880,217.4923,187.38
 DCR,DCR Tech Group Ltd,No Signal,None,Data Fetch Error,-,-,-,-
 DGB,DGB,No Signal,None,Data Fetch Error,-,-,-,-
 DINGO,DINGO,No Signal,None,Data Fetch Error,-,-,-,-
 DOGE,DOGE,No Signal,None,Data Fetch Error,-,-,-,-
 ELON,Battleshares TSLA vs F ETF,No Signal,None,Data Fetch Error,-,-,-,-
-ETN,Eaton Corporation plc,No Signal,None,"Not in Zone (Dist: 4.80%, Price: 363.6673, EMA: 347.0255)",-,-,363.6673,334.105
-EURAUD=X,EURAUD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed) | 1h: Trend Up (Retest Confirmed),4h: Retest @ 1.7739 (Flip: 2025-11-17 04:00) | 1h: Retest @ 1.7805 (Flip: 2025-11-21 00:00),1.7739,1.783
-EURCAD=X,EURCAD=X,Standard Buy,Squeeze (Mean Rev (Bounce Up)),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.6207 (Flip: 2025-11-20 21:00),1.6231,1.6258
-EURGBP=X,EURGBP=X,No Signal,None,Setup Invalid: Slope Invalid (0.00055 pointing Up),-,-,0.8799,0.8791
+ETN,Eaton Corporation plc,No Signal,None,"Not in Zone (Dist: 4.80%, Price: 363.6650, EMA: 347.0250)",-,-,363.665,334.0597
+EURAUD=X,EURAUD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed) | 1h: Trend Up (Retest Confirmed),4h: Retest @ 1.7739 (Flip: 2025-11-17 04:00) | 1h: Retest @ 1.7805 (Flip: 2025-11-21 00:00),1.7739,1.7831
+EURCAD=X,EURCAD=X,Standard Buy,Squeeze (Mean Rev (Bounce Up)),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.6207 (Flip: 2025-11-20 21:00),1.6231,1.6255
+EURGBP=X,EURGBP=X,No Signal,None,Setup Invalid: Slope Invalid (0.00055 pointing Up),-,-,0.8799,0.8789
 EURI,AgriEuro Corp.,No Signal,Squeeze,Lower TF Mismatch,-,-,0.0,0.0
-EURJPY=X,EURJPY=X,No Signal,None,"Not in Zone (Dist: 4.57%, Price: 178.6012, EMA: 170.7968)",-,-,178.6012,180.733
-EURNZD=X,EURNZD=X,No Signal,None,"Not in Zone (Dist: 4.26%, Price: 2.0384, EMA: 1.9552)",-,-,2.0384,2.0533
-EURUSD=X,EURUSD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.1568,1.1526
+EURJPY=X,EURJPY=X,No Signal,None,"Not in Zone (Dist: 4.57%, Price: 178.6029, EMA: 170.7972)",-,-,178.6029,180.767
+EURNZD=X,EURNZD=X,No Signal,None,"Not in Zone (Dist: 4.26%, Price: 2.0384, EMA: 1.9552)",-,-,2.0384,2.054
+EURUSD=X,EURUSD=X,No Signal,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch,-,-,1.1568,1.1527
 FIRO,FIRO,No Signal,None,Data Fetch Error,-,-,-,-
 FORTH,FORTH,No Signal,None,Data Fetch Error,-,-,-,-
-FTNT,"Fortinet, Inc.",No Signal,None,"Not in Zone (Dist: 7.07%, Price: 82.5725, EMA: 88.8564)",-,-,82.5725,79.529
+FTNT,"Fortinet, Inc.",No Signal,None,"Not in Zone (Dist: 7.06%, Price: 82.5810, EMA: 88.8582)",-,-,82.581,79.7
 GAS,330431,No Signal,None,Data Fetch Error,-,-,-,-
-GBPAUD=X,GBPAUD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00170 pointing Down),-,-,2.0159,2.028
-GBPCAD=X,GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.8392 (Flip: 2025-11-20 18:00),1.8446,1.8492
-GBPJPY=X,GBPJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01201 pointing Up),-,-,202.959,205.575
-GBPNZD=X,GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed) | 1h: Trend Up (Retest Confirmed),4h: Retest @ 2.3235 (Flip: 2025-11-19 08:00) | 1h: Retest @ 2.3316 (Flip: 2025-11-20 22:00),2.3165,2.3357
-GBPUSD=X,GBPUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00129 pointing Down),-,-,1.3146,1.3108
-GEHC,GE HealthCare Technologies Inc.,No Signal,None,Setup Invalid: Slope Invalid (-0.02911 pointing Down),-,-,74.5565,78.65
-GOOG,Alphabet Inc.,No Signal,None,"Not in Zone (Dist: 31.47%, Price: 285.7917, EMA: 217.3763)",-,-,285.7917,317.505
-GOOGL,Alphabet Inc.,No Signal,None,"Not in Zone (Dist: 31.83%, Price: 285.2760, EMA: 216.4023)",-,-,285.276,317.34
+GBPAUD=X,GBPAUD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00170 pointing Down),-,-,2.0159,2.0287
+GBPCAD=X,GBPCAD=X,Standard Buy,Mean Rev (Bounce Up),None,1h: Trend Up (Retest Confirmed),1h: Retest @ 1.8392 (Flip: 2025-11-20 18:00),1.8446,1.8494
+GBPJPY=X,GBPJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01207 pointing Up),-,-,202.9634,205.662
+GBPNZD=X,GBPNZD=X,Standard Buy,Mean Rev (Bounce Up),None,4h: Trend Up (Retest Confirmed) | 1h: Trend Up (Retest Confirmed),4h: Retest @ 2.3235 (Flip: 2025-11-19 08:00) | 1h: Retest @ 2.3316 (Flip: 2025-11-20 22:00),2.3165,2.3364
+GBPUSD=X,GBPUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00129 pointing Down),-,-,1.3146,1.3111
+GEHC,GE HealthCare Technologies Inc.,No Signal,None,Setup Invalid: Slope Invalid (-0.02981 pointing Down),-,-,74.5078,77.675
+GOOG,Alphabet Inc.,No Signal,None,"Not in Zone (Dist: 31.47%, Price: 285.7880, EMA: 217.3756)",-,-,285.788,317.43
+GOOGL,Alphabet Inc.,No Signal,None,"Not in Zone (Dist: 31.83%, Price: 285.2750, EMA: 216.4021)",-,-,285.275,317.32
 GRIN,VictoryShares International Free Cash Flow Growth ETF,No Signal,None,Data Fetch Error,-,-,-,-
 GRS,128717,No Signal,None,Data Fetch Error,-,-,-,-
 HUAHUA,HUAHUA,No Signal,None,Data Fetch Error,-,-,-,-
-ISRG,"Intuitive Surgical, Inc.",No Signal,None,"Not in Zone (Dist: 9.94%, Price: 553.1954, EMA: 503.1787)",-,-,553.1954,569.4688
+ISRG,"Intuitive Surgical, Inc.",No Signal,None,"Not in Zone (Dist: 9.94%, Price: 553.1650, EMA: 503.1726)",-,-,553.165,568.86
 KAS,KAS,No Signal,None,Data Fetch Error,-,-,-,-
-LTC,"LTC Properties, Inc.",No Signal,None,Setup Invalid: Slope Invalid (0.05549 pointing Up),-,-,35.5497,36.13
+LTC,"LTC Properties, Inc.",No Signal,None,Setup Invalid: Slope Invalid (0.05542 pointing Up),-,-,35.5447,36.03
 MAY,3313277,No Signal,None,Data Fetch Error,-,-,-,-
-MDT,Medtronic plc,No Signal,None,"Not in Zone (Dist: 5.15%, Price: 94.8635, EMA: 90.2185)",-,-,94.8635,103.51
-META,"Meta Platforms, Inc.",No Signal,None,"Not in Zone (Dist: 6.08%, Price: 631.7125, EMA: 672.5941)",-,-,631.7125,614.07
-MSFT,Microsoft Corporation,No Signal,None,"Not in Zone (Dist: 5.24%, Price: 504.8276, EMA: 479.6781)",-,-,504.8276,474.91
+MDT,Medtronic plc,No Signal,None,"Not in Zone (Dist: 5.14%, Price: 94.8525, EMA: 90.2163)",-,-,94.8525,103.29
+META,"Meta Platforms, Inc.",No Signal,None,"Not in Zone (Dist: 6.07%, Price: 631.7843, EMA: 672.6085)",-,-,631.7843,615.505
+MSFT,Microsoft Corporation,No Signal,None,"Not in Zone (Dist: 5.24%, Price: 504.8231, EMA: 479.6772)",-,-,504.8231,474.82
 MTL,MTL,No Signal,None,Data Fetch Error,-,-,-,-
 NAV,NAV,No Signal,None,Data Fetch Error,-,-,-,-
-NEXA,Nexa Resources S.A.,No Signal,None,"Not in Zone (Dist: 6.05%, Price: 5.8557, EMA: 5.5217)",-,-,5.8557,6.305
-NFLX,"Netflix, Inc.",No Signal,None,Setup Invalid: Flip Dist Too Small (0.57% < 2%),-,-,110.3624,104.55
-NVDA,NVIDIA Corporation,No Signal,None,"Not in Zone (Dist: 18.64%, Price: 192.4690, EMA: 162.2346)",-,-,192.469,181.88
-NZDCAD=X,NZDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00054 pointing Down),-,-,0.7961,0.7916
-NZDJPY=X,NZDJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01865 pointing Up),-,-,87.5935,87.982
+NEXA,Nexa Resources S.A.,No Signal,None,"Not in Zone (Dist: 6.05%, Price: 5.8555, EMA: 5.5216)",-,-,5.8555,6.3007
+NFLX,"Netflix, Inc.",No Signal,None,Setup Invalid: Flip Dist Too Small (0.57% < 2%),-,-,110.3653,104.61
+NVDA,NVIDIA Corporation,No Signal,None,"Not in Zone (Dist: 18.64%, Price: 192.4818, EMA: 162.2371)",-,-,192.4818,182.135
+NZDCAD=X,NZDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00054 pointing Down),-,-,0.7961,0.7913
+NZDJPY=X,NZDJPY=X,No Signal,None,Setup Invalid: Slope Invalid (0.01866 pointing Up),-,-,87.5938,87.989
 NZDUSD=X,NZDUSD=X,No Signal,None,Setup Invalid: Slope Invalid (-0.00047 pointing Down),-,-,0.5675,0.5613
 OMG,OMGL Holdings Ltd,No Signal,None,Data Fetch Error,-,-,-,-
 OPTI,"Optec International, Inc.",No Signal,None,Setup Invalid: Flip Dist Too Small (0.64% < 2%),-,-,0.0017,0.0023
 PIVX,PIVX,No Signal,None,Data Fetch Error,-,-,-,-
-PLTR,Palantir Technologies Inc.,No Signal,None,"Not in Zone (Dist: 25.97%, Price: 180.7927, EMA: 143.5255)",-,-,180.7927,164.14
-PPC,Pilgrim's Pride Corporation,No Signal,Squeeze,Lower TF Mismatch,-,-,37.66,37.97
-QQQ,Invesco QQQ Trust,No Signal,None,"Not in Zone (Dist: 9.94%, Price: 614.1815, EMA: 558.6714)",-,-,614.1815,605.08
+PLTR,Palantir Technologies Inc.,No Signal,None,"Not in Zone (Dist: 25.98%, Price: 180.8127, EMA: 143.5295)",-,-,180.8127,164.5399
+PPC,Pilgrim's Pride Corporation,No Signal,Squeeze,Lower TF Mismatch,-,-,37.657,37.91
+QQQ,Invesco QQQ Trust,No Signal,None,"Not in Zone (Dist: 9.94%, Price: 614.2015, EMA: 558.6755)",-,-,614.2015,605.48
 QUAI,QUAI,No Signal,None,Data Fetch Error,-,-,-,-
 RSR,RSR,No Signal,None,Data Fetch Error,-,-,-,-
 RVN,RVN,No Signal,None,Data Fetch Error,-,-,-,-
-SAP,SAP SE,No Signal,None,"Not in Zone (Dist: 6.15%, Price: 251.0015, EMA: 267.4607)",-,-,251.0015,238.76
+SAP,SAP SE,No Signal,None,"Not in Zone (Dist: 6.16%, Price: 250.9955, EMA: 267.4595)",-,-,250.9955,238.64
 SHIB,SHIB,No Signal,None,Data Fetch Error,-,-,-,-
-SKY,"Champion Homes, Inc.",No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,76.3413,82.835
-SPY,SPDR S&P 500 ETF,No Signal,None,"Not in Zone (Dist: 7.59%, Price: 673.7325, EMA: 626.1939)",-,-,673.7325,669.14
+SKY,"Champion Homes, Inc.",No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,76.3255,82.52
+SPY,SPDR S&P 500 ETF,No Signal,None,"Not in Zone (Dist: 7.59%, Price: 673.7320, EMA: 626.1938)",-,-,673.732,669.13
 SXP,SXP,No Signal,None,Data Fetch Error,-,-,-,-
-TEL,TE Connectivity plc,No Signal,None,"Not in Zone (Dist: 23.11%, Price: 238.0085, EMA: 193.3297)",-,-,238.0085,221.01
+TEL,TE Connectivity plc,No Signal,None,"Not in Zone (Dist: 23.10%, Price: 237.9902, EMA: 193.3261)",-,-,237.9902,220.645
 THE,869089,No Signal,None,Data Fetch Error,-,-,-,-
-TSLA,"Tesla, Inc.",No Signal,None,"Not in Zone (Dist: 19.24%, Price: 430.5145, EMA: 361.0623)",-,-,430.5145,419.17
-USDCAD=X,USDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (0.00019 pointing Up),-,-,1.4033,1.411
-USDCHF=X,USDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.802,0.8078
-USDJPY=X,USDJPY=X,No Signal,None,"Not in Zone (Dist: 3.22%, Price: 154.3997, EMA: 149.5781)",-,-,154.3997,156.821
-USDP,USD Partners LP,Standard Sell,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-10-17 12:30 @ 0.0076,0.0077,0.0099
+TSLA,"Tesla, Inc.",No Signal,None,"Not in Zone (Dist: 19.25%, Price: 430.5735, EMA: 361.0741)",-,-,430.5735,420.35
+USDCAD=X,USDCAD=X,No Signal,None,Setup Invalid: Slope Invalid (0.00019 pointing Up),-,-,1.4033,1.4108
+USDCHF=X,USDCHF=X,No Signal,Mean Rev (Bounce Down),Lower TF Mismatch,-,-,0.8021,0.8081
+USDJPY=X,USDJPY=X,No Signal,None,"Not in Zone (Dist: 3.22%, Price: 154.4025, EMA: 149.5786)",-,-,154.4025,156.877
+USDP,USD Partners LP,Standard Sell,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-10-20 09:30 @ 0.0077,0.0076,0.0068
 USDUC,USDUC,No Signal,None,Data Fetch Error,-,-,-,-
 VEX,VEX,No Signal,None,Data Fetch Error,-,-,-,-
 VOLT,Tema Electrification ETF,No Signal,None,Data Fetch Error,-,-,-,-
