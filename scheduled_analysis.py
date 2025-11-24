@@ -100,7 +100,8 @@ def generate_recommendations(current_df, previous_df):
     # 4. Select Columns for Report
     cols_to_use = [
         "Ticker", "Signal", "Recommendation", "Daily Setup", 
-        "Failure Reason", "Confirmations", "Switch Time", "Est. Price"
+        "Failure Reason", "Confirmations", "Switch Time", 
+        "Current 20d SMA Level", "Current Price" # UPDATED: Replaced Est. Price with new columns
     ]
     
     # Filter to exist only
