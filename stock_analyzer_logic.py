@@ -152,7 +152,7 @@ def analyze_daily_chart(ticker):
 
     last = df.iloc[-1]
     
-    # Pre-calculate prices for reporting even if setup fails
+    # Pre-calculate prices
     prices = {
         "price_sma": last['BBM_20'],
         "price_current": last['close']
@@ -172,7 +172,6 @@ def analyze_daily_chart(ticker):
 
     # Validation 1: Zone or Squeeze
     if not (is_in_zone or is_squeeze): 
-        # UPDATED: Return prices even on failure
         raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.4f}, EMA: {last['EMA_200']:.4f}"
         return prices, f"Not in Zone ({raw_debug})"
 
@@ -217,7 +216,6 @@ def analyze_daily_chart(ticker):
         is_valid_setup = True
 
     if not is_valid_setup: 
-        # UPDATED: Return prices even on failure
         return prices, f"Setup Invalid: {fail_reason}"
 
     return {
@@ -310,19 +308,34 @@ def analyze_lower_timeframes(ticker, daily_dir):
 
     return confirmations, time_logs
 
+def get_instrument_name(ticker):
+    """Fetches full name for non-forex tickers. Returns ticker if forex or error."""
+    # Logic: If it has '=X' it's likely forex/currency in Yahoo Finance.
+    if "=X" in ticker:
+        return ticker 
+    
+    try:
+        # Note: Accessing .info triggers an HTTP request.
+        info = yf.Ticker(ticker).info
+        return info.get('longName', info.get('shortName', ticker))
+    except:
+        return ticker
+
 def run_scanner(tickers):
     results = []
     print(f"Scanning {len(tickers)} tickers...")
     
     for ticker in tickers:
         print(f"Checking {ticker}...", end="\r")
+        
+        # --- NEW: Fetch Name ---
+        inst_name = get_instrument_name(ticker)
+        
         daily, failure_reason = analyze_daily_chart(ticker)
         
-        # Prepare Price Strings (Default to "-" if data error)
+        # Prepare Price Strings
         sma_str = "-"
         price_str = "-"
-        
-        # Extract prices if 'daily' dict exists (it now exists even on failure, unless Data Fetch Error)
         if daily and 'price_sma' in daily:
              sma_str = round(daily['price_sma'], 4)
              price_str = round(daily['price_current'], 4)
@@ -330,13 +343,14 @@ def run_scanner(tickers):
         if failure_reason:
              results.append({
                 "Ticker": ticker,
+                "Instrument Name": inst_name,  # Added
                 "Signal": "No Signal",
                 "Daily Setup": "None",
                 "Failure Reason": failure_reason,
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Current 20d SMA Level": sma_str,  # Now populated
-                "Current Price": price_str         # Now populated
+                "Current 20d SMA Level": sma_str,
+                "Current Price": price_str
             })
              continue
         
@@ -356,6 +370,7 @@ def run_scanner(tickers):
             
             results.append({
                 "Ticker": ticker,
+                "Instrument Name": inst_name,  # Added
                 "Signal": f"{signal_type} {daily['direction']}",
                 "Daily Setup": final_setup,
                 "Failure Reason": "None",
@@ -367,6 +382,7 @@ def run_scanner(tickers):
         else:
             results.append({
                 "Ticker": ticker,
+                "Instrument Name": inst_name,  # Added
                 "Signal": "No Signal",
                 "Daily Setup": daily['setup_type'],
                 "Failure Reason": "Lower TF Mismatch",
