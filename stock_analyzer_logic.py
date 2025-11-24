@@ -220,7 +220,8 @@ def analyze_daily_chart(ticker):
         "setup_type": setup_type,
         "is_squeeze": is_squeeze,
         "is_mean_rev": is_in_zone,
-        "price": last['BBM_20']
+        "price_sma": last['BBM_20'],    # UPDATED: Renamed from price
+        "price_current": last['close']  # UPDATED: Added current price
     }, None
 
 def analyze_lower_timeframes(ticker, daily_dir):
@@ -319,7 +320,8 @@ def run_scanner(tickers):
                 "Failure Reason": failure_reason,
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Est. Price": "-"
+                "Current 20d SMA Level": "-", # UPDATED
+                "Current Price": "-"          # UPDATED
             })
              continue
         
@@ -344,7 +346,8 @@ def run_scanner(tickers):
                 "Failure Reason": "None",
                 "Confirmations": full_notes,
                 "Switch Time": time_notes,
-                "Est. Price": round(daily['price'], 2)
+                "Current 20d SMA Level": round(daily['price_sma'], 2),   # UPDATED
+                "Current Price": round(daily['price_current'], 2)        # UPDATED
             })
         else:
             results.append({
@@ -354,7 +357,8 @@ def run_scanner(tickers):
                 "Failure Reason": "Lower TF Mismatch",
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Est. Price": round(daily['price'], 2)
+                "Current 20d SMA Level": round(daily['price_sma'], 2),   # UPDATED
+                "Current Price": round(daily['price_current'], 2)        # UPDATED
             })
     
     print("\nScan Complete.")
