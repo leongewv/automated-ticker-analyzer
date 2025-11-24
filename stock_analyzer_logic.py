@@ -166,8 +166,8 @@ def analyze_daily_chart(ticker):
 
     # Validation 1: Zone or Squeeze
     if not (is_in_zone or is_squeeze): 
-        # UPDATED: Provide raw data for validation
-        raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.2f}, EMA: {last['EMA_200']:.2f}"
+        # UPDATED: Provide raw data for validation (4 decimal places)
+        raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.4f}, EMA: {last['EMA_200']:.4f}"
         return None, f"Not in Zone ({raw_debug})"
 
     cross_signal, _ = check_crossover(df, lookback=5) 
@@ -263,7 +263,8 @@ def analyze_lower_timeframes(ticker, daily_dir):
             if is_above:
                 if active_trans == "Neg->Pos":
                     tf_notes.append(active_trans_sig)
-                    tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
+                    # UPDATED: 4 decimal places
+                    tf_time = f"{active_trans_time} @ {active_trans_price:.4f}"
                     is_valid_tf = True
                 elif current_slope_fast > 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Buy")
@@ -271,7 +272,8 @@ def analyze_lower_timeframes(ticker, daily_dir):
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
                     if retest_ok:
                         tf_notes.append("Trend Up (Retest Confirmed)")
-                        tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
+                        # UPDATED: 4 decimal places
+                        tf_time = f"Retest @ {retest_price:.4f} (Flip: {flip_time})"
                         is_valid_tf = True
                 if cross_sig == "Bullish Cross":
                     tf_notes.append("GOLDEN CROSS")
@@ -282,7 +284,8 @@ def analyze_lower_timeframes(ticker, daily_dir):
             if not is_above:
                 if active_trans == "Pos->Neg":
                     tf_notes.append(active_trans_sig)
-                    tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
+                    # UPDATED: 4 decimal places
+                    tf_time = f"{active_trans_time} @ {active_trans_price:.4f}"
                     is_valid_tf = True
                 elif current_slope_fast < 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Sell")
@@ -290,7 +293,8 @@ def analyze_lower_timeframes(ticker, daily_dir):
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
                     if retest_ok:
                         tf_notes.append("Trend Down (Retest Confirmed)")
-                        tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
+                        # UPDATED: 4 decimal places
+                        tf_time = f"Retest @ {retest_price:.4f} (Flip: {flip_time})"
                         is_valid_tf = True
                 if cross_sig == "Bearish Cross":
                     tf_notes.append("DEATH CROSS")
@@ -320,8 +324,8 @@ def run_scanner(tickers):
                 "Failure Reason": failure_reason,
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Current 20d SMA Level": "-", # UPDATED
-                "Current Price": "-"          # UPDATED
+                "Current 20d SMA Level": "-", 
+                "Current Price": "-"          
             })
              continue
         
@@ -346,8 +350,8 @@ def run_scanner(tickers):
                 "Failure Reason": "None",
                 "Confirmations": full_notes,
                 "Switch Time": time_notes,
-                "Current 20d SMA Level": round(daily['price_sma'], 2),   # UPDATED
-                "Current Price": round(daily['price_current'], 2)        # UPDATED
+                "Current 20d SMA Level": round(daily['price_sma'], 4),   # UPDATED: 4 decimals
+                "Current Price": round(daily['price_current'], 4)        # UPDATED: 4 decimals
             })
         else:
             results.append({
@@ -357,8 +361,8 @@ def run_scanner(tickers):
                 "Failure Reason": "Lower TF Mismatch",
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Current 20d SMA Level": round(daily['price_sma'], 2),   # UPDATED
-                "Current Price": round(daily['price_current'], 2)        # UPDATED
+                "Current 20d SMA Level": round(daily['price_sma'], 4),   # UPDATED: 4 decimals
+                "Current Price": round(daily['price_current'], 4)        # UPDATED: 4 decimals
             })
     
     print("\nScan Complete.")
