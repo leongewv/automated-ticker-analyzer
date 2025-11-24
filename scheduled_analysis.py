@@ -99,9 +99,9 @@ def generate_recommendations(current_df, previous_df):
     
     # 4. Select Columns for Report
     cols_to_use = [
-        "Ticker", "Signal", "Recommendation", "Daily Setup", 
-        "Failure Reason", "Confirmations", "Switch Time", 
-        "Current 20d SMA Level", "Current Price"
+        "Ticker", "Instrument Name", "Signal", "Recommendation", # Added Instrument Name
+        "Daily Setup", "Failure Reason", "Confirmations", 
+        "Switch Time", "Current 20d SMA Level", "Current Price"
     ]
     
     # Filter to exist only
@@ -203,7 +203,7 @@ def main():
         # Also print to console for verification
         print("\n--- Report Generated ---")
         # Print first few columns to console for quick check
-        print(actionable_df[['Ticker', 'Signal', 'Failure Reason']].to_string(index=False))
+        print(actionable_df[['Ticker', 'Instrument Name', 'Signal', 'Failure Reason']].to_string(index=False))
     else:
         print("No results generated at all (empty input?).")
 
