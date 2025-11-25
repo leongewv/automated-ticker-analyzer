@@ -6,8 +6,8 @@ import time
 from datetime import datetime, timedelta
 
 # --- Configuration ---
-SLOPE_LOOKBACK_SLOW = 20  # 40-candle footprint
-SLOPE_LOOKBACK_FAST = 8   # 16-candle footprint
+SLOPE_LOOKBACK_SLOW = 20  
+SLOPE_LOOKBACK_FAST = 8   
 
 EMA_PERIOD = 200
 BB_PERIOD = 20
@@ -17,7 +17,6 @@ TREND_FLIP_MIN = 0.02
 RETEST_TOLERANCE = 0.015
 
 def get_data(ticker, period="2y", interval="1d"):
-    """Fetches data and calculates indicators."""
     if interval == "1h": period = "1y" 
     elif interval == "4h": period = "1y" 
         
@@ -43,7 +42,6 @@ def get_data(ticker, period="2y", interval="1d"):
         return None
 
 def get_slope(series, lookback):
-    """Calculates linear regression slope."""
     if len(series) < lookback: return 0
     y = series.iloc[-lookback:].values
     x = np.arange(lookback)
@@ -51,7 +49,6 @@ def get_slope(series, lookback):
     return slope
 
 def check_slope_transition(series, dates, lookback, label_suffix=""):
-    """Checks for slope sign shift."""
     if len(series) < (lookback * 2): return None, None, None, None
 
     curr_slope = get_slope(series.iloc[-lookback:], lookback)
@@ -73,10 +70,8 @@ def check_slope_transition(series, dates, lookback, label_suffix=""):
     return None, None, None, None
 
 def check_retest_validity(df, lookback_speed, direction):
-    """Scans BACKWARDS to find the last valid slope flip and verify retest."""
     series = df['BBM_20']
     limit = 60
-    
     found_flip_idx = None
     flip_level = None
     flip_time_str = None
@@ -127,7 +122,6 @@ def check_retest_validity(df, lookback_speed, direction):
     return False, None, None
 
 def check_crossover(df, lookback=5):
-    """Checks for BBM crossing EMA_200."""
     if len(df) < lookback + 1: return None, None
     bbm = df['BBM_20']
     ema = df['EMA_200']
@@ -143,10 +137,6 @@ def check_crossover(df, lookback=5):
     return None, None
 
 def analyze_daily_chart(ticker):
-    """
-    Step 1: Identify Potential on Daily.
-    Returns: (ResultDict, FailureReason)
-    """
     df = get_data(ticker, period="2y", interval="1d")
     if df is None: return None, "Data Fetch Error"
 
@@ -218,18 +208,15 @@ def analyze_daily_chart(ticker):
         "setup_type": setup_type,
         "is_squeeze": is_squeeze,
         "is_mean_rev": is_in_zone,
-        "price": last['BBM_20']
+        "bbm_price": last['BBM_20'],
+        "current_close": last['close'] # ADDED: Actual Close Price
     }, None
 
 def analyze_lower_timeframes(ticker, daily_dir):
-    """
-    Step 2: Check 4H and 1H.
-    UPDATED: Now returns specific failure reasons for debugging.
-    """
     timeframes = ["4h", "1h"]
     confirmations = []
     time_logs = []
-    failure_details = [] # New list to store why a TF failed
+    failure_details = [] 
     
     for tf in timeframes:
         df = get_data(ticker, period="1y", interval=tf)
@@ -262,38 +249,29 @@ def analyze_lower_timeframes(ticker, daily_dir):
 
         current_slope_fast = get_slope(bbm, SLOPE_LOOKBACK_FAST)
         
-        # --- LOGIC & DIAGNOSTICS ---
         if daily_dir == "Buy":
             if is_above:
-                # 1. Check for immediate transitions
                 if active_trans == "Neg->Pos":
                     tf_notes.append(active_trans_sig)
                     tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
-                
-                # 2. Check for retests if slope is good
                 elif current_slope_fast > 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Buy")
                     if not retest_ok:
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
-                    
                     if retest_ok:
                         tf_notes.append("Trend Up (Retest Confirmed)")
                         tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
                         is_valid_tf = True
                     else:
                         failure_details.append(f"{tf}: Momentum Up but No Retest/Flip found")
-                
-                # 3. Check Golden Cross
                 if cross_sig == "Bullish Cross":
                     tf_notes.append("GOLDEN CROSS")
                     tf_time = cross_time
                     is_valid_tf = True
                 
-                # If we are above EMA, but no signal found yet
                 if not is_valid_tf and current_slope_fast <= 0:
                      failure_details.append(f"{tf}: Price > EMA but Slope Negative")
-
             else:
                 failure_details.append(f"{tf}: Misaligned (Price < EMA 200)")
 
@@ -307,14 +285,12 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Sell")
                     if not retest_ok:
                         retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
-                    
                     if retest_ok:
                         tf_notes.append("Trend Down (Retest Confirmed)")
                         tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
                         is_valid_tf = True
                     else:
                         failure_details.append(f"{tf}: Momentum Down but No Retest/Flip found")
-
                 if cross_sig == "Bearish Cross":
                     tf_notes.append("DEATH CROSS")
                     tf_time = cross_time
@@ -322,7 +298,6 @@ def analyze_lower_timeframes(ticker, daily_dir):
                 
                 if not is_valid_tf and current_slope_fast >= 0:
                      failure_details.append(f"{tf}: Price < EMA but Slope Positive")
-
             else:
                 failure_details.append(f"{tf}: Misaligned (Price > EMA 200)")
 
@@ -345,6 +320,7 @@ def run_scanner(tickers):
              results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
+                "Current Price": "-", # Placeholder for failed fetches
                 "Daily Setup": "None",
                 "Failure Reason": failure_reason,
                 "Confirmations": "-",
@@ -354,8 +330,10 @@ def run_scanner(tickers):
              continue
         
         time.sleep(1) # API pacing
-        # Updated to unpack the 3rd return variable (failure_details)
         confs, times, fail_details = analyze_lower_timeframes(ticker, daily['direction'])
+        
+        # Capture price even if signal fails later
+        curr_price = daily['current_close'] 
         
         if confs:
             labels = []
@@ -371,24 +349,25 @@ def run_scanner(tickers):
             results.append({
                 "Ticker": ticker,
                 "Signal": f"{signal_type} {daily['direction']}",
+                "Current Price": curr_price,
                 "Daily Setup": final_setup,
                 "Failure Reason": "None",
                 "Confirmations": full_notes,
                 "Switch Time": time_notes,
-                "Est. Price": round(daily['price'], 2)
+                "Est. Price": round(daily['bbm_price'], 2)
             })
         else:
-            # Join the specific failure details for the report
             detailed_fail_reason = " | ".join(fail_details) if fail_details else "Lower TF Mismatch (Unknown)"
             
             results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
+                "Current Price": curr_price,
                 "Daily Setup": daily['setup_type'],
                 "Failure Reason": f"Lower TF Mismatch: [{detailed_fail_reason}]",
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Est. Price": round(daily['price'], 2)
+                "Est. Price": round(daily['bbm_price'], 2)
             })
     
     print("\nScan Complete.")
