@@ -49,7 +49,6 @@ def generate_recommendations(current_df, previous_df):
 
     # 1. Prepare Previous Data
     if previous_df.empty:
-        # If no history, everything is new
         current_df['Recommendation'] = current_df.apply(
             lambda row: f"🔥 New Signal: {row['Signal']} ({row['Daily Setup']})" 
             if "No Signal" not in row['Signal'] else "Monitoring", axis=1
@@ -74,33 +73,26 @@ def generate_recommendations(current_df, previous_df):
         current_sig = str(row['Signal'])
         prev_sig = str(row['Signal_prev'])
         
-        # Grab the technical reasons calculated by the logic script
         fail_reason = str(row['Failure Reason'])
         setup_type = str(row['Daily Setup'])
         
-        # --- Case A: No Change ---
         if current_sig == prev_sig:
             return "No change." if "No Signal" not in current_sig else "Monitoring"
         
-        # --- Case B: Downgrade (Signal Lost) ---
         if "No Signal" in current_sig:
             if "Buy" in prev_sig or "Sell" in prev_sig:
-                # Include the specific technical failure reason
                 return f"📉 Signal Lost (Was {prev_sig}) -> Why: {fail_reason}"
             return "Monitoring"
         
-        # --- Case C: New Signal (Upgrade) ---
         if prev_sig == 'None' or prev_sig == 'nan' or "No Signal" in prev_sig:
              return f"🔥 New Signal: {current_sig} (Setup: {setup_type})"
 
-        # --- Case D: Strength Change (Standard <-> SUPER) ---
         if 'Standard' in prev_sig and 'SUPER' in current_sig:
             return f"🚀 UPGRADE: Standard -> SUPER ({current_sig})"
             
         if 'SUPER' in prev_sig and 'Standard' in current_sig:
             return f"⚠️ Strength Drop: SUPER -> Standard (Check confirmations)"
             
-        # --- Case E: Direction Flip ---
         if ('Buy' in prev_sig and 'Sell' in current_sig) or ('Sell' in prev_sig and 'Buy' in current_sig):
             return f"🔄 FLIP: {prev_sig} -> {current_sig}"
 
@@ -110,14 +102,25 @@ def generate_recommendations(current_df, previous_df):
     
     # 4. Select Columns for Report
     cols_to_use = [
-        "Ticker", "Signal", "Recommendation", "Daily Setup", 
-        "Failure Reason", "Confirmations", "Switch Time", "Est. Price"
+        "Ticker", "Signal", "Current Price", "Est. Price", 
+        "Recommendation", "Daily Setup", "Failure Reason", 
+        "Confirmations", "Switch Time"
     ]
     
     # Filter to exist only
     final_cols = [col for col in cols_to_use if col in merged_df.columns]
     
-    return merged_df[final_cols]
+    df_final = merged_df[final_cols].copy()
+    
+    # 5. Format "Current Price" to 4 decimal places
+    if "Current Price" in df_final.columns:
+        df_final['Current Price'] = pd.to_numeric(df_final['Current Price'], errors='coerce')
+        # Format valid numbers to 4 decimals, keep "-" for NaNs
+        df_final['Current Price'] = df_final['Current Price'].apply(
+            lambda x: f"{x:.4f}" if pd.notnull(x) else "-"
+        )
+
+    return df_final
 
 def main():
     print(f"Starting scheduled analysis at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -175,7 +178,6 @@ def main():
     actionable_df = generate_recommendations(full_results_df.copy(), previous_results_df)
 
     # Sort: Signals at the top, No Signal at the bottom
-    # We sort by 'Failure Reason' where 'None' (meaning Success) comes first
     actionable_df = actionable_df.sort_values(
         by='Failure Reason', 
         key=lambda x: x != 'None'
@@ -187,7 +189,7 @@ def main():
     if not actionable_df.empty:
         subject = f"Trading Signals & Report - {today_str}"
         
-        # UPDATED CSS FOR BETTER READABILITY OF LONG REASONS
+        # UPDATED CSS: Included 'Current Price' width
         html_body = f"""
         <html>
         <head>
@@ -200,11 +202,13 @@ def main():
                 tr:nth-child(even) {{ background-color: #f9f9f9; }}
                 tr:hover {{ background-color: #f1f1f1; }}
                 
-                /* Column Specific Widths to prevent squeezing */
+                /* Column Specific Widths */
                 th:nth-child(1) {{ width: 8%; }}  /* Ticker */
                 th:nth-child(2) {{ width: 10%; }} /* Signal */
-                th:nth-child(3) {{ width: 25%; }} /* Recommendation (Has detailed reason) */
-                th:nth-child(5) {{ width: 20%; }} /* Failure Reason (Raw) */
+                th:nth-child(3) {{ width: 10%; }} /* Current Price */
+                th:nth-child(4) {{ width: 10%; }} /* Est. Price (SMA) */
+                th:nth-child(5) {{ width: 25%; }} /* Recommendation */
+                th:nth-child(7) {{ width: 20%; }} /* Failure Reason */
             </style>
         </head>
         <body>
@@ -218,9 +222,8 @@ def main():
         
         send_email_notification(subject, html_body)
         
-        # Also print to console for verification
         print("\n--- Report Generated ---")
-        print(actionable_df[['Ticker', 'Signal', 'Recommendation']].to_string(index=False))
+        print(actionable_df[['Ticker', 'Signal', 'Current Price', 'Est. Price', 'Recommendation']].to_string(index=False))
     else:
         print("No results generated at all (empty input?).")
 
