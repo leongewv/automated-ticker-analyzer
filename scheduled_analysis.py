@@ -42,7 +42,7 @@ def send_email_notification(subject, html_body):
 
 def generate_recommendations(current_df, previous_df):
     """
-    Compares current signals with history to generate actionable text.
+    Compares current signals with history to generate actionable text with REASONS.
     """
     if current_df.empty:
         return current_df
@@ -50,8 +50,9 @@ def generate_recommendations(current_df, previous_df):
     # 1. Prepare Previous Data
     if previous_df.empty:
         # If no history, everything is new
-        current_df['Recommendation'] = current_df['Signal'].apply(
-            lambda x: f"🔥 New Signal: {x}" if "No Signal" not in x else "Monitoring"
+        current_df['Recommendation'] = current_df.apply(
+            lambda row: f"🔥 New Signal: {row['Signal']} ({row['Daily Setup']})" 
+            if "No Signal" not in row['Signal'] else "Monitoring", axis=1
         )
         return current_df
     
@@ -68,40 +69,49 @@ def generate_recommendations(current_df, previous_df):
         suffixes=('', '_prev')
     ).fillna({'Signal_prev': 'None'})
 
-    # 3. Logic: Compare Signals
+    # 3. Logic: Compare Signals with Explanations
     def get_recommendation(row):
-        current = str(row['Signal'])
-        previous = str(row['Signal_prev'])
+        current_sig = str(row['Signal'])
+        prev_sig = str(row['Signal_prev'])
         
-        if current == previous:
-            return "No change." if "No Signal" not in current else "Monitoring"
+        # Grab the technical reasons calculated by the logic script
+        fail_reason = str(row['Failure Reason'])
+        setup_type = str(row['Daily Setup'])
         
-        if "No Signal" in current:
-            if "Buy" in previous or "Sell" in previous:
-                return f"📉 Signal Lost (Was {previous})"
+        # --- Case A: No Change ---
+        if current_sig == prev_sig:
+            return "No change." if "No Signal" not in current_sig else "Monitoring"
+        
+        # --- Case B: Downgrade (Signal Lost) ---
+        if "No Signal" in current_sig:
+            if "Buy" in prev_sig or "Sell" in prev_sig:
+                # Include the specific technical failure reason
+                return f"📉 Signal Lost (Was {prev_sig}) -> Why: {fail_reason}"
             return "Monitoring"
         
-        if previous == 'None' or previous == 'nan' or "No Signal" in previous:
-             return f"🔥 New Signal: {current}"
+        # --- Case C: New Signal (Upgrade) ---
+        if prev_sig == 'None' or prev_sig == 'nan' or "No Signal" in prev_sig:
+             return f"🔥 New Signal: {current_sig} (Setup: {setup_type})"
 
-        if 'Standard' in previous and 'SUPER' in current:
-            return f"🚀 UPGRADE: Standard -> SUPER ({current})"
+        # --- Case D: Strength Change (Standard <-> SUPER) ---
+        if 'Standard' in prev_sig and 'SUPER' in current_sig:
+            return f"🚀 UPGRADE: Standard -> SUPER ({current_sig})"
             
-        if 'SUPER' in previous and 'Standard' in current:
-            return f"⚠️ Downgrade: SUPER -> Standard"
+        if 'SUPER' in prev_sig and 'Standard' in current_sig:
+            return f"⚠️ Strength Drop: SUPER -> Standard (Check confirmations)"
             
-        if ('Buy' in previous and 'Sell' in current) or ('Sell' in previous and 'Buy' in current):
-            return f"🔄 FLIP: {previous} -> {current}"
+        # --- Case E: Direction Flip ---
+        if ('Buy' in prev_sig and 'Sell' in current_sig) or ('Sell' in prev_sig and 'Buy' in current_sig):
+            return f"🔄 FLIP: {prev_sig} -> {current_sig}"
 
-        return f"Update: {current}"
+        return f"Update: {current_sig}"
 
     merged_df['Recommendation'] = merged_df.apply(get_recommendation, axis=1)
     
     # 4. Select Columns for Report
     cols_to_use = [
-        "Ticker", "Instrument Name", "Signal", "Recommendation", # Added Instrument Name
-        "Daily Setup", "Failure Reason", "Confirmations", 
-        "Switch Time", "Current 20d SMA Level", "Current Price"
+        "Ticker", "Signal", "Recommendation", "Daily Setup", 
+        "Failure Reason", "Confirmations", "Switch Time", "Est. Price"
     ]
     
     # Filter to exist only
@@ -177,22 +187,30 @@ def main():
     if not actionable_df.empty:
         subject = f"Trading Signals & Report - {today_str}"
         
+        # UPDATED CSS FOR BETTER READABILITY OF LONG REASONS
         html_body = f"""
         <html>
         <head>
             <style>
-                body {{ font-family: Arial, sans-serif; }}
-                table {{ border-collapse: collapse; width: 100%; font-size: 12px; }}
-                th, td {{ border: 1px solid #ddd; padding: 6px; text-align: left; }}
-                th {{ background-color: #4CAF50; color: white; }}
-                tr:nth-child(even) {{ background-color: #f2f2f2; }}
-                tr:hover {{ background-color: #ddd; }}
+                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }}
+                h2 {{ color: #333; }}
+                table {{ border-collapse: collapse; width: 100%; font-size: 13px; table-layout: fixed; }}
+                th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; word-wrap: break-word; }}
+                th {{ background-color: #2c3e50; color: white; }}
+                tr:nth-child(even) {{ background-color: #f9f9f9; }}
+                tr:hover {{ background-color: #f1f1f1; }}
+                
+                /* Column Specific Widths to prevent squeezing */
+                th:nth-child(1) {{ width: 8%; }}  /* Ticker */
+                th:nth-child(2) {{ width: 10%; }} /* Signal */
+                th:nth-child(3) {{ width: 25%; }} /* Recommendation (Has detailed reason) */
+                th:nth-child(5) {{ width: 20%; }} /* Failure Reason (Raw) */
             </style>
         </head>
         <body>
             <h2>Strategy Scan Results ({today_str})</h2>
             <p><strong>Note:</strong> Rows with 'No Signal' did not meet strict strategy criteria.</p>
-            {actionable_df.to_html(index=False)}
+            {actionable_df.to_html(index=False, classes='table')}
             <p><small>Automated Report. Not financial advice.</small></p>
         </body>
         </html>
@@ -202,8 +220,7 @@ def main():
         
         # Also print to console for verification
         print("\n--- Report Generated ---")
-        # Print first few columns to console for quick check
-        print(actionable_df[['Ticker', 'Instrument Name', 'Signal', 'Failure Reason']].to_string(index=False))
+        print(actionable_df[['Ticker', 'Signal', 'Recommendation']].to_string(index=False))
     else:
         print("No results generated at all (empty input?).")
 
