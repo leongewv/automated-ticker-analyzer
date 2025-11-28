@@ -80,7 +80,7 @@ SXP,No Signal,-,None,Data Fetch Error,-,-,-
 TEL,No Signal,-,None,"Not in Zone (Dist: 21.28%, Price: 235.59, EMA: 194.26)",-,-,-
 THE,No Signal,-,None,Data Fetch Error,-,-,-
 TSLA,No Signal,-,None,"Not in Zone (Dist: 17.40%, Price: 426.14, EMA: 362.99)",-,-,-
-USDCAD=X,No Signal,1.3973000049591064,Squeeze,Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.41
+USDCAD=X,No Signal,1.3970999717712402,Squeeze,Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.41
 USDCHF=X,No Signal,0.8033999800682068,Mean Rev (Bounce Down),Lower TF Mismatch: [4h: Misaligned (Price > EMA 200) | 1h: Misaligned (Price > EMA 200)],-,-,0.8
 USDJPY=X,No Signal,-,None,"Not in Zone (Dist: 3.52%, Price: 155.12, EMA: 149.85)",-,-,-
 USDP,Standard Sell,0.007000000216066837,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-10-24 13:30 @ 0.01,0.01
