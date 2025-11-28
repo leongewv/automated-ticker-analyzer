@@ -5,16 +5,16 @@ AMZN,No Signal,-,None,"Not in Zone (Dist: 7.89%, Price: 236.15, EMA: 218.88)",-,
 ANML,No Signal,-,None,Data Fetch Error,-,-,-
 ARRR,No Signal,-,None,Data Fetch Error,-,-,-
 ASML,No Signal,-,None,"Not in Zone (Dist: 20.09%, Price: 1024.50, EMA: 853.11)",-,-,-
-AUDCAD=X,Standard Buy,0.9149600267410278,Squeeze,None,4h: Slope Flip (Slow),4h: 2025-11-25 08:00 @ 0.91,0.91
-AUDCHF=X,No Signal,0.5256199836730957,Mean Rev (Bounce Down),Lower TF Mismatch: [4h: Misaligned (Price > EMA 200) | 1h: Misaligned (Price > EMA 200)],-,-,0.52
+AUDCAD=X,Standard Buy,0.9141600131988525,Squeeze,None,4h: Slope Flip (Slow),4h: 2025-11-25 08:00 @ 0.91,0.91
+AUDCHF=X,No Signal,0.5259100198745728,Mean Rev (Bounce Down),Lower TF Mismatch: [4h: Misaligned (Price > EMA 200) | 1h: Misaligned (Price > EMA 200)],-,-,0.52
 AUDJPY=X,No Signal,-,None,"Not in Zone (Dist: 3.62%, Price: 100.91, EMA: 97.39)",-,-,-
 AUDNZD=X,No Signal,-,None,"Not in Zone (Dist: 3.29%, Price: 1.15, EMA: 1.11)",-,-,-
-AUDUSD=X,No Signal,0.652826726436615,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch: [4h: Misaligned (Price < EMA 200) | 1h: Price > EMA but Slope Negative],-,-,0.65
+AUDUSD=X,No Signal,0.6534666419029236,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch: [4h: Misaligned (Price < EMA 200) | 1h: Price > EMA but Slope Negative],-,-,0.65
 BCH,No Signal,-,None,"Not in Zone (Dist: 21.59%, Price: 36.31, EMA: 29.86)",-,-,-
 BEAM,SUPER Buy,25.030000686645508,Mean Rev (Bounce Up),None,4h: Slope Flip (Fast) + GOLDEN CROSS | 1h: Slope Flip (Slow),4h: 2025-11-26 13:30 | 1h: 2025-11-24 10:30 @ 21.58,22.73
 BSV,No Signal,-,None,Setup Invalid: Slope Invalid (0.00358 pointing Up),-,-,-
 BTC,No Signal,-,None,"Not in Zone (Dist: 6.72%, Price: 43.07, EMA: 46.18)",-,-,-
-CADJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.10268 pointing Up),-,-,-
+CADJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.10282 pointing Up),-,-,-
 CC,No Signal,-,None,"Not in Zone (Dist: 15.05%, Price: 11.98, EMA: 14.10)",-,-,-
 CELH,Standard Sell,40.779998779296875,Trend Flip (Down),None,4h: Trend Down (Retest Confirmed),4h: Retest @ 61.49 (Flip: 2025-10-31 09:30),46.25
 COIN,No Signal,264.9700012207031,Trend Flip (Down),Lower TF Mismatch: [4h: Momentum Down but No Retest/Flip found | 1h: Price < EMA but Slope Positive],-,-,288.17
@@ -26,22 +26,22 @@ DINGO,No Signal,-,None,Data Fetch Error,-,-,-
 DOGE,No Signal,-,None,Data Fetch Error,-,-,-
 ELON,No Signal,-,None,Data Fetch Error,-,-,-
 ETN,No Signal,-,None,"Not in Zone (Dist: 3.57%, Price: 359.21, EMA: 346.84)",-,-,-
-EURAUD=X,No Signal,1.7723300457000732,Mean Rev (Bounce Up),Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.78
-EURCAD=X,No Signal,1.621690034866333,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.62
+EURAUD=X,No Signal,1.771630048751831,Mean Rev (Bounce Up),Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.78
+EURCAD=X,No Signal,1.6196600198745728,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.62
 EURGBP=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.00051 pointing Up),-,-,-
 EURI,No Signal,1.9999999494757503e-05,Squeeze,Lower TF Mismatch: [4h: No Data | 1h: No Data],-,-,0.0
-EURJPY=X,No Signal,-,None,"Not in Zone (Dist: 4.70%, Price: 179.24, EMA: 171.19)",-,-,-
+EURJPY=X,No Signal,-,None,"Not in Zone (Dist: 4.71%, Price: 179.25, EMA: 171.19)",-,-,-
 EURNZD=X,No Signal,-,None,"Not in Zone (Dist: 4.34%, Price: 2.04, EMA: 1.96)",-,-,-
-EURUSD=X,No Signal,1.1574074029922485,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch: [4h: Misaligned (Price < EMA 200) | 1h: Price > EMA but Slope Negative],-,-,1.16
+EURUSD=X,No Signal,1.1575413942337036,Squeeze (Mean Rev (Bounce Up)),Lower TF Mismatch: [4h: Misaligned (Price < EMA 200) | 1h: Price > EMA but Slope Negative],-,-,1.16
 FIRO,No Signal,-,None,Data Fetch Error,-,-,-
 FORTH,No Signal,-,None,Data Fetch Error,-,-,-
 FTNT,No Signal,-,None,"Not in Zone (Dist: 7.38%, Price: 82.15, EMA: 88.70)",-,-,-
 GAS,No Signal,-,None,Data Fetch Error,-,-,-
 GBPAUD=X,No Signal,-,None,Setup Invalid: Slope Invalid (-0.00148 pointing Down),-,-,-
-GBPCAD=X,Standard Buy,1.8529800176620483,Squeeze,None,4h: Trend Up (Retest Confirmed),4h: Retest @ 1.85 (Flip: 2025-11-25 00:00),1.85
-GBPJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.04751 pointing Up),-,-,-
+GBPCAD=X,Standard Buy,1.850119948387146,Squeeze,None,4h: Trend Up (Retest Confirmed),4h: Retest @ 1.85 (Flip: 2025-11-25 00:00),1.85
+GBPJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.04755 pointing Up),-,-,-
 GBPNZD=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.00003 pointing Up),-,-,-
-GBPUSD=X,No Signal,1.3219469785690308,Squeeze,Lower TF Mismatch: [4h: Price < EMA but Slope Positive | 1h: Misaligned (Price > EMA 200)],-,-,1.31
+GBPUSD=X,No Signal,1.3219819068908691,Squeeze,Lower TF Mismatch: [4h: Price < EMA but Slope Positive | 1h: Misaligned (Price > EMA 200)],-,-,1.31
 GEHC,No Signal,-,None,Setup Invalid: Slope Invalid (-0.03558 pointing Down),-,-,-
 GOOG,No Signal,-,None,"Not in Zone (Dist: 32.52%, Price: 290.86, EMA: 219.48)",-,-,-
 GOOGL,No Signal,-,None,"Not in Zone (Dist: 32.90%, Price: 290.41, EMA: 218.52)",-,-,-
@@ -61,8 +61,8 @@ NEXA,No Signal,-,None,"Not in Zone (Dist: 7.56%, Price: 5.96, EMA: 5.54)",-,-,-
 NFLX,No Signal,-,None,Setup Invalid: Slope Invalid (-0.38753 pointing Down),-,-,-
 NVDA,No Signal,-,None,"Not in Zone (Dist: 16.86%, Price: 190.00, EMA: 162.58)",-,-,-
 NZDCAD=X,No Signal,-,None,Setup Invalid: Slope Invalid (-0.00058 pointing Down),-,-,-
-NZDJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.01889 pointing Up),-,-,-
-NZDUSD=X,No Signal,0.5711674690246582,Squeeze,Lower TF Mismatch: [4h: Price < EMA but Slope Positive | 1h: Misaligned (Price > EMA 200)],-,-,0.57
+NZDJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.01898 pointing Up),-,-,-
+NZDUSD=X,No Signal,0.571918785572052,Squeeze,Lower TF Mismatch: [4h: Price < EMA but Slope Positive | 1h: Misaligned (Price > EMA 200)],-,-,0.57
 OMG,No Signal,-,None,Data Fetch Error,-,-,-
 OPTI,No Signal,-,None,"Not in Zone (Dist: 4.82%, Price: 0.00, EMA: 0.00)",-,-,-
 PIVX,No Signal,-,None,Data Fetch Error,-,-,-
@@ -80,9 +80,9 @@ SXP,No Signal,-,None,Data Fetch Error,-,-,-
 TEL,No Signal,-,None,"Not in Zone (Dist: 21.93%, Price: 236.45, EMA: 193.93)",-,-,-
 THE,No Signal,-,None,Data Fetch Error,-,-,-
 TSLA,No Signal,-,None,"Not in Zone (Dist: 17.76%, Price: 426.64, EMA: 362.29)",-,-,-
-USDCAD=X,No Signal,1.4019999504089355,Squeeze,Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.41
-USDCHF=X,No Signal,0.805429995059967,Mean Rev (Bounce Down),Lower TF Mismatch: [4h: Misaligned (Price > EMA 200) | 1h: Misaligned (Price > EMA 200)],-,-,0.8
-USDJPY=X,No Signal,-,None,"Not in Zone (Dist: 3.52%, Price: 155.12, EMA: 149.84)",-,-,-
+USDCAD=X,No Signal,1.3997600078582764,Squeeze,Lower TF Mismatch: [4h: Price > EMA but Slope Negative | 1h: Misaligned (Price < EMA 200)],-,-,1.41
+USDCHF=X,No Signal,0.8051199913024902,Mean Rev (Bounce Down),Lower TF Mismatch: [4h: Misaligned (Price > EMA 200) | 1h: Misaligned (Price > EMA 200)],-,-,0.8
+USDJPY=X,No Signal,-,None,"Not in Zone (Dist: 3.52%, Price: 155.12, EMA: 149.85)",-,-,-
 USDP,Standard Sell,0.007000000216066837,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-10-24 13:30 @ 0.01,0.01
 USDUC,No Signal,-,None,Data Fetch Error,-,-,-
 VEX,No Signal,-,None,Data Fetch Error,-,-,-
