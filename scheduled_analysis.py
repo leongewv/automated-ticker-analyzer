@@ -10,33 +10,59 @@ import stock_analyzer_logic as logic
 
 # --- CONFIGURATION ---
 DATA_DIR = "data/incoming"
-TICKER_SOURCE_DIR = "data/ticker_sources"  # Directory containing your ticker lists
+TICKER_SOURCE_DIR = "data/ticker_sources"
 OUTPUT_FILE = f"Trade_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
 
-# Email Config (Using os.environ for GitHub Secrets)
+# Email Config
 EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
 EMAIL_PASSWORD = os.environ.get("SENDER_PASSWORD")
 EMAIL_RECEIVER = os.environ.get("RECEIVER_EMAIL")
+
+# --- MASTER FALLBACK LIST (Restored from your logs) ---
+# Used if data/ticker_sources is missing
+FULL_TICKER_LIST = [
+    # Forex
+    "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
+    "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
+    "GBPAUD=X", "GBPNZD=X", "EURAUD=X", "EURCAD=X", "EURNZD=X", "AUDNZD=X",
+    "AUDCHF=X", "CADJPY=X", "USDJPY=X",
+    
+    # Commodities / Indices
+    "XAUUSD=X", "XAGUSD=X", "SPY", "BTC-USD", "ETH-USD", "SOL-USD", "XRP-USD",
+    
+    # Crypto (Yahoo often needs -USD for crypto)
+    "DOGE-USD", "SHIB-USD", "LTC-USD", "BCH-USD", "BSV-USD", "DASH-USD",
+    "ZEC-USD", "XMR-USD", "XLM-USD", "XEM-USD", "XEC-USD", "XNO-USD",
+    
+    # Stocks & Other Assets (from your logs)
+    "TSLA", "AMZN", "GOOG", "GOOGL", "META", "COIN", "ASML", "ISRG", "CELH",
+    "CPRT", "FTNT", "GEHC", "ANML", "ARRR", "CC", "DCR", "DGB", "DINGO", 
+    "ELON", "EURI", "ETN", "FIRO", "FORTH", "GAS", "GRIN", "GRS", "HUAHUA", 
+    "KAS", "MAY", "MDT", "MTL", "NAV", "OMG", "PIVX", "QUAI", "RSR", "RVN", 
+    "SXP", "THE", "USDUC", "VEX", "VOLT", "WBTC", "ZANO", "XEP"
+]
 
 # --- Helper Functions ---
 
 def load_tickers_from_source(source_dir):
     """
     Reads all files in the source directory to build the master ticker list.
-    Supports CSV (looks for 'Ticker'/'Symbol' column) and Text files (one per line).
+    If directory is missing, returns the FULL_TICKER_LIST.
     """
     tickers = set()
     
     if not os.path.exists(source_dir):
         print(f"Warning: Ticker source directory '{source_dir}' does not exist.")
-        # Fallback list if directory is missing, to prevent crash
-        return ["GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X", "SPY", "BTC-USD"]
+        print(f"-> Falling back to HARDCODED MASTER LIST ({len(FULL_TICKER_LIST)} tickers).")
+        return FULL_TICKER_LIST
 
     print(f"Loading tickers from {source_dir}...")
     
+    found_files = False
     for filename in os.listdir(source_dir):
         filepath = os.path.join(source_dir, filename)
         if os.path.isfile(filepath):
+            found_files = True
             try:
                 # 1. Try CSV
                 if filename.lower().endswith('.csv'):
@@ -59,6 +85,10 @@ def load_tickers_from_source(source_dir):
             except Exception as e:
                 print(f"  -> Error reading {filename}: {e}")
     
+    if not found_files:
+        print("  -> Directory exists but is empty. Using MASTER FALLBACK LIST.")
+        return FULL_TICKER_LIST
+
     sorted_tickers = sorted(list(tickers))
     print(f"Total unique tickers loaded: {len(sorted_tickers)}")
     return sorted_tickers
@@ -132,7 +162,7 @@ def send_email(subject, body, attachment_path=None):
 def main():
     print(f"--- Starting Analysis for {datetime.now().strftime('%Y-%m-%d')} ---")
     
-    # 1. Load Tickers Dynamically
+    # 1. Load Tickers (Dynamic or Fallback)
     tickers = load_tickers_from_source(TICKER_SOURCE_DIR)
     
     # 2. Load Economic Calendar
