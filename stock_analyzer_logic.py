@@ -22,30 +22,22 @@ def check_economic_danger(ticker, eco_df, current_time=None):
     Checks if there are High/Medium impact economic events for the ticker's currencies
     within the next 24 hours.
     """
-    if eco_df is None or eco_df.empty:
-        return "-"
+    if eco_df is None or eco_df.empty: return "-"
+    if current_time is None: current_time = datetime.now()
 
-    if current_time is None:
-        current_time = datetime.now()
+    # Clean ticker for currency matching (e.g. "GBPUSD=X" -> "GBP", "USD")
+    clean_ticker = ticker.replace("/", "").replace("-", "").upper().replace("=X", "")
+    currencies = [clean_ticker[:3], clean_ticker[3:]] if len(clean_ticker) == 6 else [clean_ticker]
 
-    # 1. Parse Currencies from Ticker (e.g. "GBP/CAD" -> ['GBP', 'CAD'])
-    clean_ticker = ticker.replace("/", "").replace("-", "").upper()
-    currencies = []
-    
-    if len(clean_ticker) == 6: # Standard Forex Pair
-        currencies = [clean_ticker[:3], clean_ticker[3:]]
-    else:
-        currencies = [clean_ticker] 
-
-    # 2. Define Danger Window (Next 24 Hours)
+    # Define Danger Window (Next 24 Hours)
     start_window = current_time
     end_window = current_time + timedelta(hours=24)
 
-    # 3. Filter Events
     # Ensure 'Start' is datetime
     if not pd.api.types.is_datetime64_any_dtype(eco_df['Start']):
         eco_df['Start'] = pd.to_datetime(eco_df['Start'], errors='coerce')
 
+    # Filter Events
     mask = (
         (eco_df['Start'] >= start_window) & 
         (eco_df['Start'] <= end_window) & 
@@ -54,19 +46,16 @@ def check_economic_danger(ticker, eco_df, current_time=None):
     )
     
     danger_events = eco_df[mask]
-
-    if danger_events.empty:
-        return "Safe"
+    if danger_events.empty: return "Safe"
     
-    # 4. Format Warning
+    # Format Warning
     warnings = []
     for _, row in danger_events.iterrows():
         time_str = row['Start'].strftime('%H:%M')
         warnings.append(f"{row['Currency']} {row['Name']} ({row['Impact']}) at {time_str}")
-    
     return " | ".join(warnings)
 
-# --- Existing Helper Functions (Unchanged) ---
+# --- Technical Analysis Helper Functions ---
 
 def get_data(ticker, period="2y", interval="1d"):
     if interval == "1h": period = "1y" 
@@ -74,23 +63,21 @@ def get_data(ticker, period="2y", interval="1d"):
         
     try:
         df = yf.Ticker(ticker).history(period=period, interval=interval)
-        if df.empty or len(df) < 250: return None
+        if df.empty or len(df) < 50: return None 
 
-        df.rename(columns={
-            "Open": "open", "High": "high", "Low": "low", 
-            "Close": "close", "Volume": "volume"
-        }, inplace=True)
-
+        df.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
+        
+        # Calculate Indicators
         df['EMA_200'] = TA.EMA(df, period=EMA_PERIOD)
         bbands = TA.BBANDS(df, period=BB_PERIOD, std_multiplier=BB_MULTIPLIER)
         df['BBM_20'] = bbands['BB_MIDDLE']
         df['BBU_20'] = bbands['BB_UPPER']
         df['BBL_20'] = bbands['BB_LOWER']
         df['BB_WIDTH'] = (df['BBU_20'] - df['BBL_20']) / df['BBM_20']
-
+        
         df.dropna(inplace=True)
         return df
-    except Exception as e:
+    except Exception:
         return None
 
 def get_slope(series, lookback):
@@ -102,7 +89,6 @@ def get_slope(series, lookback):
 
 def check_slope_transition(series, dates, lookback, label_suffix=""):
     if len(series) < (lookback * 2): return None, None, None, None
-
     curr_slope = get_slope(series.iloc[-lookback:], lookback)
     prev_series = series.iloc[-(lookback*2):-lookback]
     prev_slope = get_slope(prev_series, lookback)
@@ -118,7 +104,6 @@ def check_slope_transition(series, dates, lookback, label_suffix=""):
     if prev_slope > 0 and curr_slope < 0:
         sig_text = f"Slope Flip {label_suffix}"
         return "Pos->Neg", sig_text, event_time, event_price
-        
     return None, None, None, None
 
 def check_retest_validity(df, lookback_speed, direction):
@@ -194,7 +179,6 @@ def analyze_daily_chart(ticker):
 
     last = df.iloc[-1]
     
-    # Calculate key metrics
     dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
     is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
     
@@ -206,9 +190,8 @@ def analyze_daily_chart(ticker):
     else:
         is_squeeze = False
 
-    # Validation 1: Zone or Squeeze
     if not (is_in_zone or is_squeeze): 
-        raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.2f}, EMA: {last['EMA_200']:.2f}"
+        raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.2f}"
         return None, f"Not in Zone ({raw_debug})"
 
     cross_signal, _ = check_crossover(df, lookback=5) 
@@ -219,7 +202,6 @@ def analyze_daily_chart(ticker):
     is_valid_setup = False
     fail_reason = ""
 
-    # Validation 2: Setup Logic
     if cross_signal:
         if dist_pct >= TREND_FLIP_MIN: 
             if current_direction == "Buy" and cross_signal == "Bullish Cross":
@@ -251,8 +233,7 @@ def analyze_daily_chart(ticker):
         else: setup_type = "Squeeze"
         is_valid_setup = True
 
-    if not is_valid_setup: 
-        return None, f"Setup Invalid: {fail_reason}"
+    if not is_valid_setup: return None, f"Setup Invalid: {fail_reason}"
 
     return {
         "ticker": ticker,
@@ -309,8 +290,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     is_valid_tf = True
                 elif current_slope_fast > 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Buy")
-                    if not retest_ok:
-                        retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
+                    if not retest_ok: retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Buy")
                     if retest_ok:
                         tf_notes.append("Trend Up (Retest Confirmed)")
                         tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
@@ -321,11 +301,9 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     tf_notes.append("GOLDEN CROSS")
                     tf_time = cross_time
                     is_valid_tf = True
-                
-                if not is_valid_tf and current_slope_fast <= 0:
-                     failure_details.append(f"{tf}: Price > EMA but Slope Negative")
+                if not is_valid_tf and current_slope_fast <= 0: failure_details.append(f"{tf}: Slope Negative")
             else:
-                failure_details.append(f"{tf}: Misaligned (Price < EMA 200)")
+                failure_details.append(f"{tf}: Misaligned")
 
         elif daily_dir == "Sell":
             if not is_above:
@@ -335,8 +313,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     is_valid_tf = True
                 elif current_slope_fast < 0:
                     retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_SLOW, "Sell")
-                    if not retest_ok:
-                        retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
+                    if not retest_ok: retest_ok, retest_price, flip_time = check_retest_validity(df, SLOPE_LOOKBACK_FAST, "Sell")
                     if retest_ok:
                         tf_notes.append("Trend Down (Retest Confirmed)")
                         tf_time = f"Retest @ {retest_price:.2f} (Flip: {flip_time})"
@@ -347,11 +324,9 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     tf_notes.append("DEATH CROSS")
                     tf_time = cross_time
                     is_valid_tf = True
-                
-                if not is_valid_tf and current_slope_fast >= 0:
-                     failure_details.append(f"{tf}: Price < EMA but Slope Positive")
+                if not is_valid_tf and current_slope_fast >= 0: failure_details.append(f"{tf}: Slope Positive")
             else:
-                failure_details.append(f"{tf}: Misaligned (Price > EMA 200)")
+                failure_details.append(f"{tf}: Misaligned")
 
         if is_valid_tf:
             note_str = " + ".join(tf_notes)
@@ -369,34 +344,27 @@ def run_scanner(tickers, eco_df=None):
         print(f"Checking {ticker}...", end="\r")
         daily, failure_reason = analyze_daily_chart(ticker)
         
-        # Check Economic Danger (Even if no signal, sometimes good to know)
+        # Economic Check
         danger_msg = "-"
         if eco_df is not None:
             danger_msg = check_economic_danger(ticker, eco_df)
 
         if not daily:
              results.append({
-                "Ticker": ticker,
-                "Signal": "No Signal",
-                "Current Price": "-", 
-                "Daily Setup": "None",
-                "Failure Reason": failure_reason,
-                "Confirmations": "-",
-                "Switch Time": "-",
-                "Est. Price": "-",
-                "Remarks": danger_msg  # Added Remark
+                "Ticker": ticker, "Signal": "No Signal", "Current Price": "-", 
+                "Daily Setup": "None", "Failure Reason": failure_reason,
+                "Confirmations": "-", "Switch Time": "-", "Est. Price": "-",
+                "Remarks": danger_msg
             })
              continue
         
-        time.sleep(1) # API pacing
+        time.sleep(1) 
         confs, times, fail_details = analyze_lower_timeframes(ticker, daily['direction'])
-        
         curr_price = daily['current_close'] 
         
         if confs:
             labels = []
-            if "Squeeze" not in daily['setup_type'] and daily['is_squeeze']:
-                labels.append("Squeeze")
+            if "Squeeze" not in daily['setup_type'] and daily['is_squeeze']: labels.append("Squeeze")
             labels.append(daily['setup_type'])
             final_setup = " + ".join(labels)
             
@@ -405,29 +373,21 @@ def run_scanner(tickers, eco_df=None):
             signal_type = "SUPER" if "CROSS" in full_notes else "Standard"
             
             results.append({
-                "Ticker": ticker,
-                "Signal": f"{signal_type} {daily['direction']}",
-                "Current Price": curr_price,
-                "Daily Setup": final_setup,
-                "Failure Reason": "None",
-                "Confirmations": full_notes,
-                "Switch Time": time_notes,
-                "Est. Price": round(daily['bbm_price'], 2),
-                "Remarks": danger_msg # Added Remark
+                "Ticker": ticker, "Signal": f"{signal_type} {daily['direction']}",
+                "Current Price": curr_price, "Daily Setup": final_setup,
+                "Failure Reason": "None", "Confirmations": full_notes,
+                "Switch Time": time_notes, "Est. Price": round(daily['bbm_price'], 2),
+                "Remarks": danger_msg
             })
         else:
-            detailed_fail_reason = " | ".join(fail_details) if fail_details else "Lower TF Mismatch (Unknown)"
-            
+            detailed_fail_reason = " | ".join(fail_details) if fail_details else "Lower TF Mismatch"
             results.append({
-                "Ticker": ticker,
-                "Signal": "No Signal",
-                "Current Price": curr_price,
-                "Daily Setup": daily['setup_type'],
+                "Ticker": ticker, "Signal": "No Signal",
+                "Current Price": curr_price, "Daily Setup": daily['setup_type'],
                 "Failure Reason": f"Lower TF Mismatch: [{detailed_fail_reason}]",
-                "Confirmations": "-",
-                "Switch Time": "-",
+                "Confirmations": "-", "Switch Time": "-",
                 "Est. Price": round(daily['bbm_price'], 2),
-                "Remarks": danger_msg # Added Remark
+                "Remarks": danger_msg
             })
     
     print("\nScan Complete.")
