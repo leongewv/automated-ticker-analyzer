@@ -11,7 +11,7 @@ AUDJPY=X,No Signal,-,None,"Not in Zone (Dist: 3.63%, Price: 100.92, EMA: 97.39)"
 AUDNZD=X,No Signal,-,None,"Not in Zone (Dist: 3.28%, Price: 1.15, EMA: 1.11)",-,-,-
 AUDUSD=X,SUPER Buy,0.653579831123352,Squeeze (Mean Rev (Bounce Up)),None,4h: Slope Flip (Slow) + GOLDEN CROSS | 1h: Slope Flip (Fast),4h: 2025-11-28 16:00 | 1h: 2025-11-28 15:00 @ 0.65,0.65
 BCH,No Signal,-,None,"Not in Zone (Dist: 21.75%, Price: 36.45, EMA: 29.94)",-,-,-
-BEAM,SUPER Buy,25.329999923706055,Mean Rev (Bounce Up),None,4h: Slope Flip (Fast) + GOLDEN CROSS | 1h: Slope Flip (Slow),4h: 2025-11-26 13:30 | 1h: 2025-11-24 14:30 @ 22.03,22.81
+BEAM,SUPER Buy,25.329999923706055,Mean Rev (Bounce Up),None,4h: Slope Flip (Fast) + GOLDEN CROSS | 1h: Slope Flip (Slow),4h: 2025-11-26 13:30 | 1h: 2025-11-24 13:30 @ 21.92,22.81
 BSV,No Signal,-,None,Setup Invalid: Slope Invalid (0.00381 pointing Up),-,-,-
 BTC,No Signal,-,None,"Not in Zone (Dist: 7.35%, Price: 42.72, EMA: 46.11)",-,-,-
 CADJPY=X,No Signal,-,None,Setup Invalid: Slope Invalid (0.10273 pointing Up),-,-,-
@@ -67,7 +67,7 @@ OMG,No Signal,-,None,Data Fetch Error,-,-,-
 OPTI,No Signal,-,None,"Not in Zone (Dist: 5.99%, Price: 0.00, EMA: 0.00)",-,-,-
 PIVX,No Signal,-,None,Data Fetch Error,-,-,-
 PLTR,No Signal,-,None,"Not in Zone (Dist: 22.36%, Price: 176.44, EMA: 144.20)",-,-,-
-PPC,Standard Sell,38.040000915527344,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-24 14:30 @ 38.10,37.57
+PPC,Standard Sell,38.040000915527344,Squeeze,None,1h: Slope Flip (Slow),1h: 2025-11-24 13:30 @ 38.11,37.57
 QQQ,No Signal,-,None,"Not in Zone (Dist: 9.14%, Price: 611.57, EMA: 560.36)",-,-,-
 QUAI,No Signal,-,None,Data Fetch Error,-,-,-
 RSR,No Signal,-,None,Data Fetch Error,-,-,-
