@@ -9,77 +9,94 @@ from email import encoders
 import stock_analyzer_logic as logic
 
 # --- CONFIGURATION ---
-INPUT_TICKERS = [
-    "GBPUSD=X", 
-    "EURUSD=X", 
-    "JPY=X", 
-    "GBPCAD=X", 
-    "AUDUSD=X", 
-    "NZDUSD=X"
-]
-
 DATA_DIR = "data/incoming"
+TICKER_SOURCE_DIR = "data/ticker_sources"  # Directory containing your ticker lists
 OUTPUT_FILE = f"Trade_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
 
-# Email Config (Secrets from GitHub)
-EMAIL_SENDER = os.environ.get("EMAIL_SENDER")
-EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
-EMAIL_RECEIVER = os.environ.get("EMAIL_RECEIVER")
+# Email Config (Using os.environ for GitHub Secrets)
+EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
+EMAIL_PASSWORD = os.environ.get("SENDER_PASSWORD")
+EMAIL_RECEIVER = os.environ.get("RECEIVER_EMAIL")
 
-# --- NEW: Helper Functions for Economic Calendar ---
+# --- Helper Functions ---
+
+def load_tickers_from_source(source_dir):
+    """
+    Reads all files in the source directory to build the master ticker list.
+    Supports CSV (looks for 'Ticker'/'Symbol' column) and Text files (one per line).
+    """
+    tickers = set()
+    
+    if not os.path.exists(source_dir):
+        print(f"Warning: Ticker source directory '{source_dir}' does not exist.")
+        # Fallback list if directory is missing, to prevent crash
+        return ["GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X", "SPY", "BTC-USD"]
+
+    print(f"Loading tickers from {source_dir}...")
+    
+    for filename in os.listdir(source_dir):
+        filepath = os.path.join(source_dir, filename)
+        if os.path.isfile(filepath):
+            try:
+                # 1. Try CSV
+                if filename.lower().endswith('.csv'):
+                    df = pd.read_csv(filepath)
+                    # Smart column detection
+                    possible_cols = [c for c in df.columns if c.lower() in ['ticker', 'symbol', 'code']]
+                    target_col = possible_cols[0] if possible_cols else df.columns[0]
+                    
+                    file_tickers = df[target_col].dropna().astype(str).str.strip().tolist()
+                    tickers.update(file_tickers)
+                    print(f"  -> Added {len(file_tickers)} from {filename}")
+                
+                # 2. Text / Other files (Assume one ticker per line)
+                else:
+                    with open(filepath, 'r') as f:
+                        lines = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+                        tickers.update(lines)
+                        print(f"  -> Added {len(lines)} from {filename}")
+                        
+            except Exception as e:
+                print(f"  -> Error reading {filename}: {e}")
+    
+    sorted_tickers = sorted(list(tickers))
+    print(f"Total unique tickers loaded: {len(sorted_tickers)}")
+    return sorted_tickers
 
 def auto_find_calendar(data_dir):
-    """
-    Scans the data directory for any CSV that looks like an economic calendar.
-    Returns the path of the first valid match.
-    """
     if not os.path.exists(data_dir):
         print(f"Directory not found: {data_dir}")
         return None
-
-    # Columns expected in the manual event list
+    
     required_cols = {'START', 'CURRENCY', 'IMPACT'} 
-
     print(f"Scanning {data_dir} for economic calendar files...")
     
     for filename in os.listdir(data_dir):
         if filename.endswith(".csv") and "Trade_Signals" not in filename:
             filepath = os.path.join(data_dir, filename)
             try:
-                # Read header only to be fast
                 df = pd.read_csv(filepath, nrows=0)
                 file_cols = {c.strip().upper() for c in df.columns}
-                
-                # Check if it contains the required columns
                 if required_cols.issubset(file_cols):
                     print(f" -> Auto-Detected Economic Calendar: {filename}")
                     return filepath
-            except Exception:
-                continue
+            except Exception: continue
     
     print(" -> No Economic Calendar file found. Proceeding without economic analysis.")
     return None
 
 def load_economic_data(filepath):
-    """Loads and standardizes the economic calendar CSV."""
-    if not filepath or not os.path.exists(filepath):
-        return None
-    
+    if not filepath or not os.path.exists(filepath): return None
     try:
         df = pd.read_csv(filepath)
-        # Standardize Columns
         df.columns = [c.strip().title() for c in df.columns] 
-        # Parse Dates (US Format MM/DD/YYYY typical for calendars)
         df['Start'] = pd.to_datetime(df['Start'], errors='coerce')
-        # Clean Text
-        df['Impact'] = df['Impact'].astype(str).str.upper()
-        df['Currency'] = df['Currency'].astype(str).str.upper()
+        if 'Impact' in df.columns: df['Impact'] = df['Impact'].astype(str).str.upper()
+        if 'Currency' in df.columns: df['Currency'] = df['Currency'].astype(str).str.upper()
         return df
     except Exception as e:
         print(f"Error reading calendar: {e}")
         return None
-
-# --- Existing Email Function ---
 
 def send_email(subject, body, attachment_path=None):
     if not EMAIL_SENDER or not EMAIL_PASSWORD or not EMAIL_RECEIVER:
@@ -97,10 +114,7 @@ def send_email(subject, body, attachment_path=None):
             part = MIMEBase("application", "octet-stream")
             part.set_payload(attachment.read())
         encoders.encode_base64(part)
-        part.add_header(
-            "Content-Disposition",
-            f"attachment; filename= {os.path.basename(attachment_path)}",
-        )
+        part.add_header("Content-Disposition", f"attachment; filename= {os.path.basename(attachment_path)}")
         msg.attach(part)
 
     try:
@@ -118,60 +132,53 @@ def send_email(subject, body, attachment_path=None):
 def main():
     print(f"--- Starting Analysis for {datetime.now().strftime('%Y-%m-%d')} ---")
     
-    # 1. Load Economic Calendar (NEW)
+    # 1. Load Tickers Dynamically
+    tickers = load_tickers_from_source(TICKER_SOURCE_DIR)
+    
+    # 2. Load Economic Calendar
     eco_file = auto_find_calendar(DATA_DIR)
     eco_df = load_economic_data(eco_file)
     
-    all_results = []
+    # 3. Run Scanner
+    # Pass the loaded eco_df to the logic function
+    final_df = logic.run_scanner(tickers, eco_df=eco_df)
 
-    # 2. Run Scanner
-    for ticker in INPUT_TICKERS:
-        print(f"Scanning {ticker}...")
-        try:
-            # Pass the loaded eco_df to the logic function
-            df_result = logic.run_scanner([ticker], eco_df=eco_df)
-            
-            if not df_result.empty:
-                all_results.append(df_result)
-        except Exception as e:
-            print(f"Error processing {ticker}: {e}")
-
-    # 3. Process & Save Results
-    if all_results:
-        final_df = pd.concat(all_results, ignore_index=True)
-        
-        # Ensure 'Remarks' is the last column if it exists
+    if not final_df.empty:
+        # Reorder to ensure Remarks is last
         if 'Remarks' in final_df.columns:
             cols = [c for c in final_df.columns if c != 'Remarks'] + ['Remarks']
             final_df = final_df[cols]
         
         # Save CSV
-        if not os.path.exists(DATA_DIR):
-            os.makedirs(DATA_DIR)
-            
+        if not os.path.exists(DATA_DIR): os.makedirs(DATA_DIR)
         out_path = os.path.join(DATA_DIR, OUTPUT_FILE)
         final_df.to_csv(out_path, index=False)
         print(f"Results saved to {out_path}")
         
-        # Send Email
-        # Customize email body to include top signals
-        email_body = f"Trade signals generated for {datetime.now().strftime('%Y-%m-%d')}.\n\n"
-        email_body += "Top Signals:\n"
-        email_body += final_df[['Ticker', 'Signal', 'Current Price']].to_string(index=False)
-        if 'Remarks' in final_df.columns:
-             email_body += "\n\nNote: Check 'Remarks' column for High Impact Economic Events."
+        # Filter for "Active Signals" (Exclude 'No Signal')
+        active_signals = final_df[final_df['Signal'] != "No Signal"]
         
+        email_body = f"Trade signals generated for {datetime.now().strftime('%Y-%m-%d')}.\n\n"
+        
+        if not active_signals.empty:
+            email_body += "--- ACTIVE SIGNALS ---\n"
+            # Select key columns for email readability
+            display_cols = ['Ticker', 'Signal', 'Current Price', 'Daily Setup', 'Confirmations']
+            if 'Remarks' in active_signals.columns: display_cols.append('Remarks')
+            
+            email_body += active_signals[display_cols].to_string(index=False)
+            email_body += "\n\n(See attached CSV for full details)"
+        else:
+            email_body += "No active trade setups found today.\n"
+            email_body += "Monitoring " + str(len(final_df)) + " tickers."
+
         send_email(
             subject=f"Daily Trade Signals - {datetime.now().strftime('%Y-%m-%d')}",
             body=email_body,
             attachment_path=out_path
         )
     else:
-        print("No signals found today.")
-        send_email(
-            subject=f"No Trade Signals - {datetime.now().strftime('%Y-%m-%d')}",
-            body="No tickers met the entry criteria today."
-        )
+        print("No results generated.")
 
 if __name__ == "__main__":
     main()
