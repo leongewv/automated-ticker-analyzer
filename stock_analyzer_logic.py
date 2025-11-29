@@ -16,6 +16,58 @@ MEAN_REV_TOLERANCE_MAX = 0.03
 TREND_FLIP_MIN = 0.02
 RETEST_TOLERANCE = 0.015
 
+# --- NEW: Economic Danger Logic ---
+def check_economic_danger(ticker, eco_df, current_time=None):
+    """
+    Checks if there are High/Medium impact economic events for the ticker's currencies
+    within the next 24 hours.
+    """
+    if eco_df is None or eco_df.empty:
+        return "-"
+
+    if current_time is None:
+        current_time = datetime.now()
+
+    # 1. Parse Currencies from Ticker (e.g. "GBP/CAD" -> ['GBP', 'CAD'])
+    clean_ticker = ticker.replace("/", "").replace("-", "").upper()
+    currencies = []
+    
+    if len(clean_ticker) == 6: # Standard Forex Pair
+        currencies = [clean_ticker[:3], clean_ticker[3:]]
+    else:
+        currencies = [clean_ticker] 
+
+    # 2. Define Danger Window (Next 24 Hours)
+    start_window = current_time
+    end_window = current_time + timedelta(hours=24)
+
+    # 3. Filter Events
+    # Ensure 'Start' is datetime
+    if not pd.api.types.is_datetime64_any_dtype(eco_df['Start']):
+        eco_df['Start'] = pd.to_datetime(eco_df['Start'], errors='coerce')
+
+    mask = (
+        (eco_df['Start'] >= start_window) & 
+        (eco_df['Start'] <= end_window) & 
+        (eco_df['Currency'].isin(currencies)) &
+        (eco_df['Impact'].isin(['HIGH', 'MEDIUM']))
+    )
+    
+    danger_events = eco_df[mask]
+
+    if danger_events.empty:
+        return "Safe"
+    
+    # 4. Format Warning
+    warnings = []
+    for _, row in danger_events.iterrows():
+        time_str = row['Start'].strftime('%H:%M')
+        warnings.append(f"{row['Currency']} {row['Name']} ({row['Impact']}) at {time_str}")
+    
+    return " | ".join(warnings)
+
+# --- Existing Helper Functions (Unchanged) ---
+
 def get_data(ticker, period="2y", interval="1d"):
     if interval == "1h": period = "1y" 
     elif interval == "4h": period = "1y" 
@@ -209,7 +261,7 @@ def analyze_daily_chart(ticker):
         "is_squeeze": is_squeeze,
         "is_mean_rev": is_in_zone,
         "bbm_price": last['BBM_20'],
-        "current_close": last['close'] # ADDED: Actual Close Price
+        "current_close": last['close']
     }, None
 
 def analyze_lower_timeframes(ticker, daily_dir):
@@ -308,7 +360,8 @@ def analyze_lower_timeframes(ticker, daily_dir):
 
     return confirmations, time_logs, failure_details
 
-def run_scanner(tickers):
+# --- Updated Runner Logic ---
+def run_scanner(tickers, eco_df=None):
     results = []
     print(f"Scanning {len(tickers)} tickers...")
     
@@ -316,23 +369,28 @@ def run_scanner(tickers):
         print(f"Checking {ticker}...", end="\r")
         daily, failure_reason = analyze_daily_chart(ticker)
         
+        # Check Economic Danger (Even if no signal, sometimes good to know)
+        danger_msg = "-"
+        if eco_df is not None:
+            danger_msg = check_economic_danger(ticker, eco_df)
+
         if not daily:
              results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
-                "Current Price": "-", # Placeholder for failed fetches
+                "Current Price": "-", 
                 "Daily Setup": "None",
                 "Failure Reason": failure_reason,
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Est. Price": "-"
+                "Est. Price": "-",
+                "Remarks": danger_msg  # Added Remark
             })
              continue
         
         time.sleep(1) # API pacing
         confs, times, fail_details = analyze_lower_timeframes(ticker, daily['direction'])
         
-        # Capture price even if signal fails later
         curr_price = daily['current_close'] 
         
         if confs:
@@ -354,7 +412,8 @@ def run_scanner(tickers):
                 "Failure Reason": "None",
                 "Confirmations": full_notes,
                 "Switch Time": time_notes,
-                "Est. Price": round(daily['bbm_price'], 2)
+                "Est. Price": round(daily['bbm_price'], 2),
+                "Remarks": danger_msg # Added Remark
             })
         else:
             detailed_fail_reason = " | ".join(fail_details) if fail_details else "Lower TF Mismatch (Unknown)"
@@ -367,7 +426,8 @@ def run_scanner(tickers):
                 "Failure Reason": f"Lower TF Mismatch: [{detailed_fail_reason}]",
                 "Confirmations": "-",
                 "Switch Time": "-",
-                "Est. Price": round(daily['bbm_price'], 2)
+                "Est. Price": round(daily['bbm_price'], 2),
+                "Remarks": danger_msg # Added Remark
             })
     
     print("\nScan Complete.")
