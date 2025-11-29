@@ -25,7 +25,7 @@ FULL_TICKER_LIST = [
     "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
     "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
     "GBPAUD=X", "GBPNZD=X", "EURAUD=X", "EURCAD=X", "EURNZD=X", "AUDNZD=X",
-    "AUDCHF=X", "CADJPY=X", "USDJPY=X",
+    "AUDCHF=X", "CADJPY=X", "USDJPY=X", "AUDCAD=X",
     
     # Commodities / Indices
     "XAUUSD=X", "XAGUSD=X", "SPY", "BTC-USD", "ETH-USD", "SOL-USD", "XRP-USD",
