@@ -161,7 +161,7 @@ def main():
             cols = [c for c in final_df.columns if c != 'Remarks'] + ['Remarks']
             final_df = final_df[cols]
         
-        # Save RAW CSV (Data stays clean for Excel/Machine Learning)
+        # Save RAW CSV
         if not os.path.exists(DATA_DIR): os.makedirs(DATA_DIR)
         out_path = os.path.join(DATA_DIR, OUTPUT_FILE)
         final_df.to_csv(out_path, index=False)
@@ -195,9 +195,9 @@ def main():
             if 'Remarks' in email_df.columns:
                 def color_high_impact(val):
                     val_str = str(val)
+                    # Instead of returning a whole new string, we replace "HIGH"
                     if "HIGH" in val_str:
-                        # Wrap in red styling if 'HIGH' is found
-                        return f'<span style="color: #D32F2F; font-weight: bold;">{val_str}</span>'
+                        return val_str.replace("HIGH", '<span style="color: #D32F2F; font-weight: bold;">HIGH</span>')
                     return val_str
                 
                 email_df['Remarks'] = email_df['Remarks'].apply(color_high_impact)
