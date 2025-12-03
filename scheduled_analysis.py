@@ -36,7 +36,7 @@ FULL_TICKER_LIST = [
     # Stocks & Other Assets
     "TSLA", "AMZN", "GOOG", "GOOGL", "META", "COIN", "ASML", "ISRG", "CELH",
     "CPRT", "FTNT", "GEHC", "ANML", "ARRR", "CC", "DCR", "DGB", "DINGO", 
-    "ELON", "EURI", "ETN", "FIRO", "FORTH", "GAS", "GRIN", "GRS", "HUAHUA", 
+    "ELON", "EURI", "ETN", "FIRO", "FORTH", "GAS", "GRS", "HUAHUA", 
     "KAS", "MAY", "MDT", "MTL", "NAV", "OMG", "PIVX", "QUAI", "RSR", "RVN", 
     "SXP", "THE", "USDUC", "VEX", "VOLT", "WBTC", "ZANO", "XEP"
 ]
