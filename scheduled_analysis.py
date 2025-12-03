@@ -128,7 +128,11 @@ def load_economic_data(filepath):
         print(f"Error reading calendar: {e}")
         return None
 
-def send_email(subject, body, attachment_path=None):
+def send_email(subject, body, attachment_path=None, is_html=False):
+    """
+    Sends email with optional attachment. 
+    is_html: If True, sends as HTML MIME type. If False, sends as Plain Text.
+    """
     if not EMAIL_SENDER or not EMAIL_PASSWORD or not EMAIL_RECEIVER:
         print("Skipping email: Credentials not set.")
         return
@@ -137,7 +141,11 @@ def send_email(subject, body, attachment_path=None):
     msg['From'] = EMAIL_SENDER
     msg['To'] = EMAIL_RECEIVER
     msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    
+    if is_html:
+        msg.attach(MIMEText(body, 'html'))
+    else:
+        msg.attach(MIMEText(body, 'plain'))
 
     if attachment_path and os.path.exists(attachment_path):
         with open(attachment_path, "rb") as attachment:
@@ -188,24 +196,62 @@ def main():
         # Filter for "Active Signals" (Exclude 'No Signal')
         active_signals = final_df[final_df['Signal'] != "No Signal"]
         
-        email_body = f"Trade signals generated for {datetime.now().strftime('%Y-%m-%d')}.\n\n"
+        current_date = datetime.now().strftime('%Y-%m-%d')
+
+        # --- HTML EMAIL GENERATION ---
         
+        # CSS Styles for proper table formatting
+        css_style = """
+        <style>
+            body { font-family: Arial, sans-serif; font-size: 14px; color: #333; }
+            h2 { color: #2c3e50; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; font-size: 12px; }
+            th { background-color: #2c3e50; color: white; padding: 10px; text-align: left; }
+            td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+            tr:nth-child(even) { background-color: #f2f2f2; }
+            tr:hover { background-color: #e6f7ff; }
+            .footer { margin-top: 20px; font-size: 12px; color: #777; }
+        </style>
+        """
+
         if not active_signals.empty:
-            email_body += "--- ACTIVE SIGNALS ---\n"
             # Select key columns for email readability
             display_cols = ['Ticker', 'Signal', 'Current Price', 'Daily Setup', 'Confirmations']
             if 'Remarks' in active_signals.columns: display_cols.append('Remarks')
             
-            email_body += active_signals[display_cols].to_string(index=False)
-            email_body += "\n\n(See attached CSV for full details)"
+            # Convert DataFrame to HTML Table
+            table_html = active_signals[display_cols].to_html(index=False, border=0)
+            
+            email_body = f"""
+            <html>
+            <head>{css_style}</head>
+            <body>
+                <h2>Daily Trade Signals - {current_date}</h2>
+                <p><b>--- ACTIVE SIGNALS ---</b></p>
+                {table_html}
+                <div class="footer">
+                    <p>(See attached CSV for full details including "No Signal" tickers)</p>
+                </div>
+            </body>
+            </html>
+            """
         else:
-            email_body += "No active trade setups found today.\n"
-            email_body += "Monitoring " + str(len(final_df)) + " tickers."
+            email_body = f"""
+            <html>
+            <head>{css_style}</head>
+            <body>
+                <h2>Daily Trade Signals - {current_date}</h2>
+                <p>No active trade setups found today.</p>
+                <p>Monitoring {len(final_df)} tickers.</p>
+            </body>
+            </html>
+            """
 
         send_email(
-            subject=f"Daily Trade Signals - {datetime.now().strftime('%Y-%m-%d')}",
+            subject=f"Daily Trade Signals - {current_date}",
             body=email_body,
-            attachment_path=out_path
+            attachment_path=out_path,
+            is_html=True
         )
     else:
         print("No results generated.")
