@@ -409,3 +409,6 @@ def analyze_market_structure(tickers, eco_df):
     
     print("\nScan Complete.")
     return pd.DataFrame(results)
+
+# --- ALIAS FOR COMPATIBILITY ---
+run_scanner = analyze_market_structure
