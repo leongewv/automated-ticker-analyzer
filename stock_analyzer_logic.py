@@ -59,103 +59,226 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 
 def get_data(ticker, period="2y", interval="1d"):
     if interval == "1h": period = "1y" 
-    elif interval == "4h": period = "1y"
-    
+    elif interval == "4h": period = "1y" 
+        
     try:
-        # FIXED: Added auto_adjust=True to fix warnings
-        df = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=True)
-        
-        if df.empty: return None
-        
-        # FIXED: Flatten MultiIndex columns if present (Fixes 'tuple' object has no attribute 'lower')
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(0)
+        df = yf.Ticker(ticker).history(period=period, interval=interval)
+        if df.empty or len(df) < 50: return None 
+
+        df.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
         
         # Calculate Indicators
-        df['EMA_200'] = TA.EMA(df, EMA_PERIOD)
-        bb = TA.BBANDS(df, BB_PERIOD, BB_MULTIPLIER)
-        df['BBM_20'] = bb['BB_MIDDLE']
-        df['BB_UP'] = bb['BB_UPPER']
-        df['BB_LOW'] = bb['BB_LOWER']
+        df['EMA_200'] = TA.EMA(df, period=EMA_PERIOD)
+        bbands = TA.BBANDS(df, period=BB_PERIOD, std_multiplier=BB_MULTIPLIER)
+        df['BBM_20'] = bbands['BB_MIDDLE']
+        df['BBU_20'] = bbands['BB_UPPER']
+        df['BBL_20'] = bbands['BB_LOWER']
+        df['BB_WIDTH'] = (df['BBU_20'] - df['BBL_20']) / df['BBM_20']
         
-        # Bandwidth for Squeeze
-        df['BB_WIDTH'] = (df['BB_UP'] - df['BB_LOW']) / df['BBM_20']
-        
+        df.dropna(inplace=True)
         return df
-    except Exception as e:
-        print(f"Error fetching {ticker} ({interval}): {e}")
+    except Exception:
         return None
 
 def get_slope(series, lookback):
     if len(series) < lookback: return 0
-    y = series[-lookback:]
-    x = np.arange(len(y))
+    y = series.iloc[-lookback:].values
+    x = np.arange(lookback)
     slope, _ = np.polyfit(x, y, 1)
     return slope
 
-def check_slope_transition(series, index, lookback, suffix=""):
-    """
-    Detects if slope changed sign recently.
-    Returns: transition_type ("Neg->Pos" or "Pos->Neg"), signal_text, time, price
-    """
-    if len(series) < lookback + 5: return None, None, None, None
+def check_slope_transition(series, dates, lookback, label_suffix=""):
+    if len(series) < (lookback * 2): return None, None, None, None
+    curr_slope = get_slope(series.iloc[-lookback:], lookback)
+    prev_series = series.iloc[-(lookback*2):-lookback]
+    prev_slope = get_slope(prev_series, lookback)
     
-    curr_slope = get_slope(series, lookback)
-    prev_slope = get_slope(series[:-1], lookback) # Slope 1 candle ago
-    
-    # Check for Flip UP (Buy)
+    event_idx = -lookback
+    event_time = dates[event_idx].strftime('%Y-%m-%d %H:%M')
+    event_price = series.iloc[event_idx]
+
+    sig_text = None
     if prev_slope < 0 and curr_slope > 0:
-        return "Neg->Pos", f"Slope Flip {suffix}", index[-1], series.iloc[-1]
-    
-    # Check for Flip DOWN (Sell)
+        sig_text = f"Slope Flip {label_suffix}"
+        return "Neg->Pos", sig_text, event_time, event_price
     if prev_slope > 0 and curr_slope < 0:
-        return "Pos->Neg", f"Slope Flip {suffix}", index[-1], series.iloc[-1]
-        
+        sig_text = f"Slope Flip {label_suffix}"
+        return "Pos->Neg", sig_text, event_time, event_price
     return None, None, None, None
 
-def check_retest_validity(df, lookback, direction):
-    """
-    Checks if price retested the 200 EMA recently after a crossover.
-    """
-    # Simplified Logic: Check if Low touched EMA 200 recently
-    recent = df.iloc[-10:]
-    ema = recent['EMA_200']
+def check_retest_validity(df, lookback_speed, direction):
+    series = df['BBM_20']
+    limit = 60
+    found_flip_idx = None
+    flip_level = None
+    flip_time_str = None
     
+    if len(series) < limit + lookback_speed * 2: return False, None, None
+
+    for i in range(1, limit):
+        idx_now = len(series) - i
+        hist_curr = series.iloc[idx_now - lookback_speed : idx_now]
+        hist_prev = series.iloc[idx_now - (lookback_speed*2) : idx_now - lookback_speed]
+        
+        s_curr = get_slope(hist_curr, lookback_speed)
+        s_prev = get_slope(hist_prev, lookback_speed)
+        
+        if direction == "Buy" and s_prev < 0 and s_curr > 0:
+            found_flip_idx = idx_now - lookback_speed
+            flip_level = series.iloc[found_flip_idx]
+            flip_time_str = df.index[found_flip_idx].strftime('%Y-%m-%d %H:%M')
+            break
+        elif direction == "Sell" and s_prev > 0 and s_curr < 0:
+            found_flip_idx = idx_now - lookback_speed
+            flip_level = series.iloc[found_flip_idx]
+            flip_time_str = df.index[found_flip_idx].strftime('%Y-%m-%d %H:%M')
+            break
+            
+    if found_flip_idx is None: return False, None, None
+
+    segment_lows = df['low'].iloc[found_flip_idx:]
+    segment_highs = df['high'].iloc[found_flip_idx:]
+    current_close = df['close'].iloc[-1]
+
     if direction == "Buy":
-        # Price should be above EMA, but Low dipped near it
-        min_dist = ((recent['Low'] - ema) / ema).min()
-        if abs(min_dist) <= RETEST_TOLERANCE:
-            return True, recent['Low'].min(), str(recent.index[0].date())
+        lowest_since_flip = segment_lows.min()
+        dist = abs(lowest_since_flip - flip_level) / flip_level
+        is_retest_ok = dist <= RETEST_TOLERANCE
+        is_bouncing = current_close > lowest_since_flip
+        if is_retest_ok and is_bouncing:
+            return True, lowest_since_flip, flip_time_str
 
     elif direction == "Sell":
-        # Price should be below EMA, but High rallied near it
-        min_dist = ((ema - recent['High']) / ema).min()
-        if abs(min_dist) <= RETEST_TOLERANCE:
-            return True, recent['High'].max(), str(recent.index[0].date())
-            
-    return False, 0, "-"
+        highest_since_flip = segment_highs.max()
+        dist = abs(highest_since_flip - flip_level) / flip_level
+        is_retest_ok = dist <= RETEST_TOLERANCE
+        is_bouncing = current_close < highest_since_flip
+        if is_retest_ok and is_bouncing:
+            return True, highest_since_flip, flip_time_str
 
-def check_crossover(df):
-    """
-    Checks for Golden/Death Cross (SMA 50 crossing SMA 200)
-    """
-    if len(df) < 200: return None, None
-    
-    df['SMA_50'] = TA.SMA(df, 50)
-    df['SMA_200'] = TA.SMA(df, 200)
-    
-    prev = df.iloc[-2]
-    curr = df.iloc[-1]
-    
-    if prev['SMA_50'] < prev['SMA_200'] and curr['SMA_50'] > curr['SMA_200']:
-        return "Bullish Cross", str(curr.name)
-    
-    if prev['SMA_50'] > prev['SMA_200'] and curr['SMA_50'] < curr['SMA_200']:
-        return "Bearish Cross", str(curr.name)
-        
+    return False, None, None
+
+def check_crossover(df, lookback=5):
+    if len(df) < lookback + 1: return None, None
+    bbm = df['BBM_20']
+    ema = df['EMA_200']
+    dates = df.index
+
+    for i in range(1, lookback + 1):
+        curr_diff = bbm.iloc[-i] - ema.iloc[-i]
+        prev_diff = bbm.iloc[-(i+1)] - ema.iloc[-(i+1)]
+        current_time = dates[-i].strftime('%Y-%m-%d %H:%M')
+        if prev_diff < 0 and curr_diff > 0: return "Bullish Cross", current_time
+        if prev_diff > 0 and curr_diff < 0: return "Bearish Cross", current_time
+
     return None, None
 
-# --- Main Analysis Logic ---
+def analyze_daily_chart(ticker):
+    df = get_data(ticker, period="2y", interval="1d")
+    if df is None: return None, "Data Fetch Error"
+
+    last = df.iloc[-1]
+    
+    # 1. Zone Check
+    dist_pct = abs(last['BBM_20'] - last['EMA_200']) / last['EMA_200']
+    is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
+    
+    # Squeeze Check
+    lookback_squeeze = 126
+    if len(df) > lookback_squeeze:
+        recent_widths = df['BB_WIDTH'].iloc[-lookback_squeeze:]
+        rank = (recent_widths < last['BB_WIDTH']).mean()
+        is_squeeze = rank <= 0.20
+    else:
+        is_squeeze = False
+
+    if not (is_in_zone or is_squeeze): 
+        raw_debug = f"Dist: {dist_pct:.2%}, Price: {last['BBM_20']:.2f}"
+        return None, f"Not in Zone ({raw_debug})"
+
+    cross_signal, _ = check_crossover(df, lookback=5) 
+    current_direction = "Buy" if last['BBM_20'] > last['EMA_200'] else "Sell"
+    
+    # Slope Calculations
+    slope_fast = get_slope(df['BBM_20'], lookback=SLOPE_LOOKBACK_FAST)
+    slope_slow = get_slope(df['BBM_20'], lookback=SLOPE_LOOKBACK_SLOW)
+    
+    # Previous Slopes (Yesterday)
+    prev_slope_fast = get_slope(df['BBM_20'].iloc[:-1], lookback=SLOPE_LOOKBACK_FAST)
+    prev_slope_slow = get_slope(df['BBM_20'].iloc[:-1], lookback=SLOPE_LOOKBACK_SLOW)
+    
+    setup_type = ""
+    is_valid_setup = False
+    fail_reason = ""
+
+    # --- MAIN LOGIC ---
+    if cross_signal:
+        if dist_pct >= TREND_FLIP_MIN: 
+            if current_direction == "Buy" and cross_signal == "Bullish Cross":
+                setup_type = "Trend Flip (Up)"
+                is_valid_setup = True
+            elif current_direction == "Sell" and cross_signal == "Bearish Cross":
+                setup_type = "Trend Flip (Down)"
+                is_valid_setup = True
+        else: 
+            is_valid_setup = False
+            fail_reason = f"Flip Dist Too Small ({dist_pct:.2%} < {TREND_FLIP_MIN:.0%})"
+            
+    elif is_in_zone:
+        if current_direction == "Buy":
+            # Scenario A: Dip (Negative Slope)
+            is_dip = slope_slow < 0 # Primary "Pullback" indicator
+            
+            # Scenario B: Flip (Turn Up)
+            fast_flip = prev_slope_fast < 0 and slope_fast > 0
+            slow_flip = prev_slope_slow < 0 and slope_slow > 0
+            is_flip = fast_flip or slow_flip
+            
+            if is_flip:
+                flip_type = "Fast" if fast_flip and not slow_flip else "Slow" if slow_flip and not fast_flip else "Dual"
+                setup_type = f"Mean Rev (Flip Buy - {flip_type})"
+                is_valid_setup = True
+            elif is_dip:
+                setup_type = "Mean Rev (Dip Buy)"
+                is_valid_setup = True
+            else:
+                fail_reason = f"Slope Invalid (Already Up - Missed Dip & No Flip)"
+
+        elif current_direction == "Sell": 
+            # Scenario A: Rally (Positive Slope)
+            is_rally = slope_slow > 0 
+            
+            # Scenario B: Flip (Turn Down)
+            fast_flip = prev_slope_fast > 0 and slope_fast < 0
+            slow_flip = prev_slope_slow > 0 and slope_slow < 0
+            is_flip = fast_flip or slow_flip
+            
+            if is_flip:
+                flip_type = "Fast" if fast_flip and not slow_flip else "Slow" if slow_flip and not fast_flip else "Dual"
+                setup_type = f"Mean Rev (Flip Sell - {flip_type})"
+                is_valid_setup = True
+            elif is_rally:
+                setup_type = "Mean Rev (Rally Sell)"
+                is_valid_setup = True
+            else:
+                fail_reason = f"Slope Invalid (Already Down - Missed Rally & No Flip)"
+
+    if is_squeeze:
+        if is_valid_setup: setup_type = f"Squeeze ({setup_type})"
+        else: setup_type = "Squeeze"
+        is_valid_setup = True
+
+    if not is_valid_setup: return None, f"Setup Invalid: {fail_reason}"
+
+    return {
+        "ticker": ticker,
+        "direction": current_direction,
+        "setup_type": setup_type,
+        "is_squeeze": is_squeeze,
+        "is_mean_rev": is_in_zone,
+        "bbm_price": last['BBM_20'],
+        "current_close": last['close']
+    }, None
 
 def analyze_lower_timeframes(ticker, daily_dir):
     timeframes = ["4h", "1h"]
@@ -184,11 +307,14 @@ def analyze_lower_timeframes(ticker, daily_dir):
         is_above = last['BBM_20'] > last['EMA_200']
         
         tf_notes = []
-        tf_time = "-"
+        tf_time = "Established" 
         is_valid_tf = False
         
-        # Prioritize Fast Transition if available, else Slow
         active_trans = None
+        active_trans_sig = None
+        active_trans_time = None
+        active_trans_price = None
+        
         if trans_fast:
             active_trans, active_trans_sig, active_trans_time, active_trans_price = trans_fast, sig_text_fast, time_fast, price_fast
         if trans_slow:
@@ -208,7 +334,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
                 # 2. Dip Check (Must be in Zone)
                 elif is_in_zone_tf and (current_slope_slow < 0 or current_slope_fast < 0):
                     tf_notes.append("Dip (Slope Neg)")
-                    tf_time = "Pending Turn (Up)"
+                    tf_time = "Pending Turn"
                     is_valid_tf = True
                     
                 # 3. Retest Check
@@ -227,7 +353,10 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     tf_notes.append("GOLDEN CROSS")
                     tf_time = cross_time
                     is_valid_tf = True
-            
+                
+                if not is_valid_tf:
+                    reason = "Slope Positive (No Flip/Retest)" if (current_slope_slow > 0) else "Slope Negative (Not in Zone)"
+                    failure_details.append(f"{tf}: {reason}")
             else:
                 failure_details.append(f"{tf}: Misaligned")
 
@@ -242,7 +371,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
                 # 2. Rally Check (Must be in Zone)
                 elif is_in_zone_tf and (current_slope_slow > 0 or current_slope_fast > 0):
                     tf_notes.append("Rally (Slope Pos)")
-                    tf_time = "Pending Turn (Down)"
+                    tf_time = "Pending Turn"
                     is_valid_tf = True
 
                 # 3. Retest Check
@@ -260,119 +389,35 @@ def analyze_lower_timeframes(ticker, daily_dir):
                 if cross_sig == "Bearish Cross":
                     tf_notes.append("DEATH CROSS")
                     tf_time = cross_time
+                    is_valid_tf = True
+                
+                if not is_valid_tf:
+                    reason = "Slope Negative (No Flip/Retest)" if (current_slope_slow < 0) else "Slope Positive (Not in Zone)"
+                    failure_details.append(f"{tf}: {reason}")
             else:
-                 failure_details.append(f"{tf}: Misaligned")
+                failure_details.append(f"{tf}: Misaligned")
 
         if is_valid_tf:
-            confirmations.append(f"{tf}: {' + '.join(tf_notes)}")
+            note_str = " + ".join(tf_notes)
+            confirmations.append(f"{tf}: {note_str}")
             time_logs.append(f"{tf}: {tf_time}")
-            
+
     return confirmations, time_logs, failure_details
 
-def analyze_market_structure(tickers, eco_df):
+def run_scanner(tickers, eco_df=None):
     results = []
-    print(f"Analyzing {len(tickers)} tickers...")
+    print(f"Scanning {len(tickers)} tickers...")
     
     for ticker in tickers:
-        print(f"Processing {ticker}...")
-        df = get_data(ticker)
+        print(f"Checking {ticker}...", end="\r")
+        daily, failure_reason = analyze_daily_chart(ticker)
         
-        # Economic Danger Check
-        danger_msg = check_economic_danger(ticker, eco_df)
-        
-        if df is None:
-            results.append({
-                "Ticker": ticker, "Signal": "No Signal", 
-                "Current Price": "-", "Daily Setup": "None", 
-                "Failure Reason": "Data Fetch Error",
-                "Confirmations": "-", "Switch Time": "-", "Est. Price": "-",
-                "Remarks": danger_msg
-            })
-            continue
-            
-        # Daily Analysis
-        last = df.iloc[-1]
-        ema = last['EMA_200']
-        bbm = last['BBM_20']
-        
-        # 1. Squeeze Check
-        is_squeeze = last['BB_WIDTH'] < 0.10 # 10% Bandwidth threshold
-        
-        # 2. Zone Check (Price vs EMA)
-        dist_pct = abs(bbm - ema) / ema
-        is_in_zone = dist_pct <= MEAN_REV_TOLERANCE_MAX
-        
-        # 3. Daily Direction Logic
-        daily = {"direction": None, "setup_type": None, "is_squeeze": is_squeeze, "current_close": last['Close'], "bbm_price": bbm}
-        failure_reason = "None"
-        
-        slope_slow = get_slope(df['BBM_20'], SLOPE_LOOKBACK_SLOW)
-        
-        # --- BUY LOGIC ---
-        if bbm > ema: 
-            if is_in_zone:
-                # Setup A: Flip Buy (Reversal)
-                if slope_slow > 0:
-                     # Check if it *just* flipped or if it's established
-                     trans, _, _, _ = check_slope_transition(df['BBM_20'], df.index, SLOPE_LOOKBACK_SLOW)
-                     if trans == "Neg->Pos":
-                         daily["direction"] = "Buy"
-                         daily["setup_type"] = "Mean Rev (Flip Buy - Fresh)"
-                     else:
-                         # Established uptrend, treating as continuation
-                         daily["direction"] = "Buy"
-                         daily["setup_type"] = "Mean Rev (Dip Buy)"
-                
-                # Setup B: Anticipation (Slope still negative but in zone)
-                elif slope_slow < 0:
-                    daily["direction"] = "Buy" # Provisional, needs lower TF confirmation
-                    daily["setup_type"] = "Mean Rev (Flip Buy - Slow)"
-            else:
-                 failure_reason = f"Not in Zone (Dist: {dist_pct*100:.2f}%, Price: {bbm:.2f})"
-        
-        # --- SELL LOGIC ---
-        elif bbm < ema:
-            if is_in_zone:
-                if slope_slow < 0:
-                    trans, _, _, _ = check_slope_transition(df['BBM_20'], df.index, SLOPE_LOOKBACK_SLOW)
-                    if trans == "Pos->Neg":
-                        daily["direction"] = "Sell"
-                        daily["setup_type"] = "Mean Rev (Flip Sell - Fresh)"
-                    else:
-                        daily["direction"] = "Sell"
-                        daily["setup_type"] = "Mean Rev (Rally Sell)"
-                
-                elif slope_slow > 0:
-                    daily["direction"] = "Sell"
-                    daily["setup_type"] = "Mean Rev (Flip Sell - Slow)"
-            else:
-                failure_reason = f"Not in Zone (Dist: {dist_pct*100:.2f}%, Price: {bbm:.2f})"
-                
-        # --- FILTER INVALID DAILY SETUPS ---
-        if not daily['direction']:
-             results.append({
-                "Ticker": ticker, "Signal": "No Signal", "Current Price": "-", 
-                "Daily Setup": "None", "Failure Reason": failure_reason,
-                "Confirmations": "-", "Switch Time": "-", "Est. Price": "-",
-                "Remarks": danger_msg
-            })
-             continue
+        # Economic Check
+        danger_msg = "-"
+        if eco_df is not None:
+            danger_msg = check_economic_danger(ticker, eco_df)
 
-        # Check for Trend Continuation Validity (Prevent buying top of rally)
-        # If Slope is already UP, ensure we didn't just miss the move.
-        if "Dip Buy" in daily['setup_type'] and slope_slow > TREND_FLIP_MIN: 
-             # Logic: If slope is steep positive, only take if price < BBM (Pullback)
-             if last['Close'] > bbm * 1.02: # 2% above mean
-                 daily['direction'] = None
-                 failure_reason = "Setup Invalid: Slope Invalid (Already Up - Overextended)"
-        
-        if "Rally Sell" in daily['setup_type'] and slope_slow < -TREND_FLIP_MIN:
-             if last['Close'] < bbm * 0.98:
-                 daily['direction'] = None
-                 failure_reason = "Setup Invalid: Slope Invalid (Already Down - Missed Rally)"
-
-        # Re-check validity after filters
-        if not daily['direction']:
+        if not daily:
              results.append({
                 "Ticker": ticker, "Signal": "No Signal", "Current Price": "-", 
                 "Daily Setup": "None", "Failure Reason": failure_reason,
@@ -415,6 +460,3 @@ def analyze_market_structure(tickers, eco_df):
     
     print("\nScan Complete.")
     return pd.DataFrame(results)
-
-# --- ALIAS FOR COMPATIBILITY ---
-run_scanner = analyze_market_structure
