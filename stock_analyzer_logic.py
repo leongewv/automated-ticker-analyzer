@@ -62,8 +62,14 @@ def get_data(ticker, period="2y", interval="1d"):
     elif interval == "4h": period = "1y"
     
     try:
-        df = yf.download(ticker, period=period, interval=interval, progress=False)
+        # FIXED: Added auto_adjust=True to fix warnings
+        df = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=True)
+        
         if df.empty: return None
+        
+        # FIXED: Flatten MultiIndex columns if present (Fixes 'tuple' object has no attribute 'lower')
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
         
         # Calculate Indicators
         df['EMA_200'] = TA.EMA(df, EMA_PERIOD)
