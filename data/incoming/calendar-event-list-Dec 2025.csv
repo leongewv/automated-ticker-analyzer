@@ -1,0 +1,733 @@
+Id,Start,Name,Impact,Currency
+ca353af5-cec9-4c92-8293-fd483d2c3ec9,11/30/2025 21:45:00,Building Permits s.a. (MoM),MEDIUM,NZD
+1734ae4f-3fff-4fbe-bac8-89dba4aeb7cc,11/30/2025 22:00:00,S&P Global Manufacturing PMI,LOW,AUD
+c7681f31-9d59-4e21-b42b-7ddefdbbc8a7,11/30/2025 23:50:00,Capital Spending,LOW,JPY
+d45588c5-6c53-4ab9-80ee-3905a26ea229,12/01/2025 00:00:00,TD-MI Inflation Gauge (MoM),LOW,AUD
+9af7f85b-2ca7-4ce0-b74d-def8a0baac96,12/01/2025 00:00:00,TD-MI Inflation Gauge (YoY),MEDIUM,AUD
+ea55ce50-e660-47fa-935d-31e0024d06fd,12/01/2025 00:30:00,ANZ Job Advertisements,LOW,AUD
+5fd0bace-9eef-4c78-87d8-d99f0c88ee57,12/01/2025 00:30:00,Company Gross Operating Profits (QoQ),LOW,AUD
+641cb30c-2186-47ff-a973-31ce5f363f05,12/01/2025 00:30:00,Jibun Bank Manufacturing PMI,LOW,JPY
+e09aa8c1-34b3-4592-a5eb-030259228afd,12/01/2025 01:05:00,BoJ Governor Ueda speech,HIGH,JPY
+9c42b93e-e536-4f07-866d-f51d58e3a7f1,12/01/2025 01:45:00,RatingDog Manufacturing PMI,HIGH,CNY
+376fbc60-27e2-405a-a0f3-75f884072534,12/01/2025 05:30:00,RBA Commodity Index SDR (YoY),LOW,AUD
+00c994bb-0fb4-474e-ad55-75c91b8386a0,12/01/2025 06:30:00,ECB's De Guindos speech,MEDIUM,EUR
+0125b975-1c47-46ac-bf8c-f64ebfc85f1e,12/01/2025 07:30:00,Real Retail Sales (YoY),MEDIUM,CHF
+5f1324d3-4d7e-4e30-a2a2-8ad5dd841985,12/01/2025 08:15:00,HCOB Manufacturing PMI,MEDIUM,EUR
+1a6fefd0-cc86-4f0f-8fe9-391ad86f73fe,12/01/2025 08:45:00,HCOB Manufacturing PMI,MEDIUM,EUR
+69bd456e-9db9-4828-b6c4-14222d582e5b,12/01/2025 08:50:00,HCOB Manufacturing PMI,LOW,EUR
+25331bdc-31f4-4c2b-9f75-57dc6aec80f2,12/01/2025 08:55:00,HCOB Manufacturing PMI,MEDIUM,EUR
+e6b1cd69-9fcb-4691-9b53-07f271ecee6e,12/01/2025 09:00:00,HCOB Manufacturing PMI,LOW,EUR
+a09a447c-f696-4a58-9bdc-063cb81af0b2,12/01/2025 09:30:00,Consumer Credit,LOW,GBP
+150e493a-184c-4ac2-80f1-bec5f2984399,12/01/2025 09:30:00,M4 Money Supply (MoM),LOW,GBP
+ef304fd5-c8a4-46b0-a160-a68f34d98237,12/01/2025 09:30:00,M4 Money Supply (YoY),LOW,GBP
+13caae3f-52ee-4ebd-ab04-9d6614d6b2ea,12/01/2025 09:30:00,Mortgage Approvals,LOW,GBP
+b4558443-c909-4fa0-ae54-74620651fb74,12/01/2025 09:30:00,Net Lending to Individuals (MoM),LOW,GBP
+3da3d3f0-3de7-45b6-ae83-4ef7c511b421,12/01/2025 09:30:00,S&P Global Manufacturing PMI,LOW,GBP
+bbbdc2c3-1b85-4043-9301-ff53baad0cf9,12/01/2025 12:00:00,ECB's Nagel speech,MEDIUM,EUR
+9680ad19-cbca-44ba-a3ec-7800b19ad567,12/01/2025 14:30:00,S&P Global Manufacturing PMI,MEDIUM,CAD
+8e3e8f32-718c-47f6-a748-5909400785a8,12/01/2025 14:45:00,S&P Global Manufacturing PMI,LOW,USD
+ae0bddb9-35a4-4c4f-b3f6-bcdb79e3f32d,12/01/2025 15:00:00,ISM Manufacturing Employment Index,MEDIUM,USD
+28165076-a493-4488-a2f3-1bdf6ad46399,12/01/2025 15:00:00,ISM Manufacturing New Orders Index,MEDIUM,USD
+88042bbd-76d1-430e-a2f0-5c797496781f,12/01/2025 15:00:00,ISM Manufacturing PMI,HIGH,USD
+8e886a9a-6ffb-4050-8851-6b76a0605c48,12/01/2025 15:00:00,ISM Manufacturing Prices Paid,MEDIUM,USD
+f6007060-571a-458c-81b0-28ddc9da7df3,12/01/2025 15:30:00,BoE's Dhingra speech,MEDIUM,GBP
+42506bfd-549e-4343-afc9-9fbf52bc4275,12/01/2025 16:30:00,3-Month Bill Auction,LOW,USD
+5c142a49-c5d5-410c-92de-23c6296328a5,12/01/2025 16:30:00,6-Month Bill Auction,LOW,USD
+68dbfc9f-3e25-483b-88bd-f2391cefef6c,12/01/2025 21:10:00,RBNZ's Breman speech,HIGH,NZD
+7de49848-dfaf-4167-bd47-6714b746d782,12/01/2025 21:45:00,Terms of Trade Index,LOW,NZD
+13f0c56d-f26e-4132-9126-12050d70c8b9,12/01/2025 23:50:00,Monetary Base (YoY),LOW,JPY
+788d437f-3a5a-4a5e-977f-1e442a7ca4c8,12/02/2025 00:01:00,BRC Shop Price Index (YoY),LOW,GBP
+b48e3a7d-765c-45c6-af0b-7d9e1847d3a1,12/02/2025 00:30:00,Building Permits (MoM),MEDIUM,AUD
+c6040ab6-78ad-4d48-b06a-284ef9cce4a0,12/02/2025 00:30:00,Building Permits (YoY),LOW,AUD
+be1974a4-b7fd-4311-af59-143fae7f82ad,12/02/2025 00:30:00,Current Account Balance,LOW,AUD
+cbf4128d-8302-43d5-9559-e4a1fd1faa0e,12/02/2025 01:00:00,Fed's Chair Powell speech,HIGH,USD
+cd28810d-c8f1-4d07-b307-98b4848645e5,12/02/2025 03:35:00,10-y Bond Auction,LOW,JPY
+b7ac795a-37b5-41d4-bea0-4a63afbcdeff,12/02/2025 05:00:00,Consumer Confidence Index,LOW,JPY
+ce168aa0-d24b-4d6e-b386-080f829b27e7,12/02/2025 07:00:00,Financial Stability Report,MEDIUM,GBP
+7169cffc-9684-44f6-b274-e12b1e916fc4,12/02/2025 07:00:00,FPC Meeting Minutes,LOW,GBP
+57590e28-a84d-4316-b78f-0d7df7de979b,12/02/2025 07:00:00,FPC Statement,LOW,GBP
+3de1114a-dc34-45bb-bc96-edae6e15b8ad,12/02/2025 07:00:00,Nationwide Housing Prices n.s.a (YoY),LOW,GBP
+ee60f1eb-6773-47fa-a1b1-b05c9400ed13,12/02/2025 07:00:00,Nationwide Housing Prices s.a (MoM),LOW,GBP
+77424f5d-463f-4762-b172-728baacb0394,12/02/2025 07:35:00,ECB's Kocher speech,MEDIUM,EUR
+1cd13b64-4545-457a-972e-15c789bf5762,12/02/2025 07:45:00,Budget Balance,LOW,EUR
+4722fd97-5cc8-497d-a01d-df5ef47f0efe,12/02/2025 08:00:00,Unemployment Change,LOW,EUR
+c50d75af-a65e-4df0-b398-d3a0358113d6,12/02/2025 09:00:00,Unemployment,LOW,EUR
+17ce5404-9fe4-4311-bae4-c930f29a8e9b,12/02/2025 10:00:00,Core Harmonized Index of Consumer Prices (MoM),HIGH,EUR
+f72bfe90-4582-496a-a7b2-332156de64b6,12/02/2025 10:00:00,Core Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+f4ff14a0-c05e-4725-adfa-c97806f9d8fa,12/02/2025 10:00:00,Harmonized Index of Consumer Prices (MoM),HIGH,EUR
+fcf8a57f-9351-4b7b-a4b2-f59d97a1cddc,12/02/2025 10:00:00,Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+f154c4ca-1b6e-40d3-8a2c-ab02742e020e,12/02/2025 10:00:00,Unemployment Rate,MEDIUM,EUR
+4a715577-2178-4db8-ab68-2f19eb3bf4fc,12/02/2025 10:00:00,BoE's Governor Bailey speech,HIGH,GBP
+1975bb3e-5167-4b88-814a-804500a7a4a6,12/02/2025 10:25:00,12-Month Letras Auction,LOW,EUR
+b742992e-802e-4394-90b8-1635de8b831c,12/02/2025 10:25:00,6-Month Letras Auction,LOW,EUR
+94467760-5507-4d2f-a153-72e2e9799750,12/02/2025 11:00:00,Producer Price Index (MoM),LOW,EUR
+0fb3ff86-3a5b-47c3-9a0f-d96d26ca1ec6,12/02/2025 11:00:00,Producer Price Index (YoY),LOW,EUR
+813b0e70-cfc4-48cf-80b0-c7ce0de9aaaf,12/02/2025 11:25:00,ECB's Nagel speech,MEDIUM,EUR
+e8ee18b6-af93-489b-986b-cabe567bcaf5,12/02/2025 13:55:00,Redbook Index (YoY),LOW,USD
+5b435fab-e579-4b56-8d69-02f712da1d9a,12/02/2025 14:55:00,GDT Price Index,LOW,NZD
+5970ac63-c8a0-4413-9765-83607a7d1193,12/02/2025 15:00:00,Fed's Bowman speech,MEDIUM,USD
+ea6b6358-4b49-4bbf-a4d7-294164cb2097,12/02/2025 15:05:00,RealClearMarkets/TIPP Economic Optimism (MoM),LOW,USD
+2bfa7d02-635c-4dcd-bfdc-6f64b1599caa,12/02/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+ab69f258-6d6f-45e5-8972-eec73951db6a,12/02/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+e7966d8f-970c-4fe8-80fb-85f8be678afc,12/02/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+244274d1-15f4-469a-bf48-9fecd920f1c2,12/02/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+582287ea-2040-4afb-999d-3df89fcea8fd,12/02/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+5f8529fe-1436-47b9-9c5d-fb7eddcbe529,12/02/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+c1ea9941-e0ca-4a26-81df-c54896f58385,12/02/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+f778487a-43b2-418d-a31a-93ba4c7758fb,12/02/2025 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+77f93f0d-a675-4a94-95b8-40e345a6ab09,12/02/2025 22:00:00,Ai Group Construction PMI,LOW,AUD
+bc2beb48-bacd-4995-b076-90f5b13ed88a,12/02/2025 22:00:00,Ai Group Manufacturing PMI,LOW,AUD
+27341570-e32f-4221-95ea-0cbbdabbb7ca,12/02/2025 22:00:00,AiG Industry Index,MEDIUM,AUD
+52bed009-8397-4328-ad9e-a90d89195aa0,12/02/2025 22:00:00,S&P Global Composite PMI,MEDIUM,AUD
+f192227a-32cb-41b0-aea7-57930692307b,12/02/2025 22:00:00,S&P Global Services PMI,MEDIUM,AUD
+702199c3-f882-47a2-a77d-35da9b164d74,12/02/2025 22:15:30,Total Vehicle Sales,LOW,USD
+ac4fcf97-9a8e-44c0-a20d-e6a3d16d3052,12/03/2025 00:00:00,ANZ Commodity Price,LOW,NZD
+110e90c5-9d90-46ed-8c3e-8e7153376060,12/03/2025 00:30:00,Gross Domestic Product (QoQ),HIGH,AUD
+b7107e55-bce4-4481-8b8d-bd0f66586db9,12/03/2025 00:30:00,Gross Domestic Product (YoY),MEDIUM,AUD
+6a9b32a2-942b-4f2a-846d-e95a7267885b,12/03/2025 00:30:00,Jibun Bank Services PMI,LOW,JPY
+a6772988-2e08-418e-b19a-2ddefeb56f50,12/03/2025 01:45:00,RatingDog Services PMI,HIGH,CNY
+60d33f2e-d499-4d48-84ec-5a36f00aa426,12/03/2025 07:30:00,Consumer Price Index (MoM),MEDIUM,CHF
+fe428a0f-129d-4f7e-980f-062f62ea66f5,12/03/2025 07:30:00,Consumer Price Index (YoY),HIGH,CHF
+9911306b-d22a-4a5e-b5cc-78b6aa6dd0fd,12/03/2025 08:15:00,HCOB Services PMI,MEDIUM,EUR
+f2910e92-b790-49a6-aafa-5a6c19fa8a62,12/03/2025 08:45:00,HCOB Services PMI,LOW,EUR
+eb2388cd-0747-4ed4-9254-cb2d5649bb18,12/03/2025 08:50:00,HCOB Composite PMI,LOW,EUR
+ef2d41a0-6e96-4ae8-9c98-fa082da89d3b,12/03/2025 08:50:00,HCOB Services PMI,LOW,EUR
+57593075-bc89-4b98-a3d1-6958620369bc,12/03/2025 08:55:00,HCOB Composite PMI,MEDIUM,EUR
+54538785-c6ed-457b-b7d1-a1db38ae1687,12/03/2025 08:55:00,HCOB Services PMI,MEDIUM,EUR
+30d34a4d-1b05-417c-ae42-582fe79f6c29,12/03/2025 09:00:00,HCOB Composite PMI,MEDIUM,EUR
+b84f2703-398a-4195-a852-11cfe912d816,12/03/2025 09:00:00,HCOB Services PMI,LOW,EUR
+b3fd9c7f-7f45-481c-a6e2-efcbbb7e2342,12/03/2025 09:30:00,S&P Global Composite PMI,LOW,GBP
+b035dddb-f26c-4f3d-83d7-d5df04aa09cc,12/03/2025 09:30:00,S&P Global Services PMI,LOW,GBP
+b73186df-ef29-44f0-8efd-ba291c530f90,12/03/2025 10:00:00,Producer Price Index (MoM),MEDIUM,EUR
+39c320eb-cc4a-4c11-99d5-e9326f29cde3,12/03/2025 10:00:00,Producer Price Index (YoY),MEDIUM,EUR
+c8b32601-8d08-4cf4-beb1-1c107c4c7499,12/03/2025 10:30:00,ECB's Lane speech,MEDIUM,EUR
+ffe84d9e-026c-4e8e-be13-435fcd4e1c6b,12/03/2025 12:00:00,MBA Mortgage Applications,LOW,USD
+fd0e14a2-37bd-471c-be4b-ef6f356879d2,12/03/2025 13:15:00,ADP Employment Change,HIGH,USD
+cbbc60da-70a9-4fbd-82b7-925eb4249196,12/03/2025 13:30:00,Labor Productivity (QoQ),LOW,CAD
+9ca05638-c0d9-457b-8e7d-8a8764b08ea7,12/03/2025 13:30:00,ECB's President Lagarde speech,HIGH,EUR
+2f14f4bc-db96-4fcc-9a96-3028a26f451d,12/03/2025 13:30:00,Export Price Index (MoM),LOW,USD
+9935e240-eaca-4d65-98ea-a599f90d84d8,12/03/2025 13:30:00,Export Price Index (YoY),LOW,USD
+17af42a8-8fb5-4be4-8457-403ffb77af0d,12/03/2025 13:30:00,Import Price Index (MoM),LOW,USD
+8cbf68e9-3e4c-45f2-9d46-8326a8098b0d,12/03/2025 13:30:00,Import Price Index (YoY),LOW,USD
+ab9953e9-e91e-46b5-9bac-4dec3df02518,12/03/2025 14:15:00,Capacity Utilization,LOW,USD
+65ff0963-c8f9-4b17-a847-f5f832c89346,12/03/2025 14:15:00,Industrial Production (MoM),MEDIUM,USD
+e868e764-b7ce-4f5b-bf8a-782cfee7abdc,12/03/2025 14:45:00,S&P Global Composite PMI,MEDIUM,USD
+2f3e1fda-3caf-4b2c-817d-533cc0b61d73,12/03/2025 14:45:00,S&P Global Services PMI,LOW,USD
+24b8cd77-bb16-4df0-806e-bd8f78735cee,12/03/2025 15:00:00,ISM Services Employment Index,MEDIUM,USD
+986fb9c4-9e79-44dd-8c3a-814175e8f11f,12/03/2025 15:00:00,ISM Services New Orders Index,MEDIUM,USD
+d96b6df2-d568-40ef-9cf9-1ef2158de061,12/03/2025 15:00:00,ISM Services PMI,HIGH,USD
+fa80ec93-e1f3-4a9e-b4f0-d23aed8f3a1f,12/03/2025 15:00:00,ISM Services Prices Paid,MEDIUM,USD
+b51bfc0a-c9ff-4227-9a4b-316867d11d8c,12/03/2025 15:30:00,ECB's President Lagarde speech,HIGH,EUR
+a0d2df31-6268-4061-aabc-7d29703eb6e7,12/03/2025 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+9fdde6c1-8151-4848-af84-4221a6131214,12/03/2025 17:00:00,BoE's Mann speech,MEDIUM,GBP
+54334005-6e4a-490e-bfcb-7aebf429e8a7,12/03/2025 19:30:00,President Trump speech,MEDIUM,USD
+7f505bd5-9de4-4342-bdac-a9ee5e537211,12/03/2025 23:50:00,Foreign Bond Investment,LOW,JPY
+a1cbe89b-8763-4ba9-8573-fd14f68e176f,12/03/2025 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+f289505c-c404-4b47-845e-516cee828e3c,12/04/2025 00:30:00,Exports (MoM),MEDIUM,AUD
+05380d4e-f0d0-4b5e-96ba-107258eb8ff2,12/04/2025 00:30:00,Imports (MoM),MEDIUM,AUD
+d26819e9-3176-4ca8-ba27-87ba15c88449,12/04/2025 00:30:00,Trade Balance (MoM),HIGH,AUD
+bac2ce65-f3f3-4a4b-92fa-f2e9882f372d,12/04/2025 08:00:00,Unemployment Rate s.a (MoM),LOW,CHF
+430b37af-2671-4843-bff4-df9817135b68,12/04/2025 08:10:00,ECB's Cipollone speech,MEDIUM,EUR
+3280cb85-c778-449a-9c26-6c652659d41c,12/04/2025 08:30:00,SVME - Purchasing Managers' Index,LOW,CHF
+7bb15935-bd4e-4d6c-95b8-8e2001546165,12/04/2025 09:30:00,S&P Global Construction PMI,LOW,GBP
+8cb5aeab-5e1f-457a-9a56-7f08937cb373,12/04/2025 09:40:00,10-y Obligaciones Auction,LOW,EUR
+05459a17-7c3f-4654-ab57-8a822db4d919,12/04/2025 09:40:00,5-y Bond Auction,LOW,EUR
+4dbb143e-efa8-403b-919c-bcb067dc16ef,12/04/2025 09:50:00,10-y Bond Auction,LOW,EUR
+a90ba40b-3a0e-4b6d-b331-73986f5567a0,12/04/2025 10:00:00,Retail Sales (MoM),MEDIUM,EUR
+512937a3-a4bd-4903-8396-42262b9f98b3,12/04/2025 10:00:00,Retail Sales (YoY),HIGH,EUR
+00beb63b-e60b-4c21-a482-5706388a54b0,12/04/2025 12:30:00,Challenger Job Cuts,MEDIUM,USD
+d677b5fb-dfb8-4d08-b536-b31cd13007c0,12/04/2025 13:00:00,ECB's Cipollone speech,MEDIUM,EUR
+39429f11-83c4-476a-8e33-a7c79a1a5762,12/04/2025 13:30:00,Continuing Jobless Claims,LOW,USD
+0f69e483-c391-4086-9217-7c506b5c9177,12/04/2025 13:30:00,Initial Jobless Claims,MEDIUM,USD
+b73a89be-7f51-4812-bdf4-44aa910cd376,12/04/2025 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+8f144050-0823-4b7d-8d2d-5526e97d02b3,12/04/2025 15:00:00,Ivey Purchasing Managers Index,MEDIUM,CAD
+12411f28-d225-4c3c-86cd-2119ce89a080,12/04/2025 15:00:00,Ivey Purchasing Managers Index s.a,MEDIUM,CAD
+1ab79e1f-8a42-442c-bc35-0f16ad1d7cef,12/04/2025 15:00:00,ECB's Lane speech,MEDIUM,EUR
+f0bf4e7a-00b8-4a28-b9e1-d948df09f4da,12/04/2025 15:00:00,Factory Orders (MoM),MEDIUM,USD
+ad286479-31e5-44dc-a773-8b75231b8eb6,12/04/2025 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+a921cba6-8f81-4297-a272-7146d7bfd5bb,12/04/2025 16:30:00,4-Week Bill Auction,LOW,USD
+227aa2f7-24a5-4dea-95bd-b024a6e1a42b,12/04/2025 17:00:00,Fed's Bowman speech,MEDIUM,USD
+96dfcaf6-d811-48e3-975e-9d1d7fcae9ca,12/04/2025 18:00:00,ECB's De Guindos speech,MEDIUM,EUR
+8b13bc9c-e58b-4257-bfa2-f6c0a67cdf1d,12/04/2025 23:30:00,Overall Household Spending (YoY),LOW,JPY
+e9811e54-5ea4-41c0-b51c-4498d29b3097,12/04/2025 23:50:00,JP Foreign Reserves,LOW,JPY
+87bc6d7f-2e50-4e69-8587-9a42bd91f740,12/05/2025 05:00:00,Coincident Index,LOW,JPY
+a0336a6d-d783-4454-9a06-4cb6677de4e7,12/05/2025 05:00:00,Leading Economic Index,LOW,JPY
+4d7a2b83-d827-49bc-b519-30a142011d10,12/05/2025 07:00:00,Factory Orders n.s.a. (YoY),MEDIUM,EUR
+6275742f-a134-456e-a455-aa80b89a9f7e,12/05/2025 07:00:00,Factory Orders s.a. (MoM),MEDIUM,EUR
+71e3ac65-49af-412c-87fa-613286519c0e,12/05/2025 07:00:00,Halifax House Prices (MoM),LOW,GBP
+98c3c1d5-7a57-47cf-88d3-3743d8943db1,12/05/2025 07:00:00,Halifax House Prices (YoY/3m),LOW,GBP
+a90c9aac-8a02-4380-a47a-a7437050860e,12/05/2025 07:45:00,Current Account,LOW,EUR
+e8fb2f12-eba5-4193-ab28-13f905f477c7,12/05/2025 07:45:00,"Exports, EUR",LOW,EUR
+5c2be1b6-50dd-43a9-9d02-9c5cfa838b95,12/05/2025 07:45:00,"Imports, EUR",LOW,EUR
+d5f951e5-494b-46b1-b8f2-6c49e4d1dfda,12/05/2025 07:45:00,Industrial Output (MoM),LOW,EUR
+12ee051e-832d-409b-b757-d5916fa1f546,12/05/2025 07:45:00,Trade Balance EUR,LOW,EUR
+fd0e8475-ac12-4e1b-a192-7e1780383bbc,12/05/2025 08:00:00,Foreign Currency Reserves,LOW,CHF
+87ee2523-b5da-426e-b13c-49664eb198f6,12/05/2025 08:00:00,Industrial Output Cal Adjusted (YoY),LOW,EUR
+d9a3c691-ebba-4d93-889f-dad8411a1c74,12/05/2025 09:00:00,Retail Sales n.s.a (YoY),LOW,EUR
+77fa7ae2-3bd7-4463-91a0-41096adc8642,12/05/2025 09:00:00,Retail Sales s.a. (MoM),LOW,EUR
+8ec5bab3-81c5-4960-998e-f0419a61df3d,12/05/2025 10:00:00,Employment Change (QoQ),MEDIUM,EUR
+c9227cf6-2375-46d6-b5d2-a67931a9b2a0,12/05/2025 10:00:00,Employment Change (YoY),LOW,EUR
+3522c9eb-a75f-44fc-ae5d-5fe2825936db,12/05/2025 10:00:00,Gross Domestic Product s.a. (QoQ),HIGH,EUR
+8b711841-4ed7-4961-bc96-66e11aa4270d,12/05/2025 10:00:00,Gross Domestic Product s.a. (YoY),HIGH,EUR
+625400c7-2841-41a5-94a1-b0166940d0fc,12/05/2025 13:30:00,Average Hourly Wages (YoY),MEDIUM,CAD
+e5042c5d-3209-41b9-b96a-257854a802b1,12/05/2025 13:30:00,Net Change in Employment,HIGH,CAD
+102a9f6c-3f9f-4fc5-828a-83ba41ac5b34,12/05/2025 13:30:00,Participation Rate,LOW,CAD
+179d4d94-e389-4ac6-979a-f57e507a7b92,12/05/2025 13:30:00,Unemployment Rate,HIGH,CAD
+d2f687db-9587-4dd4-8b6b-ba6be3071111,12/05/2025 14:30:00,ECB's Villeroy speech,MEDIUM,EUR
+58913856-1928-4925-a2a1-fb72f98f7507,12/05/2025 15:00:00,Core Personal Consumption Expenditures - Price Index (MoM),HIGH,USD
+3e3efc42-db4a-4f62-a713-9db2cca70189,12/05/2025 15:00:00,Core Personal Consumption Expenditures - Price Index (YoY),HIGH,USD
+59cd3573-d499-44d9-a82b-0b199294dd41,12/05/2025 15:00:00,Michigan Consumer Expectations Index,MEDIUM,USD
+3a0a5804-01de-42ce-9f6f-fa653ac24943,12/05/2025 15:00:00,Michigan Consumer Sentiment Index,HIGH,USD
+0bd7f344-8d3e-45c3-978c-66838f8329d1,12/05/2025 15:00:00,Personal Consumption Expenditures - Price Index (MoM),MEDIUM,USD
+818ddee8-7e19-433d-aedf-553c30dcd7ac,12/05/2025 15:00:00,Personal Consumption Expenditures - Price Index (YoY),MEDIUM,USD
+22b85adb-4952-4483-8874-12987a37dc65,12/05/2025 15:00:00,Personal Income (MoM),MEDIUM,USD
+445e7e52-f7c3-4bed-8906-aae8140e8867,12/05/2025 15:00:00,Personal Spending,MEDIUM,USD
+7359635d-3b9e-472f-b403-cf4c91534935,12/05/2025 15:00:00,UoM 1-year Consumer Inflation Expectations,MEDIUM,USD
+ff359bcd-c378-4f64-8756-690978fd8981,12/05/2025 15:00:00,UoM 5-year Consumer Inflation Expectation,MEDIUM,USD
+9146a46b-f776-4ecf-b729-43bef1b403c6,12/05/2025 15:10:00,ECB's Lane speech,MEDIUM,EUR
+9aac76a7-b537-40b1-a1e0-9a41eea9c887,12/05/2025 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+f50d5da1-1b80-4f9d-a78a-4412947cfe26,12/05/2025 20:00:00,Consumer Credit Change,LOW,USD
+d2158501-3806-4bd1-96c8-6e5aa82d6561,12/05/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+f6a3ceed-eee7-4794-9e4c-22ade967f91b,12/05/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+dd1e19e2-6a19-4007-b4a6-8a87e4fe0a3e,12/05/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+3de52d0f-8a7c-47cb-981f-85f167b421a9,12/05/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+76406c3e-093f-4916-82c1-f83b41b98f9d,12/05/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+b3331f3b-3d4e-4a1a-b9fe-441de4fe1505,12/05/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+b646e8b0-f4c2-451c-9851-190b3f9eedf4,12/05/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+61cd35b8-7f7c-4111-b301-ea44ee4aaa9c,12/05/2025 22:00:00,Spanish Constitution Day,NONE,EUR
+679e87ca-869c-4993-92d6-665bf658dd17,12/07/2025 08:00:00,Foreign Exchange Reserves (MoM),LOW,CNY
+0717c8e4-bc04-4dbe-8172-48e10582036c,12/07/2025 22:00:00,Immaculate Conception,NONE,EUR
+48c82cf6-0824-4dc0-8d6b-9bc027b860a0,12/07/2025 22:00:00,Immaculate Conception Day,NONE,EUR
+9b4d6e26-a187-4d55-b5d6-598e21e05de8,12/07/2025 23:30:00,Labor Cash Earnings (YoY),MEDIUM,JPY
+48a8e90b-3411-4f9f-8e6d-6dff5abe9027,12/07/2025 23:50:00,Bank Lending (YoY),LOW,JPY
+c3e52b4c-3980-4ff3-ab27-fedad64daf01,12/07/2025 23:50:00,Current Account n.s.a.,MEDIUM,JPY
+a7db0554-08ad-415c-a0e5-25d85bfe51b3,12/07/2025 23:50:00,Gross Domestic Product (QoQ),HIGH,JPY
+316c00cc-4bc6-4913-b56e-5da86108bb3d,12/07/2025 23:50:00,Gross Domestic Product Annualized,MEDIUM,JPY
+7c2edd1c-377e-42a4-9aef-4c329f798081,12/07/2025 23:50:00,Gross Domestic Product Deflator (YoY),MEDIUM,JPY
+4334892f-66b2-4903-b8b1-c87d8f6930f6,12/07/2025 23:50:00,Trade Balance - BOP Basis,LOW,JPY
+45196037-ff2b-41f6-aa27-a57e2b983866,12/08/2025 03:00:00,Exports (YoY),MEDIUM,CNY
+58565f43-f9b2-4116-a4a8-0206423e06d7,12/08/2025 03:00:00,Exports (YoY) CNY,MEDIUM,CNY
+97a785d4-0f06-48f8-8798-836879cfda63,12/08/2025 03:00:00,Imports (YoY),MEDIUM,CNY
+39a28c6f-c36d-4b5f-88d4-3bf79db77055,12/08/2025 03:00:00,Imports (YoY) CNY,MEDIUM,CNY
+d44ad071-3cd0-472d-becf-40eba32e2eb5,12/08/2025 03:00:00,Trade Balance CNY,MEDIUM,CNY
+00332ffc-ffd9-43ee-9d71-f841e2a3dceb,12/08/2025 03:00:00,Trade Balance USD,MEDIUM,CNY
+060a824f-47fd-49ae-bdeb-d6681670537b,12/08/2025 05:00:00,Eco Watchers Survey: Current,LOW,JPY
+bfe4c086-8237-42a0-89cf-0adfce34b857,12/08/2025 05:00:00,Eco Watchers Survey: Outlook,LOW,JPY
+bc35d8cd-b47b-4b90-9e6f-da33d5c68077,12/08/2025 06:10:00,ECB's Schnabel speech,MEDIUM,EUR
+86a281c1-8b3a-4fac-a5c5-d8c035ee531e,12/08/2025 07:00:00,Industrial Production n.s.a. w.d.a. (YoY),MEDIUM,EUR
+276b61a2-2024-4317-8030-29dc15b2bb33,12/08/2025 07:00:00,Industrial Production s.a. (MoM),MEDIUM,EUR
+bf70b272-3b82-4f91-bd2c-d7df7672495b,12/08/2025 09:30:00,Sentix Investor Confidence,MEDIUM,EUR
+fb1872a9-2465-463c-860e-19562e62b86e,12/08/2025 14:30:00,BoE's Taylor speech,MEDIUM,GBP
+ee416a93-80c8-4e03-be45-461094b47dd8,12/08/2025 16:30:00,3-Month Bill Auction,LOW,USD
+9b01e5f4-6b16-4e4e-979b-28b61c2ed694,12/08/2025 16:30:00,6-Month Bill Auction,LOW,USD
+3b2098b8-7548-4f7c-903f-a54e41f204a3,12/08/2025 18:00:00,3-Year Note Auction,LOW,USD
+27e5fe9c-038c-4997-a057-98497275c677,12/08/2025 18:30:00,BoE's Lombardelli speech,MEDIUM,GBP
+bb1d9adc-531d-4ac5-bb9d-422bb16dfaf6,12/08/2025 23:50:00,Money Supply M2+CD (YoY),LOW,JPY
+3dd6cdc2-b925-49a8-8322-57df5503e05a,12/09/2025 00:01:00,BRC Like-For-Like Retail Sales (YoY),MEDIUM,GBP
+073304e3-5c8e-4e0b-a0aa-0899ca1e7461,12/09/2025 00:30:00,National Australia Bank's Business Conditions,LOW,AUD
+9b952a93-0751-4c0e-9801-9a4bc3f3d069,12/09/2025 00:30:00,National Australia Bank's Business Confidence,LOW,AUD
+203b1a8b-ecfe-44e7-99ca-b258abce5eab,12/09/2025 03:30:00,RBA Interest Rate Decision,HIGH,AUD
+1b867618-3b98-447e-bd10-7aba278ce76e,12/09/2025 03:30:00,RBA Monetary Policy Statement,HIGH,AUD
+84b339dd-52f0-4e51-ac6b-ed16403c5229,12/09/2025 03:30:00,RBA Rate Statement,HIGH,AUD
+94287483-6254-4b8c-b07b-9608fe52b2fe,12/09/2025 04:30:00,RBA Press Conference,HIGH,AUD
+f609f2b0-2267-402a-bc52-5b50dc24fa3f,12/09/2025 06:00:00,Machine Tool Orders (YoY),LOW,JPY
+682fc2ba-1ff8-4140-bbf5-05323f5c4af7,12/09/2025 07:00:00,Exports (MoM),LOW,EUR
+fa14d7aa-d9fa-4f0c-abae-df8e4019376d,12/09/2025 07:00:00,Imports (MoM),LOW,EUR
+c67cd32b-c6b9-4e56-b689-f6acfd734877,12/09/2025 07:00:00,Trade Balance s.a.,MEDIUM,EUR
+ac728f10-3e19-4162-a6a8-cc04e23a91b8,12/09/2025 08:00:00,ECB's Nagel speech,MEDIUM,EUR
+988fbd6e-7dc0-4cb0-8ad1-bd9b3037784b,12/09/2025 09:00:00,BoJ Governor Ueda speech,MEDIUM,JPY
+7e53fc30-1d7d-4638-9011-95456f21f40c,12/09/2025 09:40:00,3-Month Letras Auction,LOW,EUR
+4d7bfbea-fd38-4dce-a305-2e95c00cb219,12/09/2025 09:40:00,9-Month Letras Auction,LOW,EUR
+d15d76db-67a6-46e3-86cf-7adf600a0316,12/09/2025 11:00:00,NFIB Business Optimism Index,LOW,USD
+3d18c393-c17d-49ec-96fa-126a077c5a47,12/09/2025 13:15:00,ADP Employment Change 4-week average,MEDIUM,USD
+218a950f-74d7-47e0-b57d-3ddefcb279d8,12/09/2025 13:55:00,Redbook Index (YoY),LOW,USD
+14ac59ea-36f4-4e57-bd85-dd985f23b4b1,12/09/2025 15:00:00,BoE's Lombardelli speech,MEDIUM,GBP
+8a2db8fa-6234-46c1-9cb3-0582d43e8529,12/09/2025 15:00:00,BoE's Mann speech,MEDIUM,GBP
+9fda3f57-5564-4237-86a1-e0a38dcaf1eb,12/09/2025 15:00:00,BoE's Ramsden speech,MEDIUM,GBP
+94e22c33-16db-44e6-be0f-92ce6cfdb2b4,12/09/2025 15:00:00,JOLTS Job Openings,LOW,USD
+9442fcd6-7424-4ccd-b6fb-c8004383cf64,12/09/2025 15:00:05,JOLTS Job Openings,LOW,USD
+8eeb878f-f1fa-40fe-9807-be20f54b651c,12/09/2025 17:00:00,USDA WASDE Report,LOW,USD
+d5d03e9a-1e77-4594-8b51-895403d07b76,12/09/2025 18:00:00,10-Year Note Auction,LOW,USD
+ba005ffb-1b3d-4872-bbb5-a8214f4b91b9,12/09/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+9c362c30-037b-463d-bbe6-5c3adbb44750,12/09/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+9c0bd400-ac5b-4bde-b3c9-91af3e9b0e2f,12/09/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+c564dea2-10d3-4249-9208-f1eee9f0eda5,12/09/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+a9a45707-40bd-4b56-9ca4-dd92f75e8761,12/09/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+3ba75c27-a2bf-4cbe-a651-16d2e4e46969,12/09/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+d4ffffe6-ab9c-40f1-882b-17aa6c98e4f9,12/09/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+5ed9de81-4445-43a5-9ac1-8274c7be558b,12/09/2025 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+c8b42f46-827d-409d-a0c8-384f24794c01,12/09/2025 21:45:00,Visitor Arrivals (YoY),LOW,NZD
+4266aead-b3f9-457c-87f2-78077d0a86c7,12/09/2025 23:50:00,Producer Price Index (MoM),LOW,JPY
+87635803-707a-4931-9df3-654c6120ffd2,12/09/2025 23:50:00,Producer Price Index (YoY),LOW,JPY
+17be0777-ad15-4975-a65f-1879ca636d7a,12/10/2025 01:30:00,Consumer Price Index (MoM),MEDIUM,CNY
+1a45a578-b3e6-4e3e-836c-69501111481a,12/10/2025 01:30:00,Consumer Price Index (YoY),HIGH,CNY
+8108afbd-ff5e-41a2-bb82-81e0323e1659,12/10/2025 01:30:00,Producer Price Index (YoY),MEDIUM,CNY
+04a32335-e9c7-4a0d-85e0-a0f531296683,12/10/2025 07:50:00,ECB's Villeroy speech,MEDIUM,EUR
+6b970ee5-92ba-4932-ba83-5a83c9eefbd8,12/10/2025 09:00:00,Industrial Output s.a. (MoM),LOW,EUR
+df0b23fb-2e58-4b9f-8ac3-2d15fafccee4,12/10/2025 09:00:00,Industrial Output w.d.a (YoY),LOW,EUR
+35a90771-c387-4ec5-bc58-28d14c65ff1a,12/10/2025 10:15:00,10-y Bond Auction,LOW,GBP
+94a07ccf-4091-416f-8e57-96f6111ae2ff,12/10/2025 10:45:00,BoE's Governor Bailey speech,MEDIUM,GBP
+8ab58455-e1cf-4363-bfdb-76c2ad3092af,12/10/2025 10:55:00,ECB's President Lagarde speech,MEDIUM,EUR
+480b5008-2304-4cae-bf29-f57ca6c6073b,12/10/2025 12:00:00,MBA Mortgage Applications,LOW,USD
+6d643b21-5ec4-49a0-9981-9b418eada310,12/10/2025 13:30:00,Employment Cost Index,MEDIUM,USD
+ce560d9d-425b-4dad-b6f8-b475ccc95203,12/10/2025 14:45:00,BoC Interest Rate Decision,HIGH,CAD
+35616238-ca21-478d-876e-dda01f0b4cc3,12/10/2025 14:45:00,BoC Monetary Policy Statement,HIGH,CAD
+58277d6c-6d12-4e8a-a44d-1fe43b8b08a4,12/10/2025 15:30:00,BoC Press Conference,HIGH,CAD
+f1147539-360e-47fc-b2da-3fd043875b69,12/10/2025 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+6b646c38-a57d-47e3-8acd-95a52eb7dced,12/10/2025 19:00:00,Fed Interest Rate Decision,HIGH,USD
+be382896-4789-47cd-8183-232a871e601e,12/10/2025 19:00:00,Fed Monetary Policy Statement,HIGH,USD
+384a569e-bb3b-4cf8-8281-ef96a10ecaa7,12/10/2025 19:00:00,FOMC Economic Projections,HIGH,USD
+d6ba9dfe-86fc-4713-b2ca-296056defaf8,12/10/2025 19:00:00,Interest Rate Projections - 1st year,HIGH,USD
+82be4b9b-fbf2-43e5-96f3-22f7284e0505,12/10/2025 19:00:00,Interest Rate Projections - 2nd year,HIGH,USD
+4e5a6738-206e-4bfa-aba8-09e7dfd3fa36,12/10/2025 19:00:00,Interest Rate Projections - 3rd year,HIGH,USD
+e9046585-913e-4c8e-88fa-dfdb8653d65c,12/10/2025 19:00:00,Interest Rate Projections - Current,HIGH,USD
+e38bb734-97b5-4493-a94e-0620db18783b,12/10/2025 19:00:00,Interest Rate Projections - Longer,HIGH,USD
+87e4800b-9d3d-4cb1-853f-ab347d35e035,12/10/2025 19:00:00,Monthly Budget Statement,MEDIUM,USD
+e2600a0c-79ad-422e-89f8-d29ed465d5ea,12/10/2025 19:30:00,FOMC Press Conference,HIGH,USD
+ad1e9675-1bc6-4c60-af9a-e2eae0535b46,12/10/2025 21:45:00,Manufacturing Sales,LOW,NZD
+d8a1c050-968d-463e-ab78-440211b12fcd,12/10/2025 23:50:00,BSI Large Manufacturing Conditions Index (QoQ),LOW,JPY
+c1a9e919-5c23-4f9a-871f-d4259fea1fe0,12/10/2025 23:50:00,Foreign Bond Investment,LOW,JPY
+2094f03f-ccb4-4153-9499-a57de4b09d20,12/10/2025 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+1f3630fb-4b20-43cf-bddf-a2c7ad9abd3c,12/11/2025 00:01:00,RICS Housing Price Balance,LOW,GBP
+a3dcdc47-e144-4ea8-a2d5-986661c18506,12/11/2025 00:30:00,Employment Change s.a.,HIGH,AUD
+307adf6f-8a47-4374-ade7-d4dd1e633156,12/11/2025 00:30:00,Full-Time Employment,MEDIUM,AUD
+177b63b5-904b-46a1-9953-46f07e102d32,12/11/2025 00:30:00,Participation Rate,MEDIUM,AUD
+d1e327bc-fbcf-4f70-ac4f-09e1fcfce2f4,12/11/2025 00:30:00,Part-Time Employment,MEDIUM,AUD
+cc37b7fa-9382-4f4d-aec1-1c2b016625b5,12/11/2025 00:30:00,Unemployment Rate s.a.,HIGH,AUD
+e782eeac-7758-4c5c-ba60-02d190595304,12/11/2025 08:30:00,SNB Interest Rate Decision,HIGH,CHF
+9686dea4-e090-466d-a94c-f2b6a2c991ad,12/11/2025 08:30:00,SNB Monetary Policy Assessment,HIGH,CHF
+090c22fe-8412-4621-9876-0794c2b906c6,12/11/2025 09:00:00,SNB Press Conference,HIGH,CHF
+ebcb7643-78e3-42b0-bbb1-346a759c976f,12/11/2025 09:50:00,BoE's Governor Bailey speech,HIGH,GBP
+7adb7b93-2c91-45b8-801c-65a43bc028be,12/11/2025 12:00:00,OPEC Monthly Market Report,LOW,USD
+d712de87-b17a-4150-8546-d69f06faa64d,12/11/2025 13:30:00,Exports,LOW,CAD
+d6427cdd-1212-4ae6-9d89-28caf30bd386,12/11/2025 13:30:00,Imports,LOW,CAD
+c62c0ddf-e230-4337-8f91-56c4d66d317d,12/11/2025 13:30:00,International Merchandise Trade,LOW,CAD
+a2048c90-7c85-4fa0-950b-665e79161576,12/11/2025 13:30:00,Continuing Jobless Claims,LOW,USD
+db9574f9-7c17-48b7-a9ce-a955543874ea,12/11/2025 13:30:00,Goods and Services Trade Balance,LOW,USD
+3a30d35c-fac3-4d28-bfa4-f3a64c9f950b,12/11/2025 13:30:00,Goods Trade Balance,LOW,USD
+e4276b28-73b3-4d96-a692-e6b4db823f06,12/11/2025 13:30:00,Initial Jobless Claims,MEDIUM,USD
+fe3ac42e-2474-4351-ab4c-0294ee07814e,12/11/2025 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+d82d4794-ae25-4dcb-9bc5-634abb9702d0,12/11/2025 15:00:00,Wholesale Inventories,LOW,USD
+37fdfa32-e22a-4099-962f-e6bcf35080d0,12/11/2025 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+9698623e-7a05-416f-b8d7-9f309ef11a27,12/11/2025 16:30:00,4-Week Bill Auction,LOW,USD
+66190755-2e44-485f-9f7e-b20845a68f9c,12/11/2025 18:00:00,30-Year Bond Auction,LOW,USD
+534b87a7-8084-4efd-bb0a-59f1a67588ab,12/11/2025 21:30:00,Business NZ PMI,MEDIUM,NZD
+b0e10b98-2be6-4285-a24f-b81cfa1ec04b,12/11/2025 21:45:00,Electronic Card Retail Sales  (MoM),LOW,NZD
+717f8fca-d9f1-49f4-8038-9bb1bce07e91,12/11/2025 21:45:00,Electronic Card Retail Sales (YoY),LOW,NZD
+7e91bdcc-b40e-4145-af4e-137c41b61590,12/12/2025 04:30:00,Capacity Utilization,LOW,JPY
+b4392796-5195-4ece-bf67-8ae6af524565,12/12/2025 04:30:00,Industrial Production (MoM),LOW,JPY
+eb80af5f-6145-4d00-8add-695bad3fcf77,12/12/2025 04:30:00,Industrial Production (YoY),LOW,JPY
+0aa4e3b7-6d8a-4087-96e7-a565d1d8ed26,12/12/2025 07:00:00,Consumer Price Index (MoM),LOW,EUR
+c134455d-fe66-4381-82ff-0ad2e26704f5,12/12/2025 07:00:00,Consumer Price Index (YoY),LOW,EUR
+48058fba-55c9-4c5f-859f-9177eecc728e,12/12/2025 07:00:00,Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+02750bb6-550c-4cc1-b1a6-2208bd2f58eb,12/12/2025 07:00:00,Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+c072f7e2-1752-49a0-9f6b-0e949776968c,12/12/2025 07:00:00,Goods Trade Balance,LOW,GBP
+85aaa6f8-68f2-4b42-bda6-3b919e713b05,12/12/2025 07:00:00,Gross Domestic Product (MoM),MEDIUM,GBP
+89cf0de0-0099-445f-abb8-6250fab9c6b5,12/12/2025 07:00:00,Index of Services (3M/3M),LOW,GBP
+348c9e2e-dbc5-4991-9401-895e45e5432a,12/12/2025 07:00:00,Industrial Production (MoM),MEDIUM,GBP
+2c963a4d-3b29-479a-8e27-2af4c2e97e19,12/12/2025 07:00:00,Industrial Production (YoY),LOW,GBP
+c63e4a3b-9c99-40cb-b30a-14c2d0b4482b,12/12/2025 07:00:00,Manufacturing Production (MoM),MEDIUM,GBP
+8bd9fd9b-035d-4215-ae16-43722e0ccbea,12/12/2025 07:00:00,Manufacturing Production (YoY),LOW,GBP
+b1b02a5d-7c67-4958-a3ef-f67e4ed48f5e,12/12/2025 07:00:00,Total Trade Balance,LOW,GBP
+259df3da-e70e-4469-a8ae-4f12ef76c3c5,12/12/2025 07:00:00,Trade Balance; non-EU,LOW,GBP
+5996b92c-1a12-4548-b8eb-cc51b53f86c1,12/12/2025 07:45:00,Consumer Price Index (EU norm) (MoM),LOW,EUR
+07768ed2-141f-46c0-b6e9-5559f4be84d8,12/12/2025 07:45:00,Consumer Price Index (EU norm) (YoY),MEDIUM,EUR
+f4052366-f855-4d5a-a56a-2e6eecf255fd,12/12/2025 07:45:00,Inflation ex-tobacco (MoM),LOW,EUR
+e48f9fb8-1380-4f54-b216-3f875d67add2,12/12/2025 08:00:00,Consumer Price Index (MoM),LOW,EUR
+33b8fad0-9542-4dd6-a98f-4ee7bfaaa616,12/12/2025 08:00:00,Consumer Price Index (YoY),LOW,EUR
+6435c3ec-0334-4c79-9e8a-62bbfb409652,12/12/2025 08:00:00,Harmonized Index of Consumer Prices (MoM),LOW,EUR
+fd00940e-701f-4a46-8c58-b7792fff305b,12/12/2025 08:00:00,Harmonized Index of Consumer Prices (YoY),MEDIUM,EUR
+33db1f88-6afe-4d4a-8e0d-7e13acc2bc54,12/12/2025 09:00:00,M2 Money Supply (YoY),LOW,CNY
+1efd0387-dd53-4fa0-9fca-ee398f04b39d,12/12/2025 09:00:00,New Loans,LOW,CNY
+98f1c6fc-b57d-4b3a-8840-3646f93398f5,12/12/2025 09:30:00,Consumer Inflation Expectations,MEDIUM,GBP
+d814ded7-c18b-446a-9534-939f6ae09293,12/12/2025 12:00:00,NIESR GDP Estimate (3M),LOW,GBP
+645c0190-9fa3-4835-943b-19fde9ac5c8d,12/12/2025 13:00:00,Fed's Goolsbee speech,MEDIUM,USD
+2d52da72-6505-4b31-bd0c-aac43e4576cf,12/12/2025 13:00:00,Fed's Paulson speech,MEDIUM,USD
+bceed3e2-5c64-424e-b64b-f9e8d2497d09,12/12/2025 13:30:00,Building Permits (MoM),LOW,CAD
+73c5a9f7-80b8-4135-a6e9-26f39c44f52d,12/12/2025 13:30:00,Capacity Utilization,LOW,CAD
+7e27de46-ed7e-4a75-9ec6-ba2a6f1b0cbc,12/12/2025 13:30:00,Wholesale Sales (MoM),LOW,CAD
+d50e1687-f2bc-480e-bd85-111f30bb2750,12/12/2025 13:30:00,Current Account n.s.a.,LOW,EUR
+5ac7e5e8-8678-4ddf-baef-bc29dd8e5cd1,12/12/2025 13:30:00,Fed's Hammack speech,MEDIUM,USD
+85419e06-a7b2-4ca4-8f94-294f15197bf9,12/12/2025 13:30:00,Fed's Schmid speech,MEDIUM,USD
+026a2127-b7fb-403e-8364-3ad27b894c34,12/12/2025 15:30:00,Fed's Goolsbee speech,MEDIUM,USD
+ba8e647e-4830-4f7e-8edc-e2d46d99717d,12/12/2025 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+6b56a49c-4a24-4a54-a48a-9856d15dbf74,12/12/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+3ef0d8ef-aec9-44be-a613-d605b9dea94b,12/12/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+d9e7b8e1-88a9-4abf-8f5c-5e24b4228027,12/12/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+0ae397ae-c8f2-49e4-9860-456699526db9,12/12/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+1ee2fae7-fbe9-4a2a-badb-48bd75aab467,12/12/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+49a33946-698d-4421-86e9-858b3b0a6b15,12/12/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+d1ca368f-73ef-4e46-b3e0-b83f9c5b9a81,12/12/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+436b4ecd-be57-4b13-80b3-b8b1075bc868,12/13/2025 15:00:00,ECB's Cipollone speech,MEDIUM,EUR
+2d20a1a3-7576-40ad-a3de-a3a6f9e3a419,12/14/2025 21:30:00,Business NZ PSI,MEDIUM,NZD
+f8023b1b-f488-45e1-9491-ead794ff2104,12/14/2025 23:50:00,Tankan Large All Industry Capex,MEDIUM,JPY
+9cc9e8e6-a2c1-470e-8632-278c3acd81fc,12/14/2025 23:50:00,Tankan Large Manufacturing Index,HIGH,JPY
+f300ae7a-6630-40c6-9845-8c0b82d44a3c,12/14/2025 23:50:00,Tankan Large Manufacturing Outlook,MEDIUM,JPY
+abf3edea-805b-479d-ac1f-fa7fbb4dd5ba,12/14/2025 23:50:00,Tankan Non - Manufacturing Index,LOW,JPY
+ad1b0bee-a5fc-4e21-8f4b-14ac6c106c2a,12/14/2025 23:50:00,Tankan Non - Manufacturing Outlook,LOW,JPY
+9bae3e99-1a04-471a-96ca-d1c56a5b5717,12/15/2025 00:01:00,Rightmove House Price Index (MoM),LOW,GBP
+f34af524-2f1b-417d-bf69-534d6dcae08e,12/15/2025 00:01:00,Rightmove House Price Index (YoY),LOW,GBP
+b6f8b4bf-b378-4a0d-a543-2b30725b390b,12/15/2025 01:30:00,"House Price Index ",LOW,CNY
+1b9326d1-ebab-4598-91fe-9d2551bd9f33,12/15/2025 02:00:00,Fixed Asset Investment (YTD) (YoY),LOW,CNY
+ae518793-0949-4a7f-a2a6-54f53c94dba8,12/15/2025 02:00:00,Industrial Production (YoY),HIGH,CNY
+2c265834-0456-44e6-99fe-7ddfc274d83e,12/15/2025 02:00:00,Retail Sales (YoY),HIGH,CNY
+870417c3-1cd6-45aa-b5fc-1bb05306d528,12/15/2025 04:30:00,Tertiary Industry Index (MoM),LOW,JPY
+064533fa-2f11-4e0e-b8cc-fb55fc7c438e,12/15/2025 07:00:00,Wholesale Price Index (MoM),LOW,EUR
+f2ed0ecd-d513-4757-abd9-10c7f1f5cee9,12/15/2025 07:00:00,Wholesale Price Index (YoY),LOW,EUR
+3cc2738e-7a0b-4d74-8840-ae1f880799a8,12/15/2025 07:30:00,Producer and Import Prices (MoM),LOW,CHF
+3ed7b2de-13fe-4f3a-a003-697303077472,12/15/2025 07:30:00,Producer and Import Prices (YoY),LOW,CHF
+bf92f8e6-927f-4227-8f31-24a57ee75452,12/15/2025 08:00:00,SECO Economic Forecasts,LOW,CHF
+ff6aaa58-6901-41d6-ab54-777bd281a7d3,12/15/2025 09:00:00,FDI - Foreign Direct Investment (YTD) (YoY),LOW,CNY
+9a7e41ee-ad4e-4791-866b-2f43c25f7167,12/15/2025 10:00:00,Industrial Production s.a. (MoM),MEDIUM,EUR
+9f13f93c-43f2-44f7-b272-da4462473bb1,12/15/2025 10:00:00,Industrial Production w.d.a. (YoY),LOW,EUR
+c62b70cc-3474-48ec-bea3-5691591eef19,12/15/2025 13:15:00,Housing Starts s.a (YoY),LOW,CAD
+e966865b-fa88-4ee6-8b71-3e1a4f8bf158,12/15/2025 13:30:00,BoC Consumer Price Index Core (MoM),MEDIUM,CAD
+59c84ad2-00df-4be6-a6b2-1a6dfaf9e2e3,12/15/2025 13:30:00,BoC Consumer Price Index Core (YoY),HIGH,CAD
+8cb1e2a8-0ec3-4874-a18e-84facb41648d,12/15/2025 13:30:00,Consumer Price Index - Core (MoM),LOW,CAD
+1f4f6196-a546-4ae0-9b50-9cac0060e4ad,12/15/2025 13:30:00,Consumer Price Index (MoM),MEDIUM,CAD
+6c43a831-204e-4400-bdbe-b582e4d7400b,12/15/2025 13:30:00,Consumer Price Index (YoY),HIGH,CAD
+ba5a447f-fa92-4990-94e0-67a8fdc31534,12/15/2025 13:30:00,Manufacturing Sales (MoM),LOW,CAD
+6d107a6d-5ac0-4508-8895-48257b9c943d,12/15/2025 13:30:00,NY Empire State Manufacturing Index,MEDIUM,USD
+3b0ab800-8785-4149-bcba-6577cd74efc6,12/15/2025 14:30:00,Fed's Miran speech,MEDIUM,USD
+83a60e57-dfc4-45cf-94cc-8adbda09a046,12/15/2025 15:00:00,NAHB Housing Market Index,LOW,USD
+86cde6fe-c654-44d6-8f71-434b8e2e215b,12/15/2025 15:30:00,Fed's Williams speech,MEDIUM,USD
+0786b799-55bf-423d-b7cb-867db7f85f2e,12/15/2025 16:30:00,3-Month Bill Auction,LOW,USD
+474b225d-7281-413b-a15f-a6e4bd97a3f7,12/15/2025 16:30:00,6-Month Bill Auction,LOW,USD
+faa25833-88af-4014-9518-109ec197ed1e,12/15/2025 21:45:00,Food Price Index (MoM),LOW,NZD
+7ff66c5f-84d8-41a6-84d8-fa0dc35f641a,12/15/2025 22:00:00,S&P Global Composite PMI,MEDIUM,AUD
+43648932-fb14-4828-8fc9-e0fc10b75153,12/15/2025 22:00:00,S&P Global Manufacturing PMI,MEDIUM,AUD
+c1f1b120-0884-41e4-b6a4-49924ef39ee5,12/15/2025 22:00:00,S&P Global Services PMI,MEDIUM,AUD
+dd1e1f97-eae8-4808-8c21-d7f252551854,12/15/2025 23:30:00,Westpac Consumer Confidence,MEDIUM,AUD
+d5408fd8-3a11-4cdf-88ee-95c7f416eb71,12/16/2025 00:30:00,Jibun Bank Manufacturing PMI,LOW,JPY
+6e76ea68-a5e5-46fe-a86d-52eba005d3f9,12/16/2025 00:30:00,Jibun Bank Services PMI,LOW,JPY
+c922c515-0453-44ad-a541-efd37ad5ef11,12/16/2025 07:00:00,Average Earnings Excluding Bonus (3Mo/Yr),MEDIUM,GBP
+475f1234-13ad-4f35-811b-9c336bd4c29f,12/16/2025 07:00:00,Average Earnings Including Bonus (3Mo/Yr),MEDIUM,GBP
+3df51146-034e-4fd1-9f04-b9db40be9c3c,12/16/2025 07:00:00,Claimant Count Change,HIGH,GBP
+3ed6f398-3590-4163-ba25-e84d031c9119,12/16/2025 07:00:00,Claimant Count Rate,MEDIUM,GBP
+7fd4460f-1ded-4c4b-985e-2ba2c5c82755,12/16/2025 07:00:00,Employment Change (3M),HIGH,GBP
+1bb467d1-5f90-4734-a294-f7a5f5399ed6,12/16/2025 07:00:00,ILO Unemployment Rate (3M),HIGH,GBP
+e4a699f6-8efe-4dda-afcc-75974efe7e67,12/16/2025 08:15:00,HCOB Composite PMI,MEDIUM,EUR
+316b371e-64dd-4a0c-a6ba-70c0b1420fe0,12/16/2025 08:15:00,HCOB Manufacturing PMI,MEDIUM,EUR
+44a4b273-6133-432a-aed0-61d2b3b4b31e,12/16/2025 08:15:00,HCOB Services PMI,MEDIUM,EUR
+81061454-15ac-42b1-afb9-46c1b0a118b8,12/16/2025 08:30:00,HCOB Composite PMI,HIGH,EUR
+0532a6e1-6a43-447a-95c4-ac1be2b80fa2,12/16/2025 08:30:00,HCOB Manufacturing PMI,HIGH,EUR
+3549488b-4e58-48a1-a03e-cf9974ebd784,12/16/2025 08:30:00,HCOB Services PMI,HIGH,EUR
+3590c518-1879-47f5-992f-5579d947388f,12/16/2025 09:00:00,HCOB Composite PMI,HIGH,EUR
+340f152a-5b12-48e0-bb84-a48e644092ed,12/16/2025 09:00:00,HCOB Manufacturing PMI,HIGH,EUR
+169f4712-c4e7-463b-aead-fcba926a8502,12/16/2025 09:00:00,HCOB Services PMI,HIGH,EUR
+4de862d3-4dac-4145-8029-f6d48a9c6fc7,12/16/2025 09:00:00,Consumer Price Index (EU Norm) (MoM),LOW,EUR
+4cfd0f89-6722-4784-8e34-a6182dd5f2d9,12/16/2025 09:00:00,Consumer Price Index (EU Norm) (YoY),MEDIUM,EUR
+69048805-c0b0-4b4f-a4a5-51b1afffeff4,12/16/2025 09:00:00,Consumer Price Index (MoM),LOW,EUR
+0cd1d2b0-13ab-4882-b217-39a34f10768c,12/16/2025 09:00:00,Consumer Price Index (YoY),MEDIUM,EUR
+68d7b29f-22c5-49e4-b800-60251740bb07,12/16/2025 09:30:00,S&P Global Composite PMI,HIGH,GBP
+d7664cff-dd65-41b4-9513-2502ce65cf46,12/16/2025 09:30:00,S&P Global Manufacturing PMI,HIGH,GBP
+6fd50353-249e-43eb-a4b2-e33bcdcc291b,12/16/2025 09:30:00,S&P Global Services PMI,HIGH,GBP
+e8242d20-6e1e-4b92-af22-d06ea40370cb,12/16/2025 10:00:00,ZEW Survey – Current Situation,MEDIUM,EUR
+a18871d4-ee95-4522-92d6-7527b3112846,12/16/2025 10:00:00,ZEW Survey – Economic Sentiment,MEDIUM,EUR
+22e9f44d-24df-4590-8ff6-d8551cbb553a,12/16/2025 10:00:00,Trade Balance n.s.a.,LOW,EUR
+0a9ba82d-8f96-40ae-ad07-aaca23c46ca8,12/16/2025 10:00:00,Trade Balance s.a.,LOW,EUR
+4c97a270-7d84-4288-9591-90e85a6a2ede,12/16/2025 10:00:00,ZEW Survey – Economic Sentiment,MEDIUM,EUR
+6008f448-c274-4cac-a38f-41e4b6217f58,12/16/2025 10:00:00,Global Trade Balance,LOW,EUR
+741f6975-187e-44ef-ac96-79ff43cf0b22,12/16/2025 10:00:00,Trade Balance EU,LOW,EUR
+d6668271-9384-499d-96ce-39c8a77966ea,12/16/2025 13:15:00,ADP Employment Change 4-week average,MEDIUM,USD
+2bd546c9-f79c-47ce-8380-70e0e317bc23,12/16/2025 13:30:00,Average Hourly Earnings (MoM),HIGH,USD
+005d5f36-ca6f-4411-a7c4-ff2a5c724c77,12/16/2025 13:30:00,Average Hourly Earnings (YoY),HIGH,USD
+b07bae40-7a02-41e2-85f5-7c1ccf1f5da3,12/16/2025 13:30:00,Average Weekly Hours,LOW,USD
+26c31dfe-97af-426b-91a9-081cae52ee2d,12/16/2025 13:30:00,Labor Force Participation Rate,MEDIUM,USD
+009580ae-1874-49c4-97e6-544587ece0d0,12/16/2025 13:30:00,Nonfarm Payrolls,HIGH,USD
+c09c6f85-fdeb-4629-8603-c2e5589a385e,12/16/2025 13:30:00,Retail Sales (MoM),HIGH,USD
+fa22a460-b087-4bdb-b58e-a340d23c6ad5,12/16/2025 13:30:00,Retail Sales (YoY),LOW,USD
+8142c04f-80bd-4935-a307-29acf01c90dc,12/16/2025 13:30:00,Retail Sales Control Group,HIGH,USD
+e0160107-1f82-4cb8-9c30-3f5ef5162f38,12/16/2025 13:30:00,Retail Sales ex Autos (MoM),MEDIUM,USD
+fe66cbd0-4c9b-4017-b0e9-3f1b27d93150,12/16/2025 13:30:00,U6 Underemployment Rate,MEDIUM,USD
+c1efbb37-36aa-4504-9fd6-e026f6610f47,12/16/2025 13:30:00,Unemployment Rate,MEDIUM,USD
+57b34c04-d5e9-4cd1-8061-3fc9f3f04377,12/16/2025 13:30:05,Average Hourly Earnings (MoM),HIGH,USD
+4bf747eb-8856-4065-b363-148805176229,12/16/2025 13:30:05,Average Hourly Earnings (YoY),HIGH,USD
+1ca02ac9-746a-4b38-9699-e62d743af6c5,12/16/2025 13:30:05,Average Weekly Hours,LOW,USD
+c7b28bbe-61a9-4fbc-9c6a-4b6a83a74a35,12/16/2025 13:30:05,Nonfarm Payrolls,HIGH,USD
+0d485775-df58-41bd-9edf-2afe4abc30e3,12/16/2025 13:55:00,Redbook Index (YoY),LOW,USD
+6a2a013f-7780-49a8-94a0-c1ba70d9bdeb,12/16/2025 14:45:00,S&P Global Composite PMI,MEDIUM,USD
+d5e7aaa5-a3bc-4066-8400-4c34a033b14d,12/16/2025 14:45:00,S&P Global Manufacturing PMI,HIGH,USD
+3ae68c26-1571-4359-84b9-79d151ab7ac1,12/16/2025 14:45:00,S&P Global Services PMI,HIGH,USD
+c4cd9fca-448c-4f35-af60-9e096c4af632,12/16/2025 15:00:00,GDT Price Index,LOW,NZD
+f8a84aa7-f0b8-48ab-a399-74ca7b7128a4,12/16/2025 15:00:00,Business Inventories,LOW,USD
+28ae0480-9f15-4de0-82b5-81e889bf4fbf,12/16/2025 17:45:00,BoC's Governor Macklem speech,HIGH,CAD
+0a49f173-b4fe-4fbf-9ca2-bd8540f75b20,12/16/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+0773ab7c-633a-4376-ada1-9c04efa345b4,12/16/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+6d52d85a-b3fe-4916-8de4-e5955c1e5f9c,12/16/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+0d4ce5c0-282f-434a-ae70-b01bc816a430,12/16/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+05b2ad64-7c5c-44b2-88f2-fd7696b9fb2b,12/16/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+915cba56-09e0-4979-b5f3-2d3f52e9eb09,12/16/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+cb50b8bc-7232-46b2-b77e-22c1dddd4199,12/16/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+5f80351e-dfe9-47e6-a289-1238fa1016a7,12/16/2025 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+4b09fc99-9ce9-4911-8560-8908d54cacc2,12/16/2025 21:45:00,Current Account - GDP Ratio,LOW,NZD
+88bd21d3-21ca-4049-b705-9d8585ad2e6f,12/16/2025 21:45:00,Current Account (QoQ),LOW,NZD
+d85e0489-219e-4869-a390-3c73448e0ac9,12/16/2025 23:50:00,Adjusted Merchandise Trade Balance,MEDIUM,JPY
+91b5315e-9c76-442b-a193-c3846e0d2e5c,12/16/2025 23:50:00,Exports (YoY),MEDIUM,JPY
+5f3ce5eb-dcd6-4768-b54a-e5deae98f0d3,12/16/2025 23:50:00,Imports (YoY),MEDIUM,JPY
+673356ff-0e52-48c7-9813-1ac4fb6d9fb1,12/16/2025 23:50:00,Machinery Orders (MoM),LOW,JPY
+e95edc12-4945-42f7-9caf-3848aea91d15,12/16/2025 23:50:00,Machinery Orders (YoY),LOW,JPY
+368d64af-a047-4de2-84b2-278fcab3044d,12/16/2025 23:50:00,Merchandise Trade Balance Total,MEDIUM,JPY
+bdfe24fc-496a-4465-8cfe-11280dda7e38,12/17/2025 00:00:00,Westpac Leading Index (MoM),LOW,AUD
+ad8597a6-e479-4844-8a42-9da5253c5ab9,12/17/2025 07:00:00,Consumer Price Index (MoM),HIGH,GBP
+976198c4-0afe-4eff-b1d5-10b88d1e644a,12/17/2025 07:00:00,Consumer Price Index (YoY),HIGH,GBP
+bbc277e3-3895-4995-a40b-7a90e4e5fe92,12/17/2025 07:00:00,Core Consumer Price Index (YoY),HIGH,GBP
+c7adc381-4812-47dd-ab2a-6881572d7b67,12/17/2025 07:00:00,PPI Core Output (MoM) n.s.a,MEDIUM,GBP
+3d3bcce9-8971-4def-9bc0-17f8e518197a,12/17/2025 07:00:00,"PPI Core Output (YoY) n.s.a ",MEDIUM,GBP
+021e79d5-029e-4f4e-a8ab-3c420d5b2a8f,12/17/2025 07:00:00,Producer Price Index - Input (MoM) n.s.a,LOW,GBP
+4254e110-53aa-48ed-81bd-0f6b56e408fa,12/17/2025 07:00:00,Producer Price Index - Input (YoY) n.s.a,LOW,GBP
+83c83cd6-eef9-4a31-8204-ea9f81f8997a,12/17/2025 07:00:00,Producer Price Index - Output (MoM) n.s.a,MEDIUM,GBP
+8f7d8472-9998-4e90-b84e-ed6d3940f55a,12/17/2025 07:00:00,Producer Price Index - Output (YoY) n.s.a,MEDIUM,GBP
+967f960e-0824-4801-8170-f53ca5cd7212,12/17/2025 07:00:00,Retail Price Index (MoM),MEDIUM,GBP
+cd303183-c596-45b8-b93e-21acccbb3634,12/17/2025 07:00:00,Retail Price Index (YoY),MEDIUM,GBP
+e024b979-f0d2-4875-8c07-21a45af32052,12/17/2025 09:00:00,IFO – Business Climate,MEDIUM,EUR
+18ad5c44-9030-495c-a618-d88c215ab42b,12/17/2025 09:00:00,IFO – Current Assessment,MEDIUM,EUR
+8e4490be-58e4-4dd5-85c2-f2a2ba03a0de,12/17/2025 09:00:00,IFO – Expectations,MEDIUM,EUR
+5589dadd-64a9-4983-b98f-7ea4fc0c4198,12/17/2025 09:30:00,DCLG House Price Index (YoY),LOW,GBP
+e359d329-d026-488f-bdec-9f048326e839,12/17/2025 10:00:00,Core Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+1e6092e2-a400-4024-91f3-a5baf7a183c7,12/17/2025 10:00:00,Core Harmonized Index of Consumer Prices (YoY),MEDIUM,EUR
+7ee1dccd-7bf4-4b2f-b442-74d0365274c0,12/17/2025 10:00:00,Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+61cdc1c0-3eb2-41a5-b3ac-f321f722fa1b,12/17/2025 10:00:00,Harmonized Index of Consumer Prices (YoY),LOW,EUR
+a4141757-767d-4ae4-bd96-2ec40d2a188f,12/17/2025 10:00:00,Labor Cost Index,LOW,EUR
+380196ef-5dd6-440f-a5c5-921d430a43af,12/17/2025 12:00:00,MBA Mortgage Applications,LOW,USD
+c8cadca4-659c-4aa8-8925-b4398879f951,12/17/2025 13:15:00,Fed's Waller speech,MEDIUM,USD
+39f3b535-da0a-48cd-b4ad-9cb7f167ecbb,12/17/2025 13:30:00,Canadian Portfolio Investment in Foreign Securities,LOW,CAD
+01d7218d-6a5a-4c23-8351-930e89dc878a,12/17/2025 13:30:00,Foreign Portfolio Investment in Canadian Securities,LOW,CAD
+b554d2b4-0b7b-4c32-9276-bfb10c37288f,12/17/2025 14:00:00,SNB Quarterly Bulletin,MEDIUM,CHF
+8cdcc2cc-e2c5-4572-988d-b264bc1f216c,12/17/2025 14:05:00,Fed's Williams speech,MEDIUM,USD
+8a386aa2-ff61-40ec-bb99-af384ab16275,12/17/2025 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+8b326978-7e37-4632-969b-afe0ca0a6cc8,12/17/2025 17:30:00,Fed's Bostic speech,MEDIUM,USD
+90c7773c-aec8-4b2e-a4bc-4beca04ce05f,12/17/2025 18:00:00,20-Year Bond Auction,LOW,USD
+df177494-41c6-4b85-b3af-fce19054cad1,12/17/2025 21:45:00,Gross Domestic Product (QoQ),HIGH,NZD
+3f2a51b2-711e-405e-9fc1-71ea3af24c7f,12/17/2025 21:45:00,Gross Domestic Product (YoY),HIGH,NZD
+f8efe7fc-73dd-4eb4-aa88-27e306e35211,12/17/2025 23:50:00,Foreign Bond Investment,LOW,JPY
+7296ef4f-f3b9-46ac-9a83-7da00ff10a5d,12/17/2025 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+701ad4ce-9f63-4b45-bed8-5b66942e7594,12/18/2025 00:00:00,Consumer Inflation Expectations,MEDIUM,AUD
+5e965776-9025-4047-9f1b-b470b8e0b951,12/18/2025 07:00:00,Exports (MoM),LOW,CHF
+857f213b-7bb0-4e74-82ca-23c05f38dd83,12/18/2025 07:00:00,Imports (MoM),LOW,CHF
+0e4a71b4-75b3-4dff-9eb2-c4755b19e55a,12/18/2025 07:00:00,Trade Balance,LOW,CHF
+fecf2728-b76a-408c-be7f-aa6e0dab991e,12/18/2025 07:45:00,Business Climate in Manufacturing,LOW,EUR
+1838859c-c314-416e-99a4-b1e0593c4c00,12/18/2025 10:00:00,Construction Output  s.a (MoM),LOW,EUR
+4c21aef4-7a23-489e-85b5-a921f1861444,12/18/2025 10:00:00,Construction Output w.d.a (YoY),LOW,EUR
+bf05e650-b4bb-4126-90ec-c2d68c7d1178,12/18/2025 12:00:00,BoE Interest Rate Decision,HIGH,GBP
+c62b7768-5dd1-4eee-a11f-281425031fde,12/18/2025 12:00:00,BoE Minutes,HIGH,GBP
+d85ada1e-2ae1-47b2-830b-0d393d64adf9,12/18/2025 12:00:00,BoE Monetary Policy Summary,HIGH,GBP
+8d98019a-da1b-4176-888c-74034620fc68,12/18/2025 12:00:00,BoE MPC Vote Rate Cut,HIGH,GBP
+d473d690-2db7-4786-acc6-94ac53fd41a4,12/18/2025 12:00:00,BoE MPC Vote Rate Hike,HIGH,GBP
+e422f4fd-5896-4124-bea4-24f42f9c7d66,12/18/2025 12:00:00,BoE MPC Vote Rate Unchanged,HIGH,GBP
+fc644721-18ce-492e-a3d2-51c5c8f9ce7d,12/18/2025 13:15:00,ECB Main Refinancing Operations Rate,HIGH,EUR
+a1250fbc-49f6-4eaf-a589-6caa3a1cdb55,12/18/2025 13:15:00,ECB Monetary Policy Statement,HIGH,EUR
+cb12178b-adf6-4edd-9966-a24292ca1db7,12/18/2025 13:15:00,ECB Rate On Deposit Facility,HIGH,EUR
+f637e827-393e-4228-9563-1c9018d92491,12/18/2025 13:30:00,Employment Insurance Beneficiaries Change (MoM),LOW,CAD
+5761baa3-6310-48d0-bd6e-78fa01e8d02e,12/18/2025 13:30:00,Consumer Price Index (MoM),HIGH,USD
+c3d148e7-6510-472a-99f0-8ce7a6e0888a,12/18/2025 13:30:00,Consumer Price Index (YoY),HIGH,USD
+35da2940-9244-4ae3-b543-c241f05cd92a,12/18/2025 13:30:00,Consumer Price Index Core s.a,LOW,USD
+a7474a00-ceca-414a-bed9-13dda99cb6c0,12/18/2025 13:30:00,Consumer Price Index ex Food & Energy (MoM),HIGH,USD
+cfe51088-7290-4c99-83d7-2bfeb300f040,12/18/2025 13:30:00,Consumer Price Index ex Food & Energy (YoY),HIGH,USD
+bafdfdec-9ebe-470e-9951-ce775a93e75f,12/18/2025 13:30:00,Consumer Price Index n.s.a (MoM),LOW,USD
+5af1f003-5453-4c84-85ef-688c041b0788,12/18/2025 13:30:00,Continuing Jobless Claims,LOW,USD
+455fd85a-362f-4523-a071-d039ec8bf50d,12/18/2025 13:30:00,Initial Jobless Claims,MEDIUM,USD
+e122ab3a-87a4-4d45-83c2-b8d688e6f074,12/18/2025 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+5be74538-4dcb-44bc-a3cc-f982f0dc1bfd,12/18/2025 13:30:00,Philadelphia Fed Manufacturing Survey,MEDIUM,USD
+79e7c666-10d9-43ba-8357-8de27817d321,12/18/2025 13:45:00,ECB Press Conference,HIGH,EUR
+53459594-7311-404d-9dcc-c461db79af52,12/18/2025 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+dad07b40-243f-4ea1-b173-5c618517487a,12/18/2025 16:00:00,Kansas Fed Manufacturing Activity,LOW,USD
+d0f8d9b7-54ca-4da9-8bdc-94c684a0bff9,12/18/2025 16:30:00,4-Week Bill Auction,LOW,USD
+405715de-3ae2-44cf-a4e6-734e16893bee,12/18/2025 18:00:00,5-year TIPS Auction,LOW,USD
+c20433df-cba0-4ce7-bae2-203970145a6d,12/18/2025 20:00:00,Westpac Consumer Survey,MEDIUM,NZD
+78630629-e3df-4f84-8aa9-52888c85f364,12/18/2025 21:00:00,ANZ – Roy Morgan Consumer Confidence,MEDIUM,NZD
+8ddf7e30-518d-43d1-8662-5b1197edfce1,12/18/2025 21:00:00,Net Long-Term TIC Flows,LOW,USD
+906d7bae-1518-4e0b-9e77-0accdfecd2d1,12/18/2025 21:00:00,Total Net TIC Flows,LOW,USD
+b540e794-be35-466f-b0bd-a5a7ba56bbfe,12/18/2025 21:45:00,Exports,MEDIUM,NZD
+8a6b8e1d-c8a1-467f-847d-74fb8d58c3ab,12/18/2025 21:45:00,Imports,MEDIUM,NZD
+5ff744ed-a949-47b7-9b5d-61098a9bc5d9,12/18/2025 21:45:00,Trade Balance NZD (MoM),LOW,NZD
+14e730a6-2ec0-4529-ac6b-7fd0a10af90d,12/18/2025 21:45:00,Trade Balance NZD (YoY),MEDIUM,NZD
+0aa87f13-0d6d-4237-8eb6-66d32323adad,12/18/2025 23:30:00,National Consumer Price Index (YoY),MEDIUM,JPY
+fcce641c-7901-428d-9783-f1166c6a1d4e,12/18/2025 23:30:00,"National CPI ex Food, Energy (YoY)",MEDIUM,JPY
+46fbbdc5-4ef8-4378-adda-59f15f0bbd79,12/18/2025 23:30:00,National CPI ex Fresh Food (YoY),MEDIUM,JPY
+c522d273-36f3-4dfe-9aff-a819f2e1564c,12/19/2025 00:00:00,ANZ Activity Outlook,LOW,NZD
+30665c48-74bf-4b44-b6f9-4c2c1266957d,12/19/2025 00:00:00,ANZ Business Confidence,LOW,NZD
+f0075c11-9706-4fc0-b46d-7009b2776630,12/19/2025 00:01:00,GfK Consumer Confidence,MEDIUM,GBP
+3d7bc0ee-6da1-4e79-804b-0fb1671a627e,12/19/2025 00:30:00,Private Sector Credit (MoM),LOW,AUD
+3ecda2f4-1774-4476-9361-617b929c1d7c,12/19/2025 00:30:00,Private Sector Credit (YoY),LOW,AUD
+88920b1c-63c8-4e18-be02-222b998d4d89,12/19/2025 02:00:00,Credit Card Spending (YoY),LOW,NZD
+904537a1-46af-4a1a-b862-152efe9cd804,12/19/2025 03:00:00,BoJ Interest Rate Decision,HIGH,JPY
+2d648408-7f20-4e3f-abc7-6e108dc5c366,12/19/2025 03:00:00,BoJ Monetary Policy Statement,HIGH,JPY
+6a053440-7da9-4c42-a124-59539d94ed11,12/19/2025 06:30:00,BoJ Press Conference,HIGH,JPY
+8c775aa8-57fe-4c22-8045-2f3e3b062029,12/19/2025 07:00:00,GfK Consumer Confidence Survey,MEDIUM,EUR
+6fb7a9cb-2e5f-4dd0-a496-37c5ef48224a,12/19/2025 07:00:00,Producer Price Index (MoM),MEDIUM,EUR
+5bd9c364-0c72-496e-93c2-c79a89163a4d,12/19/2025 07:00:00,Producer Price Index (YoY),MEDIUM,EUR
+032f8aab-3666-4d55-b004-3f4eb73b1086,12/19/2025 07:00:00,Public Sector Net Borrowing,LOW,GBP
+870408e0-061b-457d-9fc4-8894dff49314,12/19/2025 07:00:00,Retail Sales (MoM),HIGH,GBP
+6786d11c-6df1-4b2a-92ca-21d87765160f,12/19/2025 07:00:00,Retail Sales (YoY),MEDIUM,GBP
+56180cce-2fbf-4fdc-b5f3-4bfe787ea1fe,12/19/2025 07:00:00,Retail Sales ex-Fuel (MoM),MEDIUM,GBP
+25c7a80f-d3e7-4601-8a20-17137fbb84c2,12/19/2025 07:00:00,Retail Sales ex-Fuel (YoY),MEDIUM,GBP
+6cc96e52-143d-4fef-87c9-6b4c817a3fab,12/19/2025 07:45:00,Producer Prices (MoM),LOW,EUR
+b12b1dd4-8cd4-47aa-a9f3-4c64ac9a1d6e,12/19/2025 09:00:00,Current Account n.s.a,LOW,EUR
+e3279cca-2e47-4001-bdf2-4c2fa2bd9799,12/19/2025 09:00:00,Current Account s.a,LOW,EUR
+21e9ac7e-eba6-4119-bf7a-47385d400650,12/19/2025 09:00:00,Business Confidence,LOW,EUR
+87523891-f739-4434-8d33-fe2b73236579,12/19/2025 09:00:00,Consumer Confidence,LOW,EUR
+846785bc-cf38-4464-ae8b-87627a57e9ef,12/19/2025 10:00:00,Industrial Sales n.s.a. (YoY),LOW,EUR
+11059421-ad5b-4eaf-9cba-981eccf8f909,12/19/2025 10:00:00,Industrial Sales s.a. (MoM),LOW,EUR
+0ccd6fbb-a18e-44b7-95ef-131570c5aad2,12/19/2025 11:00:00,German Buba Monthly Report,MEDIUM,EUR
+1fb6ea06-be83-4c57-ae71-2fd182e2a665,12/19/2025 11:30:00,ECB's Sleijpen speech,MEDIUM,EUR
+f37bd11d-7d8e-433e-be45-34995cf69ff0,12/19/2025 12:00:00,ECB's Cipollone speech,MEDIUM,EUR
+b917201b-8c2f-4d80-92f7-e0b880b79116,12/19/2025 13:30:00,New Housing Price Index (MoM),LOW,CAD
+423fb3f3-39d0-40f8-a43e-32dcdc157959,12/19/2025 13:30:00,New Housing Price Index (YoY),LOW,CAD
+126df62a-198a-477c-8c1f-cda93c82bf67,12/19/2025 13:30:00,Retail Sales (MoM),MEDIUM,CAD
+9500df6d-deaa-494e-801c-e43576fc5685,12/19/2025 13:30:00,Retail Sales ex Autos (MoM),MEDIUM,CAD
+9c54e528-45b1-47e4-9fff-d279b2ccd7fb,12/19/2025 15:00:00,Consumer Confidence,MEDIUM,EUR
+4a7328b0-47ed-4c60-9fed-f6b3060929bd,12/19/2025 15:00:00,Existing Home Sales (MoM),LOW,USD
+21bb102e-f140-4a80-8d3d-0ec8ededfb44,12/19/2025 15:00:00,Existing Home Sales Change (MoM),MEDIUM,USD
+79a11d3f-b5cc-4edd-bdd4-b7547cab164e,12/19/2025 15:00:00,Michigan Consumer Expectations Index,MEDIUM,USD
+c8185ba8-1ad0-45b6-9ba3-489b159d7260,12/19/2025 15:00:00,Michigan Consumer Sentiment Index,MEDIUM,USD
+d65f09fd-d0df-4388-be2b-4c3a34e0f76c,12/19/2025 15:00:00,UoM 1-year Consumer Inflation Expectations,MEDIUM,USD
+1dd371c5-aa7d-4775-807b-67932a425c6e,12/19/2025 15:00:00,UoM 5-year Consumer Inflation Expectation,MEDIUM,USD
+3cd69d82-5028-4b53-9482-97bdea0e1e02,12/19/2025 15:10:00,ECB's Lane speech,MEDIUM,EUR
+3343acdb-108b-466b-bdc9-183bfbc4f898,12/19/2025 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+1a053870-e624-4651-9407-f82d0d8f2eb8,12/19/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+db5f4db5-b988-4dc9-bf33-47074561b53a,12/19/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+cc445c8b-da80-4efa-9158-1d83fdedee6c,12/19/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+59eaae6b-11c1-40e4-9ed7-82101258ee59,12/19/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+ae6c7464-8069-4b9d-9774-4ca5524224f6,12/19/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+b08dcb78-1b19-439c-872c-e8d8a657a4a4,12/19/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+34dc7424-7201-4c47-b850-0577024b5ac7,12/19/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+eb1831a6-bebe-4df2-a2bb-41bc6198a1c6,12/22/2025 01:15:00,PBoC Interest Rate Decision,MEDIUM,CNY
+67af8eae-264b-43a1-9fbb-9cf8f3979457,12/22/2025 07:00:00,Current Account,LOW,GBP
+e3137b23-5a98-4f91-ae6d-6726b2abcbee,12/22/2025 07:00:00,Gross Domestic Product (QoQ),HIGH,GBP
+654e4c00-fe63-4ea0-8374-63a760970af4,12/22/2025 07:00:00,Gross Domestic Product (YoY),HIGH,GBP
+0ef350bb-19b8-41c3-981b-efda7425f44c,12/22/2025 07:00:00,Total Business Investment (QoQ),LOW,GBP
+3f7744eb-c14d-409f-b3fd-1224cd79ad6e,12/22/2025 07:00:00,Total Business Investment (YoY),LOW,GBP
+e2553418-b85c-4dec-8b99-deb3e4cd81e1,12/22/2025 10:00:00,Producer Price Index (MoM),LOW,EUR
+2b7acbb7-e3b1-4d53-9b84-b5ceafe09702,12/22/2025 10:00:00,Producer Price Index (YoY),LOW,EUR
+46eba338-8eb1-494b-b53b-8df84b135db4,12/22/2025 13:30:00,Industrial Product Price (MoM),LOW,CAD
+01b1746d-2d78-41b8-89e1-fd09ed02aa94,12/22/2025 13:30:00,Raw Material Price Index,LOW,CAD
+ac12dbd4-dca4-459d-affc-0d9a37b52de3,12/22/2025 16:30:00,3-Month Bill Auction,LOW,USD
+5f4e9c3e-7a93-4d69-bea0-806f82dfef7b,12/22/2025 16:30:00,6-Month Bill Auction,LOW,USD
+bf6f5ac6-4000-4b0f-84eb-f66c247646ce,12/22/2025 18:00:00,2-Year Note Auction,LOW,USD
+e5861362-e874-4992-aa61-2ee12fa87922,12/23/2025 00:30:00,RBA Meeting Minutes,HIGH,AUD
+a088d497-a3e3-410e-8082-6c7dab0e1577,12/23/2025 08:00:00,Gross Domestic Product (QoQ),MEDIUM,EUR
+93f424fa-fd57-419a-97de-d95eb9cf89ce,12/23/2025 08:00:00,Gross Domestic Product (YoY),LOW,EUR
+6a388c69-3079-4b11-84b0-4903ae88ef89,12/23/2025 09:00:00,Trade Balance non-EU,LOW,EUR
+770b33f6-29bf-42f6-a36d-053aa737e41a,12/23/2025 13:15:00,ADP Employment Change 4-week average,MEDIUM,USD
+227d5df3-50c6-47f4-93bb-713e07cbb2d9,12/23/2025 13:30:00,Gross Domestic Product (MoM),MEDIUM,CAD
+f690b8b9-01d2-40f4-a20c-457110be69f1,12/23/2025 13:30:00,Core Personal Consumption Expenditures (QoQ),MEDIUM,USD
+e237df35-c0a0-4093-b0e1-7b0b07ecb37d,12/23/2025 13:30:00,Current Account,LOW,USD
+5c3be01e-3b72-43bf-a577-41106d05185e,12/23/2025 13:30:00,Durable Goods Orders,MEDIUM,USD
+e311c808-8cd5-4168-ac22-f278de8b4b3a,12/23/2025 13:30:00,Durable Goods Orders ex Defense,MEDIUM,USD
+cb2df15e-ec80-4220-bce3-bbc033c4b35a,12/23/2025 13:30:00,Durable Goods Orders ex Transportation,MEDIUM,USD
+a95ac800-bd88-44b0-ba25-7ef331b99fd3,12/23/2025 13:30:00,Gross Domestic Product Annualized,HIGH,USD
+c108cf9b-02f5-424f-a00c-ee950d067102,12/23/2025 13:30:00,Gross Domestic Product Price Index,MEDIUM,USD
+086372ba-9b29-4a84-825f-50adffd36634,12/23/2025 13:30:00,Nondefense Capital Goods Orders ex Aircraft,MEDIUM,USD
+659ad193-dc1a-487d-9c26-49bde1f98517,12/23/2025 13:30:00,Personal Consumption Expenditures Prices (QoQ),MEDIUM,USD
+484f8282-e7fc-4fef-8435-a2c6118286a6,12/23/2025 13:55:00,Redbook Index (YoY),LOW,USD
+bdf9a145-08f2-4f5a-8dc6-8d504df3feb9,12/23/2025 14:15:00,Capacity Utilization,MEDIUM,USD
+d6453690-a3e3-4479-92df-541db9135bdc,12/23/2025 14:15:00,Industrial Production (MoM),MEDIUM,USD
+c7c755bc-040d-4d5f-b23d-ab36d343fe80,12/23/2025 14:15:05,Capacity Utilization,LOW,USD
+22428dea-834d-46a1-83b0-84f3017a4ab0,12/23/2025 14:15:05,Industrial Production (MoM),MEDIUM,USD
+2be3bd03-7539-4cbd-93c1-76654ba5d2aa,12/23/2025 15:00:00,Consumer Confidence,MEDIUM,USD
+0d5e2f5b-9514-4cb8-9525-e03ad507883c,12/23/2025 15:00:00,New Home Sales (MoM),LOW,USD
+e7ea5b55-b19f-464f-a1ec-97b42c2ec7b2,12/23/2025 15:00:00,New Home Sales Change (MoM),MEDIUM,USD
+5bab7dfe-d766-44fe-9932-9ca0863c168f,12/23/2025 15:00:00,Richmond Fed Manufacturing Index,LOW,USD
+737c822d-f754-44f9-83eb-59dbcdbf973f,12/23/2025 16:30:00,52-Week Bill Auction,LOW,USD
+b347105c-16e3-4fbe-8185-8acd1d82f74f,12/23/2025 18:00:00,5-Year Note Auction,LOW,USD
+b05f589c-d575-46ef-b859-cc24ea91724a,12/23/2025 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+4b51f295-3b4b-46f3-a143-21a7267bfefd,12/23/2025 18:30:00,BoC Summary of Deliberations,MEDIUM,CAD
+feeb2035-788e-4ec2-902b-338a43672e26,12/23/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+43b0d2da-90d2-4b4b-b5d3-423f668425ba,12/23/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+1c37156e-6494-418b-91f5-795a7e00b0aa,12/23/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+50c357f6-a50f-498b-a8cf-df1680c79554,12/23/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+5fa70f2e-6393-41bf-9561-6de2606d6872,12/23/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+6f33f0c0-4c47-4642-8f69-51327288ceba,12/23/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+16030093-9a07-4473-9d5d-5fa7a7b0c40d,12/23/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+b61909d6-84d4-4748-9380-5743dbcfb8bb,12/23/2025 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+7cab52c2-6040-4d8b-9219-bfd4da2b36fe,12/23/2025 23:50:00,BoJ Monetary Policy Meeting Minutes,MEDIUM,JPY
+6009c763-1ce4-42e0-8c0a-83fff901cb03,12/23/2025 23:50:00,Corporate Service Price Index (YoY),LOW,JPY
+d96218ee-e3ee-4ba6-af03-e1fd0ba4315e,12/24/2025 05:00:00,Annualized Housing Starts,LOW,JPY
+85b2d529-48a6-49d1-ae5e-a822d1d3efe9,12/24/2025 05:00:00,Coincident Index,LOW,JPY
+6fe0528f-d026-4e34-9118-1dff0fc914b0,12/24/2025 05:00:00,Construction Orders (YoY),LOW,JPY
+80a518b0-4406-4e3c-9bcc-b26dcf93a999,12/24/2025 05:00:00,Housing Starts (YoY),LOW,JPY
+d0617d54-d041-421f-bc86-f404a76ab62c,12/24/2025 05:00:00,Leading Economic Index,LOW,JPY
+2a51e273-a133-44af-bdbb-88c47c7ab4cc,12/24/2025 12:00:00,Christmas Day,NONE,NZD
+1c26d14d-365c-4700-9d9d-378b984fb17b,12/24/2025 12:00:00,MBA Mortgage Applications,LOW,USD
+17934c9c-7381-4fce-a476-a8a558235b77,12/24/2025 13:30:00,Continuing Jobless Claims,LOW,USD
+74da48e3-4439-4206-a0fe-b82b3ce97337,12/24/2025 13:30:00,Initial Jobless Claims,MEDIUM,USD
+549bbed2-18b6-42bc-896b-4a09e27e7f92,12/24/2025 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+ab01bffe-e6d9-44ef-a397-c0b45a615279,12/24/2025 14:00:00,Christmas Day,NONE,AUD
+f2ceb070-4b81-488c-85f5-cc4b6b7df22a,12/24/2025 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+1abf778b-f640-455f-9f85-0f502a678ce9,12/24/2025 16:30:00,4-Week Bill Auction,LOW,USD
+9aa0d79d-06f2-4c8f-b8fb-32b48a668dad,12/24/2025 18:00:00,7-Year Note Auction,LOW,USD
+9bc7b7cb-cb8e-4e87-8bd6-2a87002e3b89,12/24/2025 22:00:00,Christmas Day,NONE,CHF
+9775b453-2e3d-49ec-aeb3-673d7b1743c9,12/24/2025 22:00:00,Christmas Day,NONE,EUR
+0088f70a-cd9b-4c86-bf11-abd397f7ad93,12/24/2025 22:00:00,Christmas Day,NONE,EUR
+ff390aa1-bdd2-426c-b6c7-8b7adb3fb54e,12/24/2025 22:00:00,Christmas Day,NONE,EUR
+451d88b2-f97e-4377-8ccd-eb269a2fb4a6,12/24/2025 22:00:00,"Christmas Day ",NONE,EUR
+d420a0e8-2fc9-4aa3-a810-ae3e2044f321,12/24/2025 23:00:00,Christmas Day,NONE,EUR
+6764989a-4ac1-4f65-be14-6d024ce338a8,12/24/2025 23:50:00,Foreign Bond Investment,LOW,JPY
+d2d56005-c7ef-444f-b51d-ced5c1c1f703,12/24/2025 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+d3e42fb2-1cfd-424d-81cd-c053e0f68359,12/25/2025 00:00:00,Christmas Day,NONE,GBP
+22c249f5-066b-45bd-a0a6-ab01ef62e5b6,12/25/2025 03:00:00,BoJ Governor Ueda speech,HIGH,JPY
+220e2fcb-6fe0-44e4-bccb-4d0ed9affa01,12/25/2025 05:00:00,Christmas Day,NONE,CAD
+ade642b5-a4b8-4c32-866b-67d58d98c08c,12/25/2025 05:00:00,Christmas Day,NONE,USD
+d3255b88-d348-479e-a155-9f47f365c396,12/25/2025 12:00:00,Boxing Day,NONE,NZD
+27e4dbfc-d17e-4aa7-a349-d0b183f97f00,12/25/2025 13:30:00,"Chicago Fed National Activity Index ",LOW,USD
+468e47a7-3dee-4a13-8182-278c39da562f,12/25/2025 14:00:00,"Boxing Day ",NONE,AUD
+33cde54a-0689-4de5-82ad-214dbe8b488e,12/25/2025 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+6b3a3426-8b31-4793-a995-7f2b532190e3,12/25/2025 22:00:00,St Stephen's Day,NONE,CHF
+b248c3be-da64-4424-a71d-1c790672f700,12/25/2025 22:00:00,Boxing Day,NONE,EUR
+f6e60ba3-d6b2-4031-a8bd-4793b2d69ae8,12/25/2025 22:00:00,Boxing Day,NONE,EUR
+c6fb9565-6999-4d9f-855d-79e022c63502,12/25/2025 23:30:00,Jobs / Applicants Ratio,LOW,JPY
+50290ca6-6ecf-47aa-bd63-fd8a512b0951,12/25/2025 23:30:00,Tokyo Consumer Price Index (YoY),HIGH,JPY
+fac3af20-ed21-4acf-8ec5-5e83e3fe5012,12/25/2025 23:30:00,"Tokyo CPI ex Food, Energy (YoY)",HIGH,JPY
+1a791106-bfe1-40b8-9187-9fbb4f221fc3,12/25/2025 23:30:00,Tokyo CPI ex Fresh Food (YoY),MEDIUM,JPY
+d9f71c7c-d39b-4096-ac15-b76bf8a07d0c,12/25/2025 23:50:00,Industrial Production (MoM),LOW,JPY
+a8b38146-67bf-4917-9501-e405f5fe1f09,12/25/2025 23:50:00,Industrial Production (YoY),LOW,JPY
+68ce2995-b8fe-4a90-a974-8a7322b0dddd,12/25/2025 23:50:00,Large Retailer Sales,MEDIUM,JPY
+5c059096-50b0-4acf-8f03-5f7dd28d609d,12/25/2025 23:50:00,Retail Trade (YoY),MEDIUM,JPY
+5d7ff62a-a3fd-4aad-b509-9bbb2a4f9aae,12/25/2025 23:50:00,Retail Trade s.a (MoM),MEDIUM,JPY
+d25b4279-0a48-4c6e-b6d2-dd02dec8b49e,12/26/2025 00:00:00,Boxing Day,NONE,GBP
+c93292a4-71c3-46a9-bc7b-109ebc1214d9,12/26/2025 05:00:00,Boxing Day,NONE,CAD
+666559cb-60d0-407d-97a6-6a7baab16fa9,12/28/2025 23:50:00,BoJ Summary of Opinions,LOW,JPY
+86ea7915-e5c7-44c9-882b-341576889fda,12/29/2025 00:01:00,BRC Shop Price Index (YoY),LOW,GBP
+50a1a39a-e832-4a1d-97d2-da4e570c4042,12/29/2025 07:00:00,Nationwide Housing Prices n.s.a (YoY),LOW,GBP
+4990f86a-1df1-44a0-9a7a-8f7f8f98bbe9,12/29/2025 07:00:00,Nationwide Housing Prices s.a (MoM),LOW,GBP
+f0d722ef-a902-42d7-ba2d-c55d354cfd46,12/29/2025 13:30:00,Goods Trade Balance,LOW,USD
+ae58fc22-b2de-4801-9885-3c5b947f96fa,12/29/2025 13:30:00,Wholesale Inventories,LOW,USD
+14986560-44bb-4d20-a863-863e2fd4e7e9,12/29/2025 15:30:00,Dallas Fed Manufacturing Business Index,LOW,USD
+868f764e-6639-415b-9422-ca8740d3c4f3,12/29/2025 16:30:00,3-Month Bill Auction,LOW,USD
+8146ea6f-f685-42f8-bfbd-b7d4e25b427b,12/29/2025 16:30:00,6-Month Bill Auction,LOW,USD
+2890e99d-ebf0-4ebb-9011-082f5507b71e,12/29/2025 23:30:00,Unemployment Rate,MEDIUM,JPY
+5dccb569-6c80-4490-92a8-78d8f1c342a0,12/30/2025 07:00:00,Import Price Index (MoM),LOW,EUR
+07e5ae13-3764-4b0c-926d-1691498cca2c,12/30/2025 07:00:00,Import Price Index (YoY),LOW,EUR
+07340c08-0750-4b54-8abe-ae8ece91607f,12/30/2025 08:00:00,KOF Leading Indicator,LOW,CHF
+f1770c90-9e5d-4eac-96c3-8576f22b08f7,12/30/2025 08:00:00,Consumer Price Index (MoM),LOW,EUR
+8345ecb3-0250-4741-afb9-0ad87c8ca075,12/30/2025 08:00:00,Consumer Price Index (YoY),LOW,EUR
+9a3ef5ec-80e5-401d-83de-4ee60ead87ee,12/30/2025 08:00:00,Harmonized Index of Consumer Prices (MoM),LOW,EUR
+4a309ee3-9c7f-42ae-81d0-b47a525091fd,12/30/2025 08:00:00,Harmonized Index of Consumer Prices (YoY),MEDIUM,EUR
+1a5d8a49-7c95-459c-8be4-0e926daa6f5f,12/30/2025 08:00:00,Retail Sales (YoY),LOW,EUR
+f7f7f52a-cc8c-41e1-a408-488af6c25b32,12/30/2025 09:00:00,Current Account Balance,LOW,EUR
+705fdf51-98ef-4825-9543-2cd9508aedd1,12/30/2025 13:55:00,Redbook Index (YoY),LOW,USD
+20d72b3c-0b86-4eb3-b7dd-288e6ee2a660,12/30/2025 14:00:00,New Year's holiday,NONE,AUD
+ba19b91e-214b-47be-9ac5-349e080a51d0,12/30/2025 14:00:00,Housing Price Index (MoM),MEDIUM,USD
+f2bfbf79-f3c9-4f3b-90f6-2a733b7059db,12/30/2025 14:00:00,S&P/Case-Shiller Home Price Indices (YoY),LOW,USD
+68de19c0-1fcc-4853-8d74-6530cf8928b9,12/30/2025 14:45:00,Chicago PMI,MEDIUM,USD
+9cf83bfa-af82-4e86-bfa8-3f75c50f079f,12/30/2025 15:00:00,Pending Home Sales (MoM),MEDIUM,USD
+c2ea34da-3e9d-45d0-a821-7c00cd9a742b,12/30/2025 15:00:00,Pending Home Sales (YoY),LOW,USD
+a5cec9e5-cfda-4779-a2ad-fe66b5a89148,12/30/2025 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+5dd7f5fe-5c0d-483e-bfa3-e32e30e0d1e2,12/30/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+0fd2a644-5a86-4f7c-997f-52dcd5bc7669,12/30/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+06d5686e-f666-40a6-95b5-c6fbecaf0757,12/30/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+caeb18c0-b156-43ca-ab12-a90c2d9530e4,12/30/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+843b0d70-c3e8-4cc7-8d55-1aa4b0c535fd,12/30/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+0951befb-a8cb-48a5-9bac-8e2cda9e66d5,12/30/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+ad70404b-0e94-4a48-9eb6-763bfa8e4863,12/30/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+3f2b7479-1d17-44cb-a34e-a9c8392478fe,12/30/2025 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+72d519dd-8ab0-48b5-8a09-d270c44f3c68,12/30/2025 22:00:00,New Year's Eve,NONE,EUR
+a16fc136-f85a-422b-9233-9e025ad1d68d,12/31/2025 01:30:00,NBS Manufacturing PMI,HIGH,CNY
+09a13d3b-0487-46b3-b770-20f7fa27c7e4,12/31/2025 01:30:00,NBS Non-Manufacturing PMI,HIGH,CNY
+2f83ea10-b15c-4715-892b-c3cda817839a,12/31/2025 09:00:00,ZEW Survey – Expectations,MEDIUM,CHF
+1c7dd8d6-be3f-4370-bd9f-1afe38e9bbbe,12/31/2025 12:00:00,"New Year's Day ",NONE,NZD
+8b033642-822d-4d7b-923c-0a0e8e10734e,12/31/2025 12:00:00,MBA Mortgage Applications,LOW,USD
+a31b3aa5-2cbc-4a12-b8c1-d37233f9320d,12/31/2025 14:00:00,New Year's Day,NONE,AUD
+846d324b-31dc-4b9c-827f-6882be145f79,12/31/2025 15:00:00,New Year's Day,NONE,JPY
+f301b395-f080-49e8-8786-a001fc5ca003,12/31/2025 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
