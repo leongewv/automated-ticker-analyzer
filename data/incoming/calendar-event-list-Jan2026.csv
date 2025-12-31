@@ -1,0 +1,729 @@
+Id,Start,Name,Impact,Currency
+af254ec3-372e-43fe-bdd6-f676074f865a,12/31/2025 16:00:00,New Year's Day,NONE,CNY
+fd56d4dd-d548-4a25-a600-6ef66762b113,12/31/2025 16:30:00,4-Week Bill Auction,LOW,USD
+103ce7f9-c359-4596-8101-f87fcd3a2963,12/31/2025 17:00:00,EIA Natural Gas Storage Change,LOW,USD
+5dd7f5fe-5c0d-483e-bfa3-e32e30e0d1e2,12/31/2025 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+0fd2a644-5a86-4f7c-997f-52dcd5bc7669,12/31/2025 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+06d5686e-f666-40a6-95b5-c6fbecaf0757,12/31/2025 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+caeb18c0-b156-43ca-ab12-a90c2d9530e4,12/31/2025 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+843b0d70-c3e8-4cc7-8d55-1aa4b0c535fd,12/31/2025 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+0951befb-a8cb-48a5-9bac-8e2cda9e66d5,12/31/2025 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+ad70404b-0e94-4a48-9eb6-763bfa8e4863,12/31/2025 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+38c7f979-c0a7-419b-87f3-af23703b9341,12/31/2025 22:00:00,New Year's Day,NONE,CHF
+766ce80c-e975-4ba8-a8d4-ee689de17320,12/31/2025 22:00:00,New Year's Day,NONE,EUR
+6ace7f17-ab1c-46da-9358-d90429df6e64,12/31/2025 22:00:00,New Year's Day,NONE,EUR
+a3a926fd-62e1-4382-a94f-98bf1e1b20d0,12/31/2025 23:00:00,New Year's Day,NONE,EUR
+c88b0760-0c52-4e46-b030-a397145d1962,12/31/2025 23:00:00,New Year's Day,NONE,EUR
+ecc25174-6a69-4fb9-9fbf-4888ea10916d,12/31/2025 23:00:00,New Year's Day,NONE,GBP
+6567d4c0-9d2a-4902-b675-4d7a32385b3f,01/01/2026 05:00:00,New Year's Day,NONE,CAD
+65b852ea-ac2d-43ca-b8e4-945939f926a7,01/01/2026 05:00:00,New Year's Day,NONE,USD
+dcfd60a8-31f8-4f2a-8202-c56820858c83,01/01/2026 09:50:00,10-y Bond Auction,LOW,EUR
+f7c93420-ff18-40cf-8643-0746639858f1,01/01/2026 12:00:00,"Day after New Year's Day ",NONE,NZD
+f8f3d0f6-a011-4e62-9143-3cdd5480e1ed,01/01/2026 16:00:00,New Years Holiday,NONE,CNY
+2e734326-5569-4ce1-bf98-8f2724d7a1e1,01/01/2026 22:00:00,S&P Global Manufacturing PMI,LOW,AUD
+dde2ac5c-f958-4580-a1b4-72d45c84e466,01/02/2026 05:30:00,RBA Commodity Index SDR (YoY),LOW,AUD
+50a1a39a-e832-4a1d-97d2-da4e570c4042,01/02/2026 07:00:00,Nationwide Housing Prices n.s.a (YoY),LOW,GBP
+4990f86a-1df1-44a0-9a7a-8f7f8f98bbe9,01/02/2026 07:00:00,Nationwide Housing Prices s.a (MoM),LOW,GBP
+f34f2edb-26a7-4fee-aee7-00054632674a,01/02/2026 08:00:00,Unemployment Change,LOW,EUR
+b2e8adc2-32dc-4a9b-bfc7-63be30f5e8dd,01/02/2026 08:15:00,HCOB Manufacturing PMI,MEDIUM,EUR
+a71f2751-d594-4c7c-86c9-0d0f8bf27ab4,01/02/2026 08:45:00,HCOB Manufacturing PMI,MEDIUM,EUR
+b7e72cb6-ac59-4cd4-98d1-d5dd9110e4f9,01/02/2026 08:50:00,HCOB Manufacturing PMI,LOW,EUR
+77e776ff-7507-4ee6-be6a-5d152e4fca0e,01/02/2026 08:55:00,HCOB Manufacturing PMI,MEDIUM,EUR
+2eb3a858-9e6b-4669-95ee-496cc6dcd754,01/02/2026 09:00:00,HCOB Manufacturing PMI,LOW,EUR
+f244e5f3-d3ce-4b3e-914b-e8fa56ac204f,01/02/2026 09:00:00,M3 Money Supply (3m),LOW,EUR
+93be017c-a1fb-4ed6-bb7c-57addc131b61,01/02/2026 09:00:00,M3 Money Supply (YoY),LOW,EUR
+30467660-edfb-4610-aade-cac6512d95a5,01/02/2026 09:00:00,Private Loans (YoY),LOW,EUR
+152ff0eb-251c-42cd-ac92-28d65a241f42,01/02/2026 09:30:00,S&P Global Manufacturing PMI,LOW,GBP
+2efb70c2-7d2f-4f72-93ea-c3981aa3d7d1,01/02/2026 14:30:00,S&P Global Manufacturing PMI,MEDIUM,CAD
+c5675a96-b587-4d7e-a344-e0ad61168288,01/02/2026 14:45:00,S&P Global Manufacturing PMI,LOW,USD
+5bbb1f87-9689-4c75-afe1-0fd00f73e994,01/03/2026 15:15:00,Fed's Paulson speech,MEDIUM,USD
+aa49a219-ee33-4ed4-a211-a685ddab2a62,01/03/2026 19:30:00,Fed's Paulson speech,MEDIUM,USD
+2952caf8-7fbe-4381-be8d-ae4d0e6cc8bb,01/04/2026 17:30:00,Fed's Kashkari speech,MEDIUM,USD
+be539d37-83f5-4da3-a6f0-c9f3fa63a516,01/05/2026 00:30:00,Jibun Bank Manufacturing PMI,LOW,JPY
+9e6ffc7a-146e-4226-a5d1-67ac5d9da27d,01/05/2026 01:45:00,RatingDog Services PMI,HIGH,CNY
+06a4a624-106b-4b29-9451-d25481dc8ecf,01/05/2026 07:30:00,Real Retail Sales (YoY),MEDIUM,CHF
+37284788-8b2c-4b93-90dd-ace8423425f5,01/05/2026 09:30:00,Sentix Investor Confidence,MEDIUM,EUR
+1fce37a3-b1a3-4de6-ade4-2009604c4dca,01/05/2026 09:30:00,Consumer Credit,LOW,GBP
+01b880b6-1198-47ba-884a-8f114a6c6c14,01/05/2026 09:30:00,M4 Money Supply (MoM),LOW,GBP
+63a540ea-1325-4752-838d-71dc2dcacb01,01/05/2026 09:30:00,M4 Money Supply (YoY),LOW,GBP
+a4862c78-d1ab-402e-935e-fc67fbfd8c79,01/05/2026 09:30:00,Mortgage Approvals,LOW,GBP
+40f0a436-3a92-4ba3-8acc-68446a1b11d5,01/05/2026 09:30:00,Net Lending to Individuals (MoM),LOW,GBP
+cb1e155f-49d8-4595-b6fe-47a4290abd15,01/05/2026 15:00:00,ISM Manufacturing Employment Index,MEDIUM,USD
+773a23a2-fbe5-49d4-9495-b92711d6407c,01/05/2026 15:00:00,ISM Manufacturing New Orders Index,MEDIUM,USD
+b1c30b4d-77a7-41cf-b026-9b5d656bdd2e,01/05/2026 15:00:00,ISM Manufacturing PMI,HIGH,USD
+9144475a-91a6-450c-9e5c-36f9644f53f1,01/05/2026 15:00:00,ISM Manufacturing Prices Paid,MEDIUM,USD
+3c1fd201-4d60-4d28-ad10-32197bd92b07,01/05/2026 16:30:00,3-Month Bill Auction,LOW,USD
+ea3fac33-20ed-4b33-bd86-c719b67d8710,01/05/2026 16:30:00,6-Month Bill Auction,LOW,USD
+dd6c6fa3-5643-44f9-a728-4eb6fcbdf233,01/05/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+2e8770e8-c6a8-4fa9-b4b1-01e81f5374ff,01/05/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+4c53a04a-0ace-482a-8f41-924f04b55682,01/05/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+78397dba-e67f-48bf-a01b-3d15fc280e77,01/05/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+efed916c-bc6b-4b21-9a54-08c7df5efc6e,01/05/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+ad2faa02-7c55-4399-ab70-f78553503e37,01/05/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+ee2c68ee-3f2a-40c7-83f1-c8c4640af106,01/05/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+67811d1d-5f6f-4151-b451-56db20677c66,01/05/2026 20:30:00,Total Vehicle Sales,LOW,USD
+671d5120-31bc-4ab3-a55f-cc460a8602ad,01/05/2026 22:00:00,Epiphany,NONE,EUR
+dd04a0c0-cbe5-496b-a79d-ecd175423c14,01/05/2026 22:00:00,Epiphany,NONE,EUR
+06eaae2b-47fb-41ed-ab47-6ab677350d68,01/05/2026 23:50:00,Monetary Base (YoY),LOW,JPY
+86ea7915-e5c7-44c9-882b-341576889fda,01/06/2026 00:01:00,BRC Shop Price Index (YoY),LOW,GBP
+6f0dc33f-8ec6-4f3d-92ce-f499c2e014f9,01/06/2026 03:35:00,10-y Bond Auction,LOW,JPY
+8047600d-e06d-4c0f-9820-251cf3e68573,01/06/2026 07:45:00,Consumer Price Index (EU norm) (MoM),LOW,EUR
+570743bb-22f1-4a6f-8e57-ffdfccad4b3b,01/06/2026 07:45:00,Consumer Price Index (EU norm) (YoY),MEDIUM,EUR
+a4c276de-1e30-4826-a6fd-8eb0f6490a62,01/06/2026 08:15:00,HCOB Services PMI,MEDIUM,EUR
+6ecd197b-97fc-403f-8b33-fb8421ccd515,01/06/2026 08:30:00,SVME - Purchasing Managers' Index,LOW,CHF
+0ac9a333-95b7-4203-a291-ea06d69428c3,01/06/2026 08:45:00,HCOB Services PMI,LOW,EUR
+1d8d27a5-9af3-42d1-8fd5-44de4dcb065d,01/06/2026 08:50:00,HCOB Composite PMI,LOW,EUR
+af61e9b7-89c2-4b6a-b466-d8ac4d682dee,01/06/2026 08:50:00,HCOB Services PMI,LOW,EUR
+c45229cd-f987-4954-afd5-0130aba9c4ca,01/06/2026 08:55:00,HCOB Composite PMI,MEDIUM,EUR
+ad9da27a-61d9-404b-a4ae-30d152a5c73a,01/06/2026 08:55:00,HCOB Services PMI,MEDIUM,EUR
+d2369bcb-de2b-4dff-bf41-9392704a15f9,01/06/2026 09:00:00,Baden-Wuerttemberg CPI (MoM),LOW,EUR
+d5a46912-f7a0-4762-9057-5ab7dc227501,01/06/2026 09:00:00,Baden-Wuerttemberg CPI (YoY),LOW,EUR
+73a107a5-82d1-462d-b866-7836dbf7ff90,01/06/2026 09:00:00,Bavaria CPI (MoM),LOW,EUR
+631d546a-865b-41e6-8896-2f626960db12,01/06/2026 09:00:00,Bavaria CPI (YoY),LOW,EUR
+867d516b-bad3-4133-880a-844c0e8db5a3,01/06/2026 09:00:00,Brandenburg CPI (MoM),LOW,EUR
+b95647f0-4c7a-4791-8ab8-c71ad1482cd0,01/06/2026 09:00:00,Brandenburg CPI (YoY),LOW,EUR
+a8e61296-c1d5-4f96-8ac7-494158a11ae1,01/06/2026 09:00:00,Hesse CPI (MoM),LOW,EUR
+9d0de288-84dd-46cd-b1af-b477b65925e0,01/06/2026 09:00:00,Hesse CPI (YoY),LOW,EUR
+ad5da331-dab8-4ec5-9d89-aab98756786c,01/06/2026 09:00:00,North Rhine-Westphalia CPI (MoM),LOW,EUR
+ba7335b9-001d-4968-bba6-6b6de9756c3d,01/06/2026 09:00:00,North Rhine-Westphalia CPI (YoY),LOW,EUR
+fa54f7e4-9495-4414-aefc-7dfdd82c62f7,01/06/2026 09:00:00,Saxony CPI (MoM),LOW,EUR
+7459344c-fb0f-4746-9ff1-593169ea9895,01/06/2026 09:00:00,Saxony CPI (YoY),LOW,EUR
+413f1e25-bf49-41f8-9ac2-d3c282b7019a,01/06/2026 09:00:00,HCOB Composite PMI,MEDIUM,EUR
+75e538a7-399f-4db2-b142-a1b7729037c4,01/06/2026 09:00:00,HCOB Services PMI,LOW,EUR
+a8710486-e061-4153-84ca-0eb2c98da271,01/06/2026 09:30:00,S&P Global Composite PMI,LOW,GBP
+fda39157-1be4-4d02-a0b0-de3f1201be4c,01/06/2026 09:30:00,S&P Global Services PMI,LOW,GBP
+463107aa-1cc3-4fd4-a4cf-87cd851f4c08,01/06/2026 13:00:00,Consumer Price Index (MoM),HIGH,EUR
+926274c0-1945-462e-b86b-c8c48b9082cc,01/06/2026 13:00:00,Consumer Price Index (YoY),HIGH,EUR
+49331d5e-d191-4f0f-a1a2-55a6264bd003,01/06/2026 13:00:00,Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+4ed3cea5-ae31-40e2-b367-44000687d529,01/06/2026 13:00:00,Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+93963afd-41f9-4e45-aa00-bf5310fea50b,01/06/2026 13:55:00,Redbook Index (YoY),LOW,USD
+4e2ac217-c99d-4d22-bdb5-a48f8ee0b389,01/06/2026 14:45:00,S&P Global Composite PMI,MEDIUM,USD
+7a986231-00a7-4a20-bf8b-d9557314c281,01/06/2026 14:45:00,S&P Global Services PMI,LOW,USD
+f54d46b9-a55c-48c6-83c9-aef4285ec18e,01/06/2026 15:00:00,GDT Price Index,LOW,NZD
+e4f58e26-47fc-4add-a192-5d0daa8f18ea,01/06/2026 18:00:00,3-Year Note Auction,LOW,USD
+913d7dfd-b503-4641-906a-54c738c286fb,01/06/2026 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+b560a107-9403-4e29-a4c3-ca84768c6970,01/06/2026 22:00:00,S&P Global Composite PMI,MEDIUM,AUD
+3780d3bd-3435-4fa7-9ca0-4bfeaf7ec177,01/06/2026 22:00:00,S&P Global Services PMI,MEDIUM,AUD
+3dad411f-ca35-4887-96f0-d5f8b541e278,01/07/2026 00:30:00,Building Permits (MoM),MEDIUM,AUD
+e02e9c71-bd73-44ab-b6d4-3e41ded8e386,01/07/2026 00:30:00,Building Permits (YoY),LOW,AUD
+f3d73b02-8c44-4622-9a85-0e2474c2e233,01/07/2026 00:30:00,Consumer Price Index (MoM),MEDIUM,AUD
+ea19059c-74b9-469c-b73b-6412e901d6a4,01/07/2026 00:30:00,Consumer Price Index (YoY),HIGH,AUD
+febe65ac-0647-47d6-9f4e-b995f69b14fc,01/07/2026 00:30:00,Trimmed Mean CPI (MoM),MEDIUM,AUD
+1d8ce0c2-46d6-455b-b51f-c5128b747f2a,01/07/2026 00:30:00,Trimmed Mean CPI (YoY),HIGH,AUD
+0ca8f48a-f149-4d47-84f6-ea386044b808,01/07/2026 00:30:00,Jibun Bank Services PMI,LOW,JPY
+48d92fbb-de3e-45e8-8f06-224182ba76ca,01/07/2026 07:00:00,Retail Sales (MoM),MEDIUM,EUR
+59e4c87f-ebfb-4163-8fe8-509d9253a173,01/07/2026 07:00:00,Retail Sales (YoY),HIGH,EUR
+271d1134-f376-406e-bdd6-b68d8dbb43a2,01/07/2026 07:45:00,Consumer Confidence,LOW,EUR
+9af41837-1d2b-4eb7-9cd6-41f1e7420a33,01/07/2026 08:00:00,Foreign Exchange Reserves (MoM),LOW,CNY
+800faaed-ecc3-470e-afc3-24ae954a4a78,01/07/2026 08:55:00,Unemployment Change,MEDIUM,EUR
+7e7cdcce-6d20-4d89-bec6-6ddd5261e89f,01/07/2026 08:55:00,Unemployment Rate s.a.,MEDIUM,EUR
+78b10d7d-3639-442a-895a-161c8c291eee,01/07/2026 09:00:00,Public Deficit/GDP,LOW,EUR
+92547b6f-82f7-43c4-b0f0-2cc43dc9574d,01/07/2026 09:30:00,S&P Global Construction PMI,LOW,GBP
+112c84ff-f978-41ab-8216-c3162993546d,01/07/2026 10:00:00,Core Harmonized Index of Consumer Prices (MoM),HIGH,EUR
+f0c089aa-0b7d-461f-b5f9-ea9348504e87,01/07/2026 10:00:00,Core Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+46428181-b910-41af-a40c-9142270dd9b4,01/07/2026 10:00:00,Harmonized Index of Consumer Prices (MoM),HIGH,EUR
+efd31f16-a520-41eb-8b46-7f5bc9420038,01/07/2026 10:00:00,Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+90be43c1-c179-407b-9a98-9b081ba0d3f6,01/07/2026 10:00:00,Consumer Price Index (EU Norm) (MoM),LOW,EUR
+f6cc418a-a988-4d01-a2bc-c7656cbcc60e,01/07/2026 10:00:00,Consumer Price Index (EU Norm) (YoY),MEDIUM,EUR
+9d8b6094-381a-40ff-9440-2b7a6e7719ae,01/07/2026 10:00:00,Consumer Price Index (MoM),LOW,EUR
+5d5d3041-8984-46ae-bffa-d59baa41f614,01/07/2026 10:00:00,Consumer Price Index (YoY),MEDIUM,EUR
+eda1e98d-cb82-49e3-a6f0-c7b678a5959c,01/07/2026 10:30:00,10-y Bond Auction,LOW,EUR
+3a284276-973a-48d6-9657-8347aa306ec3,01/07/2026 12:00:00,MBA Mortgage Applications,LOW,USD
+98d4d576-8882-4d48-bb72-8477e90b254a,01/07/2026 13:15:00,ADP Employment Change,HIGH,USD
+8c901dc9-e881-4d84-89c9-1724c87c0075,01/07/2026 15:00:00,Ivey Purchasing Managers Index,MEDIUM,CAD
+620bd571-ea04-49d3-b469-4fc472e57ed1,01/07/2026 15:00:00,Ivey Purchasing Managers Index s.a,MEDIUM,CAD
+b8461fdc-6f24-4a23-9446-9bf8e61ac56c,01/07/2026 15:00:00,Factory Orders (MoM),MEDIUM,USD
+fd415c65-6883-4e7c-b450-8f72a5a117a1,01/07/2026 15:00:00,ISM Services Employment Index,MEDIUM,USD
+43b8e5f4-e9e2-42de-9752-a25b180fde04,01/07/2026 15:00:00,ISM Services New Orders Index,MEDIUM,USD
+2d572c3f-78e1-4cb9-bf11-74b44662f270,01/07/2026 15:00:00,ISM Services PMI,HIGH,USD
+e6b57ff5-63fe-463c-b539-074a4489c815,01/07/2026 15:00:00,ISM Services Prices Paid,MEDIUM,USD
+46e493b5-e3ac-4dc5-8fea-4b297933d081,01/07/2026 15:00:00,JOLTS Job Openings,MEDIUM,USD
+fef52615-e617-40b0-b507-5d3d699c58b3,01/07/2026 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+42aed6e1-9f91-4fca-b363-2dab77c5924a,01/07/2026 18:00:00,10-Year Note Auction,LOW,USD
+9d110c8c-87d5-47d4-afd7-e9ab3383c189,01/07/2026 23:30:00,Labor Cash Earnings (YoY),MEDIUM,JPY
+ae66add9-083b-4c89-b324-c2a72b49e46e,01/07/2026 23:50:00,Foreign Bond Investment,LOW,JPY
+4ca1d743-d407-40e4-802c-cd84f441654f,01/07/2026 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+37648e32-565f-4172-82de-0e7dd42834be,01/07/2026 23:50:05,Foreign Bond Investment,LOW,JPY
+2fbc3991-522d-4eed-a072-2a922fb678aa,01/07/2026 23:50:05,Foreign Investment in Japan Stocks,LOW,JPY
+51293bce-dad5-4acd-b9ec-7b8fefef424b,01/08/2026 00:30:00,Exports (MoM),MEDIUM,AUD
+257f401d-157f-4cfc-8966-a242fbba5b95,01/08/2026 00:30:00,Imports (MoM),MEDIUM,AUD
+1ce31762-d359-469e-9777-605c3d81215e,01/08/2026 00:30:00,Trade Balance (MoM),HIGH,AUD
+9980286a-320f-48c7-ae73-b964641df2fd,01/08/2026 03:00:00,Exports (YoY),MEDIUM,CNY
+2a73b4b8-02ff-4b24-86d4-54f07f6a05b6,01/08/2026 03:00:00,Exports (YoY) CNY,MEDIUM,CNY
+d2add1a6-dad8-4231-a600-edc01d08d5c4,01/08/2026 03:00:00,Imports (YoY),MEDIUM,CNY
+e52c55f8-fc0d-4ffa-acb0-47ac82bd0b34,01/08/2026 03:00:00,Imports (YoY) CNY,MEDIUM,CNY
+1b32ebbf-a144-4486-aa6e-e9e8106bcd3d,01/08/2026 03:00:00,Trade Balance CNY,MEDIUM,CNY
+e2dd553f-ceff-4565-b562-d3d3e9d29ff4,01/08/2026 03:00:00,Trade Balance USD,MEDIUM,CNY
+ec8ff6c0-75b0-47ad-b183-d04768a58d8d,01/08/2026 05:00:00,Consumer Confidence Index,LOW,JPY
+61155925-a6ed-4c83-846a-6b4e3127bc20,01/08/2026 06:00:00,Machine Tool Orders (YoY),LOW,JPY
+8748065b-5ab4-44e6-8cb4-2e935c4ed25f,01/08/2026 07:00:00,Factory Orders n.s.a. (YoY),MEDIUM,EUR
+ae91a129-8c87-4a6c-b72d-07d7c470076f,01/08/2026 07:00:00,Factory Orders s.a. (MoM),MEDIUM,EUR
+f96d1ed2-a64d-4136-b125-91d1f34f4341,01/08/2026 07:00:00,Halifax House Prices (MoM),LOW,GBP
+2c642755-3d2c-41e1-8792-0343bbbda475,01/08/2026 07:00:00,Halifax House Prices (YoY/3m),LOW,GBP
+13dacd22-6419-44a9-9561-f2e6ac38ec6e,01/08/2026 07:30:00,Consumer Price Index (MoM),MEDIUM,CHF
+8f5b96de-894e-42ae-8a0b-f5939ca42937,01/08/2026 07:30:00,Consumer Price Index (YoY),HIGH,CHF
+29b0361b-7d3b-4ce5-bf7f-13e589d7c354,01/08/2026 07:45:00,Current Account,LOW,EUR
+d0a55c60-e2a4-496f-bdf9-1074b0b40f87,01/08/2026 07:45:00,"Exports, EUR",LOW,EUR
+446aa446-440d-4fd7-9de4-dc2ba54f71d1,01/08/2026 07:45:00,"Imports, EUR",LOW,EUR
+5051a86e-addf-49d6-966a-d4c5a293b96e,01/08/2026 07:45:00,Trade Balance EUR,LOW,EUR
+63eef3f1-9e8a-4bbe-b396-859fd52b43b9,01/08/2026 09:00:00,Unemployment,LOW,EUR
+b7bdf562-9bae-449b-98ef-c7d528497c5d,01/08/2026 09:40:00,10-y Obligaciones Auction,LOW,EUR
+f6a0a2f9-092c-4a1c-845b-719ab5c42a6e,01/08/2026 09:40:00,3-y Bond Auction,LOW,EUR
+ab346f71-758b-40dc-8578-f2e02b6e92d1,01/08/2026 09:40:00,5-y Bond Auction,LOW,EUR
+0cab46d7-f7f5-401d-8e8c-d3c260ae1b3b,01/08/2026 10:00:00,Business Climate,MEDIUM,EUR
+cd0d02ad-2567-4154-a3d6-f678c2334fde,01/08/2026 10:00:00,Consumer Confidence,MEDIUM,EUR
+68c63c63-57bd-449c-bfd2-3f9b78d8f887,01/08/2026 10:00:00,Economic Sentiment Indicator,MEDIUM,EUR
+c850ce30-ed98-40aa-98ab-9ad6a336ef8a,01/08/2026 10:00:00,Industrial Confidence,LOW,EUR
+14a8d7b5-5d5e-482b-8518-fc5eabef4cd3,01/08/2026 10:00:00,Producer Price Index (MoM),MEDIUM,EUR
+49234ba3-de15-4937-8fbb-4908f1c18dae,01/08/2026 10:00:00,Producer Price Index (YoY),MEDIUM,EUR
+838ccb04-30eb-4d22-bd5b-d7c85133a400,01/08/2026 10:00:00,Services Sentiment,LOW,EUR
+c7851791-c448-4f5c-8bca-538638bf5f38,01/08/2026 10:00:00,Unemployment Rate,MEDIUM,EUR
+6002016a-32bc-4f53-91df-646e02eca98d,01/08/2026 12:30:00,Challenger Job Cuts,MEDIUM,USD
+cca191f5-15ca-438d-80b1-f302586b01bd,01/08/2026 13:30:00,Exports,LOW,CAD
+30e6a5ec-223f-4da2-a385-b9cf44d0fee7,01/08/2026 13:30:00,Imports,LOW,CAD
+097db0ed-e8bd-4b9e-8cc9-b478cd0a0648,01/08/2026 13:30:00,International Merchandise Trade,LOW,CAD
+987f5102-2142-427d-b420-41630aa45b0f,01/08/2026 13:30:00,Continuing Jobless Claims,LOW,USD
+25f1e7fc-aa6f-4d04-bd0c-57d5d8abede1,01/08/2026 13:30:00,Goods and Services Trade Balance,LOW,USD
+df658b9f-e9c0-451e-973f-e425e44f8470,01/08/2026 13:30:00,Goods Trade Balance,LOW,USD
+e942e378-3b7f-4c3f-8b36-1545ca2c3804,01/08/2026 13:30:00,Initial Jobless Claims,MEDIUM,USD
+91a1bb1d-6ebb-4a61-a4ed-324b1be24722,01/08/2026 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+fe8fb799-825d-4d85-8af5-6b341b801b4e,01/08/2026 13:30:00,Nonfarm Productivity,MEDIUM,USD
+b2a137aa-292b-451f-9664-05b685769476,01/08/2026 13:30:00,Unit Labor Costs,MEDIUM,USD
+dcf8d439-60a2-447a-b897-10ce3c1fe46a,01/08/2026 15:00:00,Wholesale Inventories,LOW,USD
+5740e665-e60a-48b0-bb39-90a552020403,01/08/2026 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+351d23f2-c488-47fe-9ba2-e07855bd5355,01/08/2026 16:30:00,4-Week Bill Auction,LOW,USD
+e3c422af-b91d-44f6-8395-f995e7574d49,01/08/2026 20:00:00,Consumer Credit Change,LOW,USD
+d56a2267-662b-4f16-aff4-e029813a92c8,01/08/2026 23:30:00,Overall Household Spending (YoY),LOW,JPY
+835d5d81-88b0-4be3-9da0-95b7e5552be8,01/08/2026 23:50:00,JP Foreign Reserves,LOW,JPY
+cb9ac2ea-e920-4044-8a76-478645a888bf,01/09/2026 01:30:00,Consumer Price Index (MoM),MEDIUM,CNY
+28b29e0d-f7ce-4919-b7c6-eb66c49149c7,01/09/2026 01:30:00,Consumer Price Index (YoY),HIGH,CNY
+d6f92165-5473-42bc-b7cc-c06c36a730ea,01/09/2026 01:30:00,Producer Price Index (YoY),MEDIUM,CNY
+84245446-c6b2-4ae9-8b8f-9e1310dac2cb,01/09/2026 05:00:00,Coincident Index,LOW,JPY
+6801fae4-8818-4505-9b3b-a85087401788,01/09/2026 05:00:00,Leading Economic Index,LOW,JPY
+de9745b6-888f-4d2b-9c14-d06a277b221d,01/09/2026 06:45:00,Unemployment Rate s.a (MoM),LOW,CHF
+8a58488a-0cbe-42af-abee-ec9347bd7049,01/09/2026 07:00:00,Exports (MoM),LOW,EUR
+c08cdf57-8235-4938-910e-23ff58ee06ad,01/09/2026 07:00:00,Imports (MoM),LOW,EUR
+ce1501f1-c0dc-42f1-9a11-ef528c72070a,01/09/2026 07:00:00,Industrial Production n.s.a. w.d.a. (YoY),MEDIUM,EUR
+e27c6bd4-eee0-410e-987a-9181bbe8db54,01/09/2026 07:00:00,Industrial Production s.a. (MoM),MEDIUM,EUR
+21df4e5b-7ebb-48f8-a846-0454dbcbf757,01/09/2026 07:00:00,Trade Balance s.a.,MEDIUM,EUR
+69dc3705-3e90-4bea-9eef-0b06f8f62264,01/09/2026 07:45:00,Consumer Spending (MoM),LOW,EUR
+3853f045-5a15-4002-a946-a9880122251e,01/09/2026 07:45:00,Industrial Output (MoM),LOW,EUR
+97219405-50da-4fa1-89a8-c9471d537c22,01/09/2026 08:00:00,Foreign Currency Reserves,LOW,CHF
+6c6b7310-f694-4ad5-97a3-d43168530b0a,01/09/2026 08:00:00,Industrial Output Cal Adjusted (YoY),LOW,EUR
+328130a4-ab5f-413e-b3c6-ae4888231fc6,01/09/2026 09:00:00,FDI - Foreign Direct Investment (YTD) (YoY),LOW,CNY
+da4eb025-9eaa-48d8-9bd3-677364696525,01/09/2026 09:00:00,Retail Sales n.s.a (YoY),LOW,EUR
+9d01a8e8-b3f0-41dd-a8e3-f4032ed2cae3,01/09/2026 09:00:00,Retail Sales s.a. (MoM),LOW,EUR
+1921ba5e-535e-4e33-ab27-f14a571593fe,01/09/2026 10:00:00,M2 Money Supply (YoY),LOW,CNY
+befd9744-35c7-43c3-b91e-88ccaea9d2ae,01/09/2026 10:00:00,New Loans,LOW,CNY
+16fa9caa-e256-4082-b2a7-0841446ca45e,01/09/2026 10:00:00,Retail Sales (MoM),MEDIUM,EUR
+27c73f38-dea6-426a-b62e-d27b5408a12b,01/09/2026 10:00:00,Retail Sales (YoY),HIGH,EUR
+206079a2-1b72-42c1-97c6-cbd23783672c,01/09/2026 13:30:00,Average Hourly Wages (YoY),MEDIUM,CAD
+c31ef1c5-41d6-497f-9b44-3efef9ccf30f,01/09/2026 13:30:00,Net Change in Employment,HIGH,CAD
+fc947f34-9de3-46ef-9bd2-6af945dc8411,01/09/2026 13:30:00,Participation Rate,LOW,CAD
+f16903e2-2df4-4d25-bada-e3f9e1f95569,01/09/2026 13:30:00,Unemployment Rate,HIGH,CAD
+6a5032d1-9706-4fec-bb67-d91cd4f177b5,01/09/2026 13:30:00,Average Hourly Earnings (MoM),HIGH,USD
+40e1d4ab-bc43-4d85-82c1-6f1b4eaafdf0,01/09/2026 13:30:00,Average Hourly Earnings (YoY),HIGH,USD
+96bb3663-49f9-40ca-883d-5c7d9b175132,01/09/2026 13:30:00,Average Weekly Hours,LOW,USD
+5bfffe6f-1ac5-4008-98f3-0ff63c04d53f,01/09/2026 13:30:00,Building Permits (MoM),MEDIUM,USD
+63377aa1-9585-47c7-ad4b-8c6a0a6d5c65,01/09/2026 13:30:00,Building Permits Change,LOW,USD
+ad814a66-2a8b-4874-979a-15b8a259a3a9,01/09/2026 13:30:00,Housing Starts (MoM),MEDIUM,USD
+33a5c798-63b2-4c89-904a-9376707a2fa5,01/09/2026 13:30:00,Housing Starts Change,LOW,USD
+d9b91b2d-6d67-4e88-86dd-464073916549,01/09/2026 13:30:00,Labor Force Participation Rate,MEDIUM,USD
+b5ca800d-5869-43a8-83d5-67b83bc35c72,01/09/2026 13:30:00,Nonfarm Payrolls,HIGH,USD
+d44e0e19-855c-4e00-a3f9-edefa7eaa8d0,01/09/2026 13:30:00,U6 Underemployment Rate,MEDIUM,USD
+bd4c2d18-ea0e-4c25-a60c-4eecaca93780,01/09/2026 13:30:00,Unemployment Rate,MEDIUM,USD
+d962dfd5-8740-4ad2-aea6-1f7d2d2d307c,01/09/2026 13:30:05,Building Permits (MoM),MEDIUM,USD
+b8b1efd6-73c6-4fde-b449-6dc1313fad2a,01/09/2026 13:30:05,Building Permits Change,LOW,USD
+a87d46a8-e95c-4849-b03f-1235fbdad006,01/09/2026 13:30:05,Housing Starts (MoM),MEDIUM,USD
+cfbc8821-a24f-462d-94fa-fea0bbaa565e,01/09/2026 13:30:05,Housing Starts Change,LOW,USD
+297d88be-84d6-4fb9-8f17-e04ae32ca94f,01/09/2026 15:00:00,Michigan Consumer Expectations Index,MEDIUM,USD
+93937022-4c92-4ab3-bb0b-948b87413138,01/09/2026 15:00:00,Michigan Consumer Sentiment Index,HIGH,USD
+9386d5cd-df2a-4b96-a7f0-672c85d83a41,01/09/2026 15:00:00,UoM 1-year Consumer Inflation Expectations,MEDIUM,USD
+ec49c68d-74c7-4a5d-b7e0-b1a79c2dfe84,01/09/2026 15:00:00,UoM 5-year Consumer Inflation Expectation,MEDIUM,USD
+d25a4951-aac2-4d1f-a460-0a35cc7a274b,01/09/2026 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+e9e9b60e-de35-4bea-bc7a-9fd46106cb00,01/09/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+c2b0773b-55fd-41bb-86b4-42edfc9e7215,01/09/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+11aca635-8d46-4807-94d4-358172f18aeb,01/09/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+076f2f05-39a9-480b-afbb-9ecc1bd6ed49,01/09/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+8c7117ae-dc6a-4d0f-b384-ef293e3dc80e,01/09/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+b5bb62fc-b372-4e74-8b27-80722ef0b24d,01/09/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+f7efc15e-cc62-4530-8b61-4ae4e840bec1,01/09/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+6e8e0878-1701-4fc9-b73e-c631d3cc09bb,01/11/2026 15:00:00,Coming-of-Age Day,NONE,JPY
+525a90f7-9a4d-4dd8-9545-ae91ce337ecf,01/11/2026 23:50:00,Money Supply M2+CD (YoY),LOW,JPY
+35b428ca-4bfd-4016-aa3c-3c793b9fd691,01/11/2026 23:50:00,Producer Price Index (MoM),LOW,JPY
+7b6f2758-306d-4fb5-9c9e-370b3babcdf7,01/11/2026 23:50:00,Producer Price Index (YoY),LOW,JPY
+ebf26209-d277-4abe-88bc-300856804441,01/12/2026 00:00:00,TD-MI Inflation Gauge (MoM),LOW,AUD
+2d7848d1-6e1e-42f4-b8a3-907ca2226ae3,01/12/2026 00:00:00,TD-MI Inflation Gauge (YoY),MEDIUM,AUD
+76d98ee0-c1f9-4877-a35f-d885e18a90dc,01/12/2026 00:30:00,ANZ Job Advertisements,LOW,AUD
+10bfb054-7eae-4940-a261-2b39ccdc95fc,01/12/2026 13:30:00,Current Account n.s.a.,LOW,EUR
+dfc78f40-115c-47da-b067-8ba4b2f5570d,01/12/2026 16:30:00,3-Month Bill Auction,LOW,USD
+e5196e46-74b0-41f2-8a1c-4a4b2a5f5509,01/12/2026 16:30:00,6-Month Bill Auction,LOW,USD
+52c163f0-d5f0-49fc-b6cd-8eebab5a2a68,01/12/2026 19:00:00,Monthly Budget Statement,MEDIUM,USD
+baf22564-52f7-4e17-a1cf-d11a5158256b,01/12/2026 21:00:00,NZIER Business Confidence (QoQ),MEDIUM,NZD
+085dbefd-4ae0-4c52-a57e-19a88798940f,01/12/2026 23:50:00,Bank Lending (YoY),LOW,JPY
+271190f8-7752-471a-a2ce-91fd6cf7b1a6,01/12/2026 23:50:00,Current Account n.s.a.,MEDIUM,JPY
+80b7b528-c087-4797-9846-23c5d075b270,01/12/2026 23:50:00,Trade Balance - BOP Basis,LOW,JPY
+920bbedc-f244-4dd9-a1c5-f24239df308a,01/13/2026 00:01:00,BRC Like-For-Like Retail Sales (YoY),MEDIUM,GBP
+c072ecfb-fbe4-4562-83f8-12f4e3a41316,01/13/2026 00:30:00,National Australia Bank's Business Conditions,LOW,AUD
+e4123969-2500-4383-a1bd-54126b7b5a61,01/13/2026 00:30:00,National Australia Bank's Business Confidence,LOW,AUD
+cbecc8d6-647c-4cee-a1e9-12245bb0e2ef,01/13/2026 05:00:00,Eco Watchers Survey: Current,LOW,JPY
+3ffd4901-94fb-4baa-a8d4-2c6ecafe7cca,01/13/2026 05:00:00,Eco Watchers Survey: Outlook,LOW,JPY
+300f4cf9-2fb7-4195-b662-2bfc1b84b938,01/13/2026 07:00:00,Average Earnings Excluding Bonus (3Mo/Yr),MEDIUM,GBP
+d22741d6-24f9-40d3-8060-92ee2d547262,01/13/2026 07:00:00,Average Earnings Including Bonus (3Mo/Yr),MEDIUM,GBP
+383e24f7-d5aa-4987-91fd-766ae765e2dd,01/13/2026 07:00:00,Claimant Count Change,HIGH,GBP
+8221994d-59ce-4cbf-8609-cd3cc8f52b01,01/13/2026 07:00:00,Claimant Count Rate,MEDIUM,GBP
+6a21e7b0-f8ba-4cc2-bd8f-9a0f8d35615a,01/13/2026 07:00:00,Employment Change (3M),HIGH,GBP
+1e141a47-d0b6-42d9-8c84-f92ea58b073f,01/13/2026 07:00:00,ILO Unemployment Rate (3M),HIGH,GBP
+54b6290f-174c-46cd-bdfa-e663cd124c44,01/13/2026 07:45:00,Budget Balance,LOW,EUR
+ae507538-be1b-4491-954b-ba726ca2d75f,01/13/2026 07:45:00,Inflation ex-tobacco (MoM),LOW,EUR
+1318d8a0-3a1e-4e32-b050-ea1a214d6247,01/13/2026 11:00:00,NFIB Business Optimism Index,LOW,USD
+ba917a5e-25ef-46b5-89ff-915c2752ddc0,01/13/2026 13:30:00,Building Permits (MoM),LOW,CAD
+d5847064-3ed5-4ee0-8b1a-57852334d94b,01/13/2026 13:30:00,Consumer Price Index (MoM),HIGH,USD
+cf310aba-8bef-4e93-94fc-a38747636f8f,01/13/2026 13:30:00,Consumer Price Index (YoY),HIGH,USD
+025fb2dd-96df-4d52-8365-c878578b14de,01/13/2026 13:30:00,Consumer Price Index Core s.a,LOW,USD
+cdaa4f61-217f-4c11-81ef-51420a8629d7,01/13/2026 13:30:00,Consumer Price Index ex Food & Energy (MoM),HIGH,USD
+750f257e-7b7d-473b-9029-0d4f8c5796b2,01/13/2026 13:30:00,Consumer Price Index ex Food & Energy (YoY),HIGH,USD
+7a556aad-b33d-45eb-b0da-55e04caee866,01/13/2026 13:30:00,Consumer Price Index n.s.a (MoM),LOW,USD
+eb02a2b8-a596-4e07-b73c-8807e215717c,01/13/2026 13:55:00,Redbook Index (YoY),LOW,USD
+cbc911eb-e516-4488-b56d-0176e894cc76,01/13/2026 15:00:00,New Home Sales (MoM),LOW,USD
+3f318227-6903-4964-841a-034d35f5118b,01/13/2026 15:00:00,New Home Sales Change (MoM),MEDIUM,USD
+7e665324-5e1d-4289-aef7-3b21ab3466cc,01/13/2026 15:00:00,RealClearMarkets/TIPP Economic Optimism (MoM),LOW,USD
+59d09966-4c3c-4b4d-a4b6-286c33d37e41,01/13/2026 15:00:05,New Home Sales (MoM),LOW,USD
+31b873af-9e16-4a6c-af1b-65583d8c95fe,01/13/2026 15:00:05,New Home Sales Change (MoM),MEDIUM,USD
+e6bfd714-180d-45bd-a962-4be759890fe7,01/13/2026 18:00:00,30-Year Bond Auction,LOW,USD
+d44b7c0d-8d3b-499d-90a9-1380bcd17bba,01/13/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+13f5fac6-79be-4cb1-92fe-a1565a511961,01/13/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+a2b34bd2-c3fc-4e6b-bf4e-d870a718e0ee,01/13/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+8565ee24-0ce8-4901-b59a-45967e509258,01/13/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+79bde6e5-9409-4648-8da7-7b11deafe7b8,01/13/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+a7f7b4db-4f92-4cff-a67b-c2bc2b7b862e,01/13/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+05013589-c14d-404c-ac25-c6c47fbef806,01/13/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+4d1c7314-5af8-4d83-b3a1-8bf8085a74b6,01/13/2026 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+bfa7763f-7457-4c90-b7c9-76b32053629f,01/13/2026 21:45:00,Building Permits s.a. (MoM),MEDIUM,NZD
+4d6f5861-9576-4310-9778-1d4b9757536c,01/14/2026 00:00:00,ANZ Commodity Price,LOW,NZD
+dbb6d995-1a9d-42df-b945-af7b6f8275f0,01/14/2026 12:00:00,MBA Mortgage Applications,LOW,USD
+e237df35-c0a0-4093-b0e1-7b0b07ecb37d,01/14/2026 13:30:00,Current Account,LOW,USD
+bf91c785-bb72-4d8f-a540-27b324002c6c,01/14/2026 13:30:00,Producer Price Index (MoM),MEDIUM,USD
+e5aabd6b-1b79-42c3-a15d-9f621fcc7bae,01/14/2026 13:30:00,Producer Price Index (YoY),MEDIUM,USD
+da750f6f-30cf-4b0a-9e3d-431f2ab951b8,01/14/2026 13:30:00,Producer Price Index ex Food & Energy (MoM),MEDIUM,USD
+cc624134-6312-4610-877e-b7fbfae3b9bb,01/14/2026 13:30:00,Producer Price Index ex Food & Energy (YoY),HIGH,USD
+6210a9cb-3069-4ff7-a686-4df2beae0e63,01/14/2026 13:30:00,Retail Sales (MoM),HIGH,USD
+896cc9a9-9d57-468b-acd5-deb870d889b6,01/14/2026 13:30:00,Retail Sales (YoY),LOW,USD
+3fec0ee2-d829-48ab-ac06-91603347f29e,01/14/2026 13:30:00,Retail Sales Control Group,HIGH,USD
+4c4082b9-b3ad-49d8-b021-96c31459928b,01/14/2026 13:30:00,Retail Sales ex Autos (MoM),MEDIUM,USD
+29f120e0-36f5-451f-8725-8c0caa1f8546,01/14/2026 13:30:05,Producer Price Index (MoM),MEDIUM,USD
+fb0962cc-1903-472f-82e8-b202eb31a784,01/14/2026 13:30:05,Producer Price Index (YoY),MEDIUM,USD
+05c7435b-7365-4853-852d-b9fc586f48de,01/14/2026 13:30:05,Producer Price Index ex Food & Energy (MoM),MEDIUM,USD
+69bea06d-e12e-4ae8-b529-5314f794e60b,01/14/2026 13:30:05,Producer Price Index ex Food & Energy (YoY),HIGH,USD
+b305a52c-2b7b-4be7-943a-9cbe1d29e70f,01/14/2026 14:50:00,Fed's Paulson speech,MEDIUM,USD
+c2e68a36-3d54-46f0-b12d-a6ac24b62d15,01/14/2026 15:00:00,Business Inventories,LOW,USD
+4dd98887-a044-4006-aa74-0d25b6875cdd,01/14/2026 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+00e9f124-0b25-4205-a465-f68e714df004,01/14/2026 23:50:00,Foreign Bond Investment,LOW,JPY
+bad9ade8-5892-470b-aa76-1d9625dbd425,01/14/2026 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+c68cdbba-42b5-45bc-91de-856c68182db2,01/14/2026 23:50:00,Machinery Orders (MoM),LOW,JPY
+9f24a420-9094-4d26-bae1-b6065df5c7e3,01/14/2026 23:50:00,Machinery Orders (YoY),LOW,JPY
+7df41b9b-5ef1-429b-aefa-b85c0116eb92,01/15/2026 00:00:00,Consumer Inflation Expectations,MEDIUM,AUD
+2192151d-0c55-4eb4-917a-bac583fd02c8,01/15/2026 00:01:00,RICS Housing Price Balance,LOW,GBP
+d20fc969-b2ba-4f19-928b-6b475f2c8f94,01/15/2026 00:30:00,Employment Change s.a.,HIGH,AUD
+a78f490c-6ec0-40c1-b458-873290d17957,01/15/2026 00:30:00,Full-Time Employment,MEDIUM,AUD
+e8104d40-ef23-4e29-93f9-ad8cd2169c5b,01/15/2026 00:30:00,Participation Rate,MEDIUM,AUD
+67e39291-1d66-453b-93c3-79a9b7f317d2,01/15/2026 00:30:00,Part-Time Employment,MEDIUM,AUD
+3f05255f-0b30-4bb2-b368-11b6bc3d38f9,01/15/2026 00:30:00,Unemployment Rate s.a.,HIGH,AUD
+dfa97933-8f96-4c05-bb00-ec0f236b844c,01/15/2026 01:30:00,"House Price Index ",LOW,CNY
+a5ae0b3e-c123-4f88-8f8b-d8d692b786f9,01/15/2026 02:00:00,Fixed Asset Investment (YTD) (YoY),LOW,CNY
+c8c08a7d-7e7f-439e-9e55-0d7b50dbf95e,01/15/2026 02:00:00,Industrial Production (YoY),HIGH,CNY
+93adacd7-1864-46e5-a3db-2b085d144250,01/15/2026 02:00:00,Retail Sales (YoY),HIGH,CNY
+05ffccc5-d4db-46e9-809f-56a62cc2435b,01/15/2026 04:30:00,Tertiary Industry Index (MoM),LOW,JPY
+aace5ee9-7a9b-4a45-8ee1-bd9689531c43,01/15/2026 07:00:00,Wholesale Price Index (MoM),LOW,EUR
+1f7bb3ee-5150-4cc9-9574-7cdfdcdc539b,01/15/2026 07:00:00,Wholesale Price Index (YoY),LOW,EUR
+3b8af1bc-5cba-4ebb-b81c-211ba9d40f1c,01/15/2026 07:00:00,Goods Trade Balance,LOW,GBP
+ce180304-f62e-47e8-bf94-b7e151982a4b,01/15/2026 07:00:00,Gross Domestic Product (MoM),MEDIUM,GBP
+fcd4d03d-7f9f-4ace-a6cd-7b68b93368c8,01/15/2026 07:00:00,Index of Services (3M/3M),LOW,GBP
+d47a3bdd-ed58-4dc8-af47-994bdff84aad,01/15/2026 07:00:00,Industrial Production (MoM),MEDIUM,GBP
+ac691ddd-d27c-43a1-ab38-4927afd3a6ce,01/15/2026 07:00:00,Industrial Production (YoY),LOW,GBP
+4e52a23e-d023-4b46-b6dc-09a21e192c02,01/15/2026 07:00:00,Manufacturing Production (MoM),MEDIUM,GBP
+5393cb6b-95fd-4053-9d3e-a3775c1287bb,01/15/2026 07:00:00,Manufacturing Production (YoY),LOW,GBP
+c32b0d41-5e08-40ff-afcf-c6f7a58502dd,01/15/2026 07:00:00,Total Trade Balance,LOW,GBP
+a031a943-6b03-4043-84b9-ef53dbd0d18f,01/15/2026 07:00:00,Trade Balance; non-EU,LOW,GBP
+a28aff88-857b-4128-8cf6-5a40483b230f,01/15/2026 07:45:00,Consumer Price Index (EU norm) (MoM),LOW,EUR
+e8ca2325-f716-4724-8d2d-d7f8e650fd7f,01/15/2026 07:45:00,Consumer Price Index (EU norm) (YoY),MEDIUM,EUR
+ac5df479-d46e-4116-a34c-256ada382906,01/15/2026 08:00:00,Consumer Price Index (MoM),LOW,EUR
+10007b40-75dc-49a3-bdcb-82c673f25ce6,01/15/2026 08:00:00,Consumer Price Index (YoY),LOW,EUR
+4e3cb366-d932-4e1e-9e1f-cc8a64fe97fe,01/15/2026 08:00:00,Harmonized Index of Consumer Prices (MoM),LOW,EUR
+ac5b39c7-ce53-46eb-bff2-d1c1fb2c6f68,01/15/2026 08:00:00,Harmonized Index of Consumer Prices (YoY),MEDIUM,EUR
+45c27e8b-da99-49c8-a1f3-bea25d456bb1,01/15/2026 09:00:00,Real GDP Growth,LOW,EUR
+2b7babdd-4f84-495a-8733-aa2f8e40e165,01/15/2026 09:00:00,Global Trade Balance,LOW,EUR
+873a3a3d-e648-4d1c-91a7-27a5f3ddcdb4,01/15/2026 09:00:00,Industrial Output s.a. (MoM),LOW,EUR
+9cc7d973-1003-48ba-a0ea-08d63e5c2f5e,01/15/2026 09:00:00,Industrial Output w.d.a (YoY),LOW,EUR
+729078cb-ff9f-4bb8-8dfe-3a7186af2ed5,01/15/2026 09:00:00,Trade Balance EU,LOW,EUR
+e146e761-e340-4052-96cf-9176ba53acfd,01/15/2026 09:30:00,BoE Credit Conditions Survey,LOW,GBP
+e0f99030-6413-4263-b9de-97c50761b529,01/15/2026 10:00:00,Construction Output  s.a (MoM),LOW,EUR
+6dadb95c-f500-4ca3-9037-8cf06651fe06,01/15/2026 10:00:00,Construction Output w.d.a (YoY),LOW,EUR
+4b466904-8a3a-4221-987d-783e86f12962,01/15/2026 10:00:00,Industrial Production s.a. (MoM),MEDIUM,EUR
+1cda6254-bbb8-4fac-8874-1dcf90a48e4d,01/15/2026 10:00:00,Industrial Production w.d.a. (YoY),LOW,EUR
+e2fb3492-6721-4727-ae17-86db619c371c,01/15/2026 12:00:00,NIESR GDP Estimate (3M),LOW,GBP
+7a207e2d-cbd7-4fe3-a961-4924321fc99d,01/15/2026 13:15:00,Housing Starts s.a (YoY),LOW,CAD
+3b33f892-46cf-4e3d-bf6c-ddabef76d53e,01/15/2026 13:30:00,Manufacturing Sales (MoM),LOW,CAD
+c296549b-bbd6-49b4-9738-4a39a4fce1d3,01/15/2026 13:30:00,Wholesale Sales (MoM),LOW,CAD
+2f252577-bf66-44ab-8236-7373167c0980,01/15/2026 13:30:00,Continuing Jobless Claims,LOW,USD
+eca0dd39-c0b5-4b81-b4b3-5db4f40c62ed,01/15/2026 13:30:00,Export Price Index (MoM),LOW,USD
+db333539-b7c7-48a7-b640-2c564134c2db,01/15/2026 13:30:00,Export Price Index (YoY),LOW,USD
+64393a2e-8435-45c8-98fa-99218d144a3b,01/15/2026 13:30:00,Import Price Index (MoM),LOW,USD
+aa644803-fe6b-430c-af17-60f5fdf78a5c,01/15/2026 13:30:00,Import Price Index (YoY),LOW,USD
+74742ca6-ba68-450d-89e9-73cac8d33e32,01/15/2026 13:30:00,Initial Jobless Claims,MEDIUM,USD
+36147986-9871-48c3-a44e-838934aa7d44,01/15/2026 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+36134c9a-83f9-41b5-a30a-e4eefa51773b,01/15/2026 13:30:00,NY Empire State Manufacturing Index,MEDIUM,USD
+b51c6ae7-1b5e-40f0-96b4-fbd499cff95a,01/15/2026 13:30:00,Philadelphia Fed Manufacturing Survey,MEDIUM,USD
+ced9dea9-8e64-44f5-8c58-62268e7da014,01/15/2026 15:00:00,NAHB Housing Market Index,LOW,USD
+8d82e8bf-84f7-4772-9779-901fdcfbf8c4,01/15/2026 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+caa059b2-cdad-438c-97ab-56423740f090,01/15/2026 16:30:00,4-Week Bill Auction,LOW,USD
+1572e037-9fcf-41c7-853e-9cbf01f284d6,01/15/2026 21:30:00,Business NZ PMI,MEDIUM,NZD
+76c8dab7-c850-4314-b6c4-ca49d27af9b7,01/15/2026 21:45:00,Food Price Index (MoM),LOW,NZD
+d870387c-ed52-48a9-8ae9-32dae1c37a08,01/16/2026 02:00:00,Gross Domestic Product (QoQ),HIGH,CNY
+24b280bc-7e54-4620-8adf-d924c5f95b8e,01/16/2026 02:00:00,Gross Domestic Product (YoY),HIGH,CNY
+164dc208-f342-4e3e-94f8-b38099ba8fa1,01/16/2026 07:00:00,Consumer Price Index (MoM),LOW,EUR
+15a2134b-72c5-4996-ae7c-1bafa8591268,01/16/2026 07:00:00,Consumer Price Index (YoY),LOW,EUR
+32492569-4bcf-4b04-9f22-99ea41ff570d,01/16/2026 07:00:00,Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+2b60ddf9-b6bb-4eca-bd5c-5347c2400646,01/16/2026 07:00:00,Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+642d0867-99f2-4a10-bb4d-117fb5ba3317,01/16/2026 09:00:00,Consumer Price Index (EU Norm) (MoM),LOW,EUR
+b5911769-107a-464f-a238-0be45602d7e1,01/16/2026 09:00:00,Consumer Price Index (EU Norm) (YoY),MEDIUM,EUR
+e0481602-cac6-4518-b8cd-307bab78cbb1,01/16/2026 09:00:00,Consumer Price Index (MoM),LOW,EUR
+5fa02048-7509-41bb-91a0-f173ba10564b,01/16/2026 09:00:00,Consumer Price Index (YoY),MEDIUM,EUR
+6031f5ca-5828-4a4b-af0d-0e518ddcb966,01/16/2026 10:00:00,Trade Balance n.s.a.,LOW,EUR
+f0a217fc-79c5-4490-8ab2-6936bf99147e,01/16/2026 10:00:00,Trade Balance s.a.,LOW,EUR
+007f02b9-e309-4da4-8d08-58787c215fbd,01/16/2026 13:30:00,Canadian Portfolio Investment in Foreign Securities,LOW,CAD
+cac42766-1541-4f14-8b25-7c8f61a2b6f9,01/16/2026 13:30:00,Foreign Portfolio Investment in Canadian Securities,LOW,CAD
+fbfdbbda-a131-4a69-955c-9059fc767df5,01/16/2026 13:30:00,Building Permits (MoM),MEDIUM,USD
+48db9de8-cb3f-41aa-802d-e3f5d3e8e1b9,01/16/2026 13:30:00,Building Permits Change,LOW,USD
+5519166f-093c-44c3-acf6-a3df72136bbb,01/16/2026 13:30:00,Housing Starts (MoM),MEDIUM,USD
+30fe82b6-4ada-4186-a7bf-38229f8031b3,01/16/2026 13:30:00,Housing Starts Change,LOW,USD
+e975b0f8-63c7-4571-a44b-596115130c53,01/16/2026 14:15:00,Capacity Utilization,LOW,USD
+7eec4add-1cb2-44e1-97ba-c7d7af55d959,01/16/2026 14:15:00,Industrial Production (MoM),MEDIUM,USD
+18f189e9-b3bf-4a17-a9b2-002ecc258df1,01/16/2026 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+70dad312-775c-4769-89e3-a73f80cd1151,01/16/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+7810294c-8143-465a-8f03-19d981a1a639,01/16/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+9b1121b0-e28c-481b-a652-c29b682c6d1a,01/16/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+18042296-4b91-4da7-bdad-3536dcb4d9ec,01/16/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+a18167d2-6b72-4df9-84eb-6536521fc58e,01/16/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+77d43d74-7611-4662-982c-e925a15b030b,01/16/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+70ceeeb3-3633-46d8-a117-a510bac43743,01/16/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+94eab8fa-bcc9-463d-9245-ff6c852082ee,01/16/2026 21:00:00,Net Long-Term TIC Flows,LOW,USD
+61bc9bef-e24f-4dee-8507-91550e752ff7,01/16/2026 21:00:00,Total Net TIC Flows,LOW,USD
+23672aa0-5c60-4594-adac-7360b98378f3,01/19/2026 00:01:00,Rightmove House Price Index (MoM),LOW,GBP
+1480dd9f-768d-4303-84c7-b9878b35bf71,01/19/2026 00:01:00,Rightmove House Price Index (YoY),LOW,GBP
+d8e0ee5c-799c-4758-a1c1-e3fc4492c5be,01/19/2026 04:30:00,Capacity Utilization,LOW,JPY
+701e8612-8e66-43c8-b864-ea5ed526c7bc,01/19/2026 04:30:00,Industrial Production (MoM),LOW,JPY
+043cd480-912c-4fc7-84bf-796fab5301a2,01/19/2026 04:30:00,Industrial Production (YoY),LOW,JPY
+b946fd96-4e73-4642-931e-9ff56debd67c,01/19/2026 05:00:00,Martin L. King's Birthday,NONE,USD
+055fc8cc-3086-4f02-b53d-579752cc30d3,01/19/2026 09:00:00,Current Account n.s.a,LOW,EUR
+90cc3af8-e66e-4c57-a4fb-f3048bae34ca,01/19/2026 09:00:00,Current Account s.a,LOW,EUR
+7d2b7dfd-b005-4296-98a9-2e9249955111,01/19/2026 11:00:00,German Buba Monthly Report,MEDIUM,EUR
+c3cdff01-e6e5-472f-b280-62df6114e937,01/19/2026 13:30:00,BoC Consumer Price Index Core (MoM),MEDIUM,CAD
+0b387c77-13a5-4e50-8fcc-8ab4d86e4dc6,01/19/2026 13:30:00,BoC Consumer Price Index Core (YoY),HIGH,CAD
+7209ecce-93f1-49dd-a5b3-d17fdf3c6a94,01/19/2026 13:30:00,Consumer Price Index - Core (MoM),LOW,CAD
+61e80261-e773-4c75-91ae-598846bf6491,01/19/2026 13:30:00,Consumer Price Index (MoM),MEDIUM,CAD
+f4f4a5f9-7104-40b2-bdae-4f2bc39f1117,01/19/2026 13:30:00,Consumer Price Index (YoY),HIGH,CAD
+eb405172-a391-4d79-bdde-65aa2b3c56bd,01/19/2026 15:30:00,Bank of Canada Business Outlook Survey,MEDIUM,CAD
+38f4ae49-7f90-4ce7-aa02-556f5030037e,01/19/2026 16:30:00,3-Month Bill Auction,LOW,USD
+2ca025ec-e4be-4115-96c8-ce24a5b27899,01/19/2026 16:30:00,6-Month Bill Auction,LOW,USD
+55947912-2d35-4219-93a7-f756fa5dd33a,01/19/2026 21:30:00,Business NZ PSI,MEDIUM,NZD
+77cc9282-c597-40be-8418-07e5121d73ac,01/19/2026 23:30:00,Westpac Consumer Confidence,MEDIUM,AUD
+aa3b04be-398e-4b02-9dad-47b0d6006ca3,01/20/2026 01:15:00,PBoC Interest Rate Decision,MEDIUM,CNY
+9ce8fc32-3466-4fc1-9837-d539b6c11006,01/20/2026 02:00:00,Credit Card Spending (YoY),LOW,NZD
+0d93c5a2-2129-45ef-ad0e-58a5ff16db68,01/20/2026 07:00:00,Producer Price Index (MoM),MEDIUM,EUR
+68444feb-961f-41af-a344-cefd78f48824,01/20/2026 07:00:00,Producer Price Index (YoY),MEDIUM,EUR
+6a6d0f34-4173-415f-b7a4-11730ab7e83e,01/20/2026 07:30:00,Producer and Import Prices (MoM),LOW,CHF
+66afd069-af95-4b1b-880a-eec9491fb92e,01/20/2026 07:30:00,Producer and Import Prices (YoY),LOW,CHF
+9f2ff889-c1a7-4537-9d6a-4af45c3d9e1c,01/20/2026 09:00:00,ECB Bank Lending Survey,HIGH,EUR
+3423ed19-5d9d-4af2-ab05-905c28f6a885,01/20/2026 10:00:00,ZEW Survey – Current Situation,MEDIUM,EUR
+8c8a2a81-6399-4f67-aaad-dfeb294f81fb,01/20/2026 10:00:00,ZEW Survey – Economic Sentiment,MEDIUM,EUR
+1ff926c6-d176-4c82-90e0-c60d8259e29b,01/20/2026 10:00:00,Core Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+9ff1a4d0-da52-44b2-a1c2-f32dcda24ef5,01/20/2026 10:00:00,Core Harmonized Index of Consumer Prices (YoY),MEDIUM,EUR
+8961d2f9-c5eb-4b33-a2d2-c6f146f389fb,01/20/2026 10:00:00,Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+17eb12d8-7672-44c9-95de-bdbaa1a1f9fa,01/20/2026 10:00:00,Harmonized Index of Consumer Prices (YoY),LOW,EUR
+e3a277a7-6728-4feb-be11-64d04aebe832,01/20/2026 10:00:00,ZEW Survey – Economic Sentiment,MEDIUM,EUR
+076a6bc4-3e38-48e5-8701-8e3050c163c5,01/20/2026 13:55:00,Redbook Index (YoY),LOW,USD
+d2903941-d7cb-47a1-9620-1ab2b3e5eb3a,01/20/2026 15:00:00,GDT Price Index,LOW,NZD
+85e1ce36-03d2-4ba2-9251-7abce9e1a588,01/20/2026 16:30:00,52-Week Bill Auction,LOW,USD
+969f52db-44b1-4c47-8e41-c93199226c51,01/20/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+04f6f1ec-f31d-4a62-961c-08a1b8bbbc55,01/20/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+a40e6ac9-aa8d-4fef-a147-000557c62ba5,01/20/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+c6be5f10-a463-4dfe-97b4-837417c9b0b4,01/20/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+8d017060-626e-45b9-ac1c-3091884a96dc,01/20/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+553efe6d-c352-4d54-9f03-111f10297046,01/20/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+ae2d0ee9-2e08-411c-8467-05761dc6861f,01/20/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+4b834c0a-9a6a-4c97-b0c1-6e6d1fe8b84e,01/20/2026 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+855ac17c-f413-439f-94dd-533b5cac368c,01/20/2026 21:45:00,Consumer Price Index (QoQ),HIGH,NZD
+9746c424-26b0-498d-9de9-303ee446152e,01/20/2026 21:45:00,Consumer Price Index (YoY),HIGH,NZD
+c0dd2b81-5e1d-48d0-a526-2db23e59a03b,01/20/2026 23:50:00,Adjusted Merchandise Trade Balance,MEDIUM,JPY
+fcd83ded-ebb0-4618-a17b-af5a372aff18,01/20/2026 23:50:00,Exports (YoY),MEDIUM,JPY
+6aa762ee-0cda-4d77-9f4b-e22c623c1d60,01/20/2026 23:50:00,Imports (YoY),MEDIUM,JPY
+91666f42-074b-4734-a39a-f2fa1ce51be9,01/20/2026 23:50:00,Merchandise Trade Balance Total,MEDIUM,JPY
+35a5774d-dcf2-4a0b-8051-e94964877615,01/21/2026 00:00:00,Westpac Leading Index (MoM),LOW,AUD
+19208a4f-cfbb-4376-b681-4b965ae1f81c,01/21/2026 07:00:00,Consumer Price Index (MoM),HIGH,GBP
+123d8e29-ff82-4e25-80b1-ec4f9aac1c6a,01/21/2026 07:00:00,Consumer Price Index (YoY),HIGH,GBP
+45090cb9-4a2c-44ad-bad9-23afbcd2de70,01/21/2026 07:00:00,Core Consumer Price Index (YoY),HIGH,GBP
+18e08511-8f80-4a7d-819d-66f8b05dab38,01/21/2026 07:00:00,PPI Core Output (MoM) n.s.a,MEDIUM,GBP
+10d9472b-0cde-4ea6-af5b-773eb263d24c,01/21/2026 07:00:00,"PPI Core Output (YoY) n.s.a ",MEDIUM,GBP
+293879f0-d30a-438e-ab32-7a0ac520e433,01/21/2026 07:00:00,Producer Price Index - Input (MoM) n.s.a,LOW,GBP
+79aafe58-bd32-481c-af76-e9e8445d8202,01/21/2026 07:00:00,Producer Price Index - Input (YoY) n.s.a,LOW,GBP
+44daf8df-a54e-438b-b9d6-5884a15e275b,01/21/2026 07:00:00,Producer Price Index - Output (MoM) n.s.a,MEDIUM,GBP
+2592ea3a-f548-4999-a6d2-25c36a839935,01/21/2026 07:00:00,Producer Price Index - Output (YoY) n.s.a,MEDIUM,GBP
+724b453d-7c4c-4eff-9525-26fa86620fdb,01/21/2026 07:00:00,Retail Price Index (MoM),MEDIUM,GBP
+8ec18afb-983a-4e59-8825-d95b7e32e7ba,01/21/2026 07:00:00,Retail Price Index (YoY),MEDIUM,GBP
+10ae0494-12bb-470c-a60b-fc625588d3f0,01/21/2026 09:30:00,DCLG House Price Index (YoY),LOW,GBP
+961c4677-8131-4693-a305-386f04afa55e,01/21/2026 12:00:00,MBA Mortgage Applications,LOW,USD
+bb7cbfb3-a174-4d9e-863a-79da1b90928d,01/21/2026 13:30:00,Industrial Product Price (MoM),LOW,CAD
+151159a9-4868-403c-a66b-a55c3c20ca17,01/21/2026 13:30:00,Raw Material Price Index,LOW,CAD
+af03dc14-58f6-473e-9a81-66d22ef361b6,01/21/2026 15:00:00,Existing Home Sales (MoM),LOW,USD
+40a56030-e1e5-410f-9b6d-dd78eb7b2df0,01/21/2026 15:00:00,Existing Home Sales Change (MoM),MEDIUM,USD
+7ca89afa-2fcd-4961-894a-a5fd0a2c286a,01/21/2026 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+663c14c5-cd47-4d94-b5d2-3e039fb5d2e5,01/21/2026 18:00:00,20-Year Bond Auction,LOW,USD
+02fe2e5a-5800-47c3-8745-07f8cc02e43d,01/21/2026 21:45:00,Electronic Card Retail Sales  (MoM),LOW,NZD
+2e5fc278-4ccd-4f58-9e8b-6a60ca7ebbd5,01/21/2026 21:45:00,Electronic Card Retail Sales (YoY),LOW,NZD
+7ca96025-8da0-41db-9e6b-7418b2337da7,01/21/2026 21:45:00,Visitor Arrivals (YoY),LOW,NZD
+9f123178-683f-4b21-8901-52b21fadb970,01/21/2026 23:50:00,Foreign Bond Investment,LOW,JPY
+3a87096d-c337-44e6-abab-8fff29eb367a,01/21/2026 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+85b758f2-d8c2-4929-967f-f84344f5a4c4,01/22/2026 07:00:00,Public Sector Net Borrowing,LOW,GBP
+d9a346f3-0506-4c51-8c7c-96f7f858fc9b,01/22/2026 07:30:00,HCOB Services PMI,HIGH,EUR
+703beced-e32e-4884-8cf6-0cf00b8df52c,01/22/2026 08:30:00,HCOB Composite PMI,HIGH,EUR
+c55f3561-0404-444e-9785-0264456da62c,01/22/2026 08:30:00,HCOB Manufacturing PMI,HIGH,EUR
+f45b0b4f-d000-4240-b1da-e0614b8cd0a9,01/22/2026 09:00:00,HCOB Composite PMI,HIGH,EUR
+9b821ef7-aab0-4287-b2be-9958bb599add,01/22/2026 09:00:00,HCOB Manufacturing PMI,HIGH,EUR
+2f85500e-518c-48b6-a81d-9b04670c124e,01/22/2026 09:00:00,HCOB Services PMI,HIGH,EUR
+bd679be8-e2be-4fbd-be1f-95a5ef1b284a,01/22/2026 09:30:00,S&P Global Composite PMI,HIGH,GBP
+154b17ad-ed3c-4930-900a-cb5ca0320b01,01/22/2026 09:30:00,S&P Global Manufacturing PMI,HIGH,GBP
+2a911385-82c7-41aa-9a9d-80519f80244f,01/22/2026 09:30:00,S&P Global Services PMI,HIGH,GBP
+af28e008-dc3e-4b3e-bbdc-2bdb4bd32914,01/22/2026 13:30:00,Employment Insurance Beneficiaries Change (MoM),LOW,CAD
+c6ccc196-9ed7-4424-89fe-7ec69d8cfc1a,01/22/2026 13:30:00,Continuing Jobless Claims,LOW,USD
+9d447dca-4867-4afc-a5c2-635dda71e1d3,01/22/2026 13:30:00,Initial Jobless Claims,MEDIUM,USD
+16923ec7-35f2-4aea-8d8a-ea28476bac5a,01/22/2026 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+635ada83-1638-485d-ac62-ebe0a87a2b48,01/22/2026 15:00:00,Consumer Confidence,MEDIUM,EUR
+364530b0-eff7-44c8-a18c-03a05039fa07,01/22/2026 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+e35b3ca5-e772-42ac-8a31-a42225a60685,01/22/2026 16:00:00,Kansas Fed Manufacturing Activity,LOW,USD
+1e4bf662-480f-4dc4-a60e-5a3e9b49ea9a,01/22/2026 16:30:00,4-Week Bill Auction,LOW,USD
+8c83a1bd-8d61-43d7-899e-555893e39189,01/22/2026 18:00:00,10-year TIPS Auction,LOW,USD
+c0dedb47-93f2-475e-8164-cec6b5e0518a,01/22/2026 22:00:00,S&P Global Composite PMI,MEDIUM,AUD
+a48b539b-b940-4360-bc67-25d5dce2be30,01/22/2026 22:00:00,S&P Global Manufacturing PMI,MEDIUM,AUD
+d5c67a9b-eee5-44dd-b154-0623d6d76ee1,01/22/2026 22:00:00,S&P Global Services PMI,MEDIUM,AUD
+5907fb92-2953-40b5-a2d3-404dd141f7ac,01/22/2026 23:30:00,National Consumer Price Index (YoY),MEDIUM,JPY
+1d8f7b9f-69b4-4116-b842-89815408fbbe,01/22/2026 23:30:00,"National CPI ex Food, Energy (YoY)",MEDIUM,JPY
+d1619c5b-58a6-4d2b-ab3f-432c60fad1da,01/22/2026 23:30:00,National CPI ex Fresh Food (YoY),MEDIUM,JPY
+bf856c6c-54ec-4280-8321-c038d3f74a29,01/23/2026 00:01:00,GfK Consumer Confidence,MEDIUM,GBP
+55a871ea-3058-42be-b662-c04cdd2efe9f,01/23/2026 00:30:00,Jibun Bank Manufacturing PMI,LOW,JPY
+47f5f42f-53d9-4881-81cd-4f247a11498d,01/23/2026 00:30:00,Jibun Bank Services PMI,LOW,JPY
+8be92807-a18a-4e7a-b252-d872c026979b,01/23/2026 03:00:00,BoJ Interest Rate Decision,HIGH,JPY
+8656d04e-b986-4847-bc0b-729a3b488be6,01/23/2026 03:00:00,BoJ Monetary Policy Statement,HIGH,JPY
+5a44a88c-dcc7-4050-be28-976bd87215d4,01/23/2026 03:00:00,BoJ Outlook Report,MEDIUM,JPY
+cb33ea30-cb40-4ee4-8183-ec4b0ddf587c,01/23/2026 06:30:00,BoJ Press Conference,HIGH,JPY
+4ed267a3-b612-468e-ad6d-dc9271ad758a,01/23/2026 07:00:00,Retail Sales (MoM),HIGH,GBP
+e419b468-c189-4e47-a54b-ddc460c7da70,01/23/2026 07:00:00,Retail Sales (YoY),MEDIUM,GBP
+0b4fca5f-3272-4abc-ac00-e3b57e1eff3c,01/23/2026 07:00:00,Retail Sales ex-Fuel (MoM),MEDIUM,GBP
+6b444ef9-b8f3-4498-8488-f94bce6b061e,01/23/2026 07:00:00,Retail Sales ex-Fuel (YoY),MEDIUM,GBP
+3dfe335a-6183-4793-ab5a-087a0956f75b,01/23/2026 07:45:00,Business Climate in Manufacturing,LOW,EUR
+ee58b5ed-20d5-4411-82a0-3aeb6e5cede6,01/23/2026 08:15:00,HCOB Composite PMI,MEDIUM,EUR
+19c86ae7-f0e2-4a20-b23d-d94bbc31b4a8,01/23/2026 08:15:00,HCOB Manufacturing PMI,MEDIUM,EUR
+b6486717-2662-4c91-a47e-c3741c02b227,01/23/2026 08:15:00,HCOB Services PMI,MEDIUM,EUR
+1a1580a6-4b32-487a-8667-fcc5472a315f,01/23/2026 09:00:00,IFO – Business Climate,MEDIUM,EUR
+70a4dd70-7442-46f7-9549-3bc7614be21a,01/23/2026 09:00:00,IFO – Current Assessment,MEDIUM,EUR
+5f0320c5-8dfa-426c-b65e-cfbe384a9b0c,01/23/2026 09:00:00,IFO – Expectations,MEDIUM,EUR
+089cf833-da58-4124-83f5-a50dcab917b4,01/23/2026 13:30:00,New Housing Price Index (MoM),LOW,CAD
+8b8197b9-48fd-405b-ab55-a4a637f37bc4,01/23/2026 13:30:00,New Housing Price Index (YoY),LOW,CAD
+d0ac87b0-7ab3-41ac-b757-a71b84a21f39,01/23/2026 13:30:00,Retail Sales (MoM),MEDIUM,CAD
+16fc6ab5-9195-486f-a60c-2e2ff2a0b084,01/23/2026 13:30:00,Retail Sales ex Autos (MoM),MEDIUM,CAD
+97802dfd-774a-40f9-8646-01b7f92358a1,01/23/2026 14:45:00,S&P Global Composite PMI,MEDIUM,USD
+941e97df-7fb0-42ec-88ff-7a829cee7b84,01/23/2026 14:45:00,S&P Global Manufacturing PMI,HIGH,USD
+e5104ef9-d6bd-415a-b394-7e3066779e59,01/23/2026 14:45:00,S&P Global Services PMI,HIGH,USD
+4ad65c0e-6d3b-4681-a469-aca039e75e51,01/23/2026 15:00:00,Michigan Consumer Expectations Index,MEDIUM,USD
+f68f6887-616f-4840-931e-cff8ab07392d,01/23/2026 15:00:00,Michigan Consumer Sentiment Index,MEDIUM,USD
+0bd8945c-d30e-4be5-884b-43c19ec9976d,01/23/2026 15:00:00,UoM 1-year Consumer Inflation Expectations,MEDIUM,USD
+71481137-9210-45f8-bbe3-8b06550538dd,01/23/2026 15:00:00,UoM 5-year Consumer Inflation Expectation,MEDIUM,USD
+eca7a2ac-a7ae-44b0-906c-7fc1aa851f3d,01/23/2026 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+f5cc0d17-569b-4553-8039-dd52af75a950,01/23/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+dbd924cf-8aa3-4e23-afad-ba1287d5bc11,01/23/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+3f26f72f-1dd6-4b4f-aa65-f9576760b6fb,01/23/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+5b8ebca4-7ee8-46f2-98bb-ed1a4319bdbd,01/23/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+1d89216b-a0bc-40c0-8437-5940174dc480,01/23/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+2c327d1a-93b8-40c4-aacb-eedca5ceb972,01/23/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+d98d8233-d9f9-4bd8-a932-274367f65c2c,01/23/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+92e05456-2b05-4299-a8d3-22fa2074609b,01/25/2026 14:00:00,Australia Day,NONE,AUD
+bacf8bf3-b63b-4bb5-bfe8-54e3bd134c24,01/25/2026 23:50:00,Corporate Service Price Index (YoY),LOW,JPY
+6e74b18b-aa32-47c2-8de7-eab29ff72361,01/26/2026 05:00:00,Coincident Index,LOW,JPY
+2a29d670-7f6c-4632-85ad-b5963b7d509b,01/26/2026 05:00:00,Leading Economic Index,LOW,JPY
+a1bd12f8-75fd-4638-b394-e90a05f86ee8,01/26/2026 13:30:00,"Chicago Fed National Activity Index ",LOW,USD
+ad1a4460-f7a4-4b88-ad36-f2132c33a6eb,01/26/2026 15:00:00,New Home Sales (MoM),LOW,USD
+1fe7dae5-6376-41d5-b18c-20e666197102,01/26/2026 15:00:00,New Home Sales Change (MoM),MEDIUM,USD
+58dea369-48a1-45e2-9a89-06b2fc9a0378,01/26/2026 15:30:00,Dallas Fed Manufacturing Business Index,LOW,USD
+11c3d70b-f71a-45dd-a045-3b73664a48b1,01/26/2026 16:30:00,3-Month Bill Auction,LOW,USD
+df05008e-1bf7-4fa0-9579-624561bfdc1a,01/26/2026 16:30:00,6-Month Bill Auction,LOW,USD
+477b79ba-af1e-45e5-a47e-4bac5fb34b22,01/26/2026 18:00:00,2-Year Note Auction,LOW,USD
+40ee8693-3992-447d-8b78-01f38a036c7a,01/27/2026 07:45:00,Consumer Confidence,LOW,EUR
+3f95907c-9e5f-434a-b3cd-f22a48c046ed,01/27/2026 08:00:00,Unemployment Survey,LOW,EUR
+0b6566ac-651d-4d6d-ad61-48e6812730b7,01/27/2026 13:30:00,Durable Goods Orders,MEDIUM,USD
+a3acf8ee-7e10-414c-bf66-13f10ca82f81,01/27/2026 13:30:00,Durable Goods Orders ex Defense,MEDIUM,USD
+4d8c5152-e56c-4a9a-8f04-b4155e52d9b6,01/27/2026 13:30:00,Durable Goods Orders ex Transportation,MEDIUM,USD
+d6c78770-ca2f-487f-814e-caba613ccc39,01/27/2026 13:30:00,Nondefense Capital Goods Orders ex Aircraft,MEDIUM,USD
+372a491f-495f-4922-beee-d7d0e257f77c,01/27/2026 13:55:00,Redbook Index (YoY),LOW,USD
+28074a97-feb9-42db-8859-b9e8da086ed7,01/27/2026 14:00:00,Housing Price Index (MoM),MEDIUM,USD
+13883b49-ddc0-4bd6-9c7d-082991212b77,01/27/2026 14:00:00,S&P/Case-Shiller Home Price Indices (YoY),LOW,USD
+a831ef70-3bd9-442c-a40a-1d721f9ff676,01/27/2026 15:00:00,Consumer Confidence,MEDIUM,USD
+18fcd316-bfa0-455f-bdb5-f5412d8ac4f9,01/27/2026 15:00:00,Richmond Fed Manufacturing Index,LOW,USD
+7306f5d8-d535-4c2b-91c0-a04c55793583,01/27/2026 18:00:00,5-Year Note Auction,LOW,USD
+dae2d9d0-c666-4c5d-b2d5-f82127500900,01/27/2026 21:30:00,API Weekly Crude Oil Stock,LOW,USD
+3ced20d1-542d-45a7-8440-3301bc070c13,01/27/2026 23:50:00,BoJ Monetary Policy Meeting Minutes,MEDIUM,JPY
+fbe04ef9-52b9-4615-a826-9b360f39da48,01/28/2026 00:01:00,BRC Shop Price Index (YoY),LOW,GBP
+7f2c7015-3ba5-48f1-9c46-f9326821fce0,01/28/2026 00:30:00,Consumer Price Index (MoM),MEDIUM,AUD
+8d6d34dc-2ef3-4cda-ac3b-c4df1c939c2e,01/28/2026 00:30:00,Consumer Price Index (YoY),HIGH,AUD
+6a1c7743-52c3-40d1-999b-5c222f5d5398,01/28/2026 00:30:00,Quarterly Consumer Price Index (QoQ),LOW,AUD
+c00594fc-301a-4328-8b77-ee648dd7e5ce,01/28/2026 00:30:00,Quarterly Consumer Price Index (YoY),LOW,AUD
+5f834902-b412-47d6-a7eb-964c600e2780,01/28/2026 00:30:00,Quarterly RBA Trimmed Mean CPI (QoQ),LOW,AUD
+08ba29d1-2029-4b8a-86f3-de794234bf62,01/28/2026 00:30:00,Quarterly RBA Trimmed Mean CPI (YoY),LOW,AUD
+306b9171-2817-48b9-92dd-5c4173d9467d,01/28/2026 00:30:00,Trimmed Mean CPI (MoM),MEDIUM,AUD
+f7c8114d-ed5d-4ab6-abec-ba48a9120b0e,01/28/2026 00:30:00,Trimmed Mean CPI (YoY),HIGH,AUD
+728c59d5-ab77-44aa-aaf8-38889c30c454,01/28/2026 07:00:00,GfK Consumer Confidence Survey,MEDIUM,EUR
+0025c73c-613a-4225-92ca-34e97d3f0c1e,01/28/2026 09:00:00,ZEW Survey – Expectations,MEDIUM,CHF
+52a771d0-0328-43ab-b795-473f994a0e6e,01/28/2026 12:00:00,MBA Mortgage Applications,LOW,USD
+9c01a58f-e2ac-46d3-a2b2-24a7530e5fd5,01/28/2026 14:45:00,BoC Interest Rate Decision,HIGH,CAD
+31d20de2-ca3d-4644-a23d-54062cf8fcd2,01/28/2026 14:45:00,BoC Monetary Policy Report,HIGH,CAD
+cfc03a2b-b223-4d00-86a8-23b5866aaef5,01/28/2026 14:45:00,BoC Monetary Policy Statement,HIGH,CAD
+dcb8e808-3dcd-4566-9f74-7d160f5d2c2e,01/28/2026 15:30:00,BoC Press Conference,HIGH,CAD
+3fd537aa-55f7-4dad-b944-6018563b8d93,01/28/2026 15:30:00,EIA Crude Oil Stocks Change,LOW,USD
+3d34109c-7a06-402e-b2b3-515fa2e66781,01/28/2026 19:00:00,Fed Interest Rate Decision,HIGH,USD
+912c497f-d457-477c-9b8e-a1062514ec7b,01/28/2026 19:00:00,Fed Monetary Policy Statement,HIGH,USD
+81b79ebc-a30e-4d5e-9fc2-9d34e73262b8,01/28/2026 19:30:00,FOMC Press Conference,HIGH,USD
+a6961a53-b912-434b-860c-e793b517151f,01/28/2026 21:45:00,Exports,MEDIUM,NZD
+c57dcff9-5d4a-42c4-bbe5-05165e31f098,01/28/2026 21:45:00,Imports,MEDIUM,NZD
+51b12fe7-104a-4df0-b7b6-080ccc2104bb,01/28/2026 21:45:00,Trade Balance NZD (MoM),LOW,NZD
+4f7d467e-6b22-49d4-9a73-d3027880c9b3,01/28/2026 21:45:00,Trade Balance NZD (YoY),MEDIUM,NZD
+0928cde1-dbb9-47fe-a7b3-c2eb625d2a68,01/28/2026 23:50:00,Foreign Bond Investment,LOW,JPY
+fa9655fe-103a-4e37-a5b8-2bfc66e64ca3,01/28/2026 23:50:00,Foreign Investment in Japan Stocks,LOW,JPY
+387bd0d9-eca9-4699-995e-b5dc4b2d4394,01/29/2026 00:00:00,ANZ Activity Outlook,LOW,NZD
+b4e8bc7f-404f-4d5d-8b54-b37e6ff51971,01/29/2026 00:00:00,ANZ Business Confidence,LOW,NZD
+6f5f1c1e-47fe-4753-a9de-4961f821899a,01/29/2026 00:30:00,Export Price Index (QoQ),LOW,AUD
+d6cafe43-8595-41c6-98a4-452c29d060fe,01/29/2026 00:30:00,Import Price Index (QoQ),LOW,AUD
+4ceca168-5b49-4cf1-b3a6-f76e2f36bd49,01/29/2026 05:00:00,Consumer Confidence Index,LOW,JPY
+2f3b4698-c0d7-444b-9887-ef5502aa0301,01/29/2026 07:00:00,Exports (MoM),LOW,CHF
+735247a4-cc1e-4c5f-8d48-9b11fa433780,01/29/2026 07:00:00,Imports (MoM),LOW,CHF
+161fd9f5-bda7-42b4-a067-688c592279bd,01/29/2026 07:00:00,Trade Balance,LOW,CHF
+0e8c5df7-4b82-4901-859c-69b13e132365,01/29/2026 08:00:00,Retail Sales (YoY),LOW,EUR
+2e6fe830-0813-44fa-b304-7831dec536cd,01/29/2026 09:00:00,M3 Money Supply (3m),LOW,EUR
+786f761c-2150-4e10-99e0-7b5b1b503730,01/29/2026 09:00:00,M3 Money Supply (YoY),LOW,EUR
+cbef1f49-e927-4094-bada-76c18793c547,01/29/2026 09:00:00,Private Loans (YoY),LOW,EUR
+ab45858a-9f56-4d5d-98cf-4aa435b24d0d,01/29/2026 09:00:00,Business Confidence,LOW,EUR
+06376ef2-33ab-4009-b7e0-879a1d9d1310,01/29/2026 09:00:00,Consumer Confidence,LOW,EUR
+ebb67c7c-edbb-44a1-9a38-01ab2712bc8f,01/29/2026 10:30:00,10-y Bond Auction,LOW,EUR
+ac21fc03-7268-4525-8cc1-e4b35749ef63,01/29/2026 10:30:00,5-y Bond Auction,LOW,EUR
+52dbdca0-4741-4aff-8cf9-fea77c9b662a,01/29/2026 13:30:00,Continuing Jobless Claims,LOW,USD
+278eaa1e-901c-4ff4-9f9b-ca3e9292a1b9,01/29/2026 13:30:00,Core Personal Consumption Expenditures (QoQ),MEDIUM,USD
+e6e50a73-e8b0-430e-91dc-983a6f571e97,01/29/2026 13:30:00,Goods Trade Balance,LOW,USD
+17963f94-e08a-486f-9bc9-902a38391be3,01/29/2026 13:30:00,Gross Domestic Product Annualized,HIGH,USD
+0cf3eff6-6406-4ac9-bb58-11b7c83ead41,01/29/2026 13:30:00,Gross Domestic Product Price Index,MEDIUM,USD
+e65b758d-aedb-46ad-b344-54c5a3615c4f,01/29/2026 13:30:00,Initial Jobless Claims,MEDIUM,USD
+eaac8f5e-ca37-4edb-8a84-d549dc104f74,01/29/2026 13:30:00,Initial Jobless Claims 4-week average,LOW,USD
+53bcb545-92ae-4852-bbfd-84abbd8dfc08,01/29/2026 13:30:00,Personal Consumption Expenditures Prices (QoQ),MEDIUM,USD
+6e828e11-6835-4203-9ca5-ea8f688473b3,01/29/2026 13:30:00,Wholesale Inventories,LOW,USD
+50bafeeb-97b9-449e-8682-d849ef55bf09,01/29/2026 15:00:00,Pending Home Sales (MoM),MEDIUM,USD
+c4624f12-ef1c-445c-b47c-8ec80c169455,01/29/2026 15:00:00,Pending Home Sales (YoY),LOW,USD
+945228e1-6b6a-4842-933b-2fa6f0c00c77,01/29/2026 15:30:00,EIA Natural Gas Storage Change,LOW,USD
+09e3d994-540d-4a29-bd4a-53a2b5bc49a2,01/29/2026 16:30:00,4-Week Bill Auction,LOW,USD
+14d97a18-99ee-472e-94a3-0f4e0cd9a1d6,01/29/2026 18:00:00,7-Year Note Auction,LOW,USD
+97822e70-5217-4ae8-9a7b-9a6db955bf08,01/29/2026 21:00:00,ANZ – Roy Morgan Consumer Confidence,MEDIUM,NZD
+c450829d-09e7-4c38-a0ab-aae69565e6a0,01/29/2026 23:30:00,Jobs / Applicants Ratio,LOW,JPY
+19bda3bd-0534-4e81-91a1-b69db51bd389,01/29/2026 23:30:00,Tokyo Consumer Price Index (YoY),HIGH,JPY
+12d80606-ddc0-4dd4-b00d-ee1a00f69fb8,01/29/2026 23:30:00,"Tokyo CPI ex Food, Energy (YoY)",HIGH,JPY
+41f02dae-623c-4ff6-80ac-00699cca42cb,01/29/2026 23:30:00,Tokyo CPI ex Fresh Food (YoY),MEDIUM,JPY
+f29050d2-ac87-41a8-8a6f-919eadb061f6,01/29/2026 23:30:00,Unemployment Rate,MEDIUM,JPY
+4ba7aa61-b00f-4831-b58b-6fd458ae5726,01/29/2026 23:50:00,Industrial Production (MoM),LOW,JPY
+3a6f7528-d5fc-4092-9d93-021207b1a33d,01/29/2026 23:50:00,Industrial Production (YoY),LOW,JPY
+8d994dc3-c848-4d55-bc50-a290109487dc,01/29/2026 23:50:00,Large Retailer Sales,MEDIUM,JPY
+884de9af-2a1c-443c-bbba-ab14ae6fff16,01/29/2026 23:50:00,Retail Trade (YoY),MEDIUM,JPY
+d816c3f7-b757-4086-89ed-a2313e6a5e5a,01/29/2026 23:50:00,Retail Trade s.a (MoM),MEDIUM,JPY
+26ba6f72-d906-4a07-a0f9-6c713b54ebf1,01/30/2026 00:30:00,Private Sector Credit (MoM),LOW,AUD
+03289157-f579-4f94-8701-a09ba6d1df03,01/30/2026 00:30:00,Private Sector Credit (YoY),LOW,AUD
+6afbf809-8215-43b9-9d8e-7ed5b60f0dfb,01/30/2026 00:30:00,Producer Price Index (QoQ),LOW,AUD
+de4e504b-4480-4a24-ae0e-a382d4873a9d,01/30/2026 00:30:00,Producer Price Index (YoY),MEDIUM,AUD
+4e359b82-46dd-4351-a3e9-7d424121d5c3,01/30/2026 05:00:00,Annualized Housing Starts,LOW,JPY
+d8cd816d-6d50-418b-b88f-51511c758750,01/30/2026 05:00:00,Construction Orders (YoY),LOW,JPY
+8cf75cf0-9767-4dda-924d-cb22e96c4418,01/30/2026 05:00:00,Housing Starts (YoY),LOW,JPY
+a6611af1-ec92-40bd-bc65-027727ebf618,01/30/2026 07:00:00,Consumer Price Index (MoM),HIGH,EUR
+06529b2c-85e5-457f-ba04-5587e6fa3b3e,01/30/2026 07:00:00,Consumer Price Index (YoY),HIGH,EUR
+e40e6a9e-b3d2-4d08-b61a-a0aa0d2057ff,01/30/2026 07:00:00,Gross Domestic Product (QoQ),HIGH,EUR
+341ccc11-d599-4fe4-95a2-2ae95df2d84b,01/30/2026 07:00:00,Gross Domestic Product (YoY),HIGH,EUR
+cb0bea07-6af0-4b18-86d4-7e43b638a372,01/30/2026 07:00:00,Gross Domestic Product w.d.a (YoY),MEDIUM,EUR
+cce992de-52ca-4347-b7eb-e6ae5a4cb13d,01/30/2026 07:00:00,Import Price Index (MoM),LOW,EUR
+f63447e3-461a-4b0e-a658-c4812c6ed060,01/30/2026 07:00:00,Import Price Index (YoY),LOW,EUR
+29dee24a-ad47-4f97-9b39-58231bf0de0b,01/30/2026 07:00:00,Retail Sales (MoM),MEDIUM,EUR
+e5352795-f054-48ce-94b0-ba89c0f720cb,01/30/2026 07:00:00,Retail Sales (YoY),HIGH,EUR
+06413ae5-f102-410f-81e5-024d723e0152,01/30/2026 07:00:00,Nationwide Housing Prices n.s.a (YoY),LOW,GBP
+f5a73091-4494-447b-8fe8-362c7eecb38d,01/30/2026 07:00:00,Nationwide Housing Prices s.a (MoM),LOW,GBP
+ca08f6d6-c75b-4cc3-820d-dd726bc08f8e,01/30/2026 07:45:00,Consumer Price Index (EU norm) (MoM),LOW,EUR
+b3585e52-dd3e-4802-8d12-85ccf3b9ee2c,01/30/2026 07:45:00,Consumer Price Index (EU norm) (YoY),MEDIUM,EUR
+9d0a05e4-2683-410a-ac66-89ff20330131,01/30/2026 07:45:00,Consumer Spending (MoM),LOW,EUR
+455accf6-0179-4698-bf1a-2ce0304744e2,01/30/2026 07:45:00,Gross Domestic Product (QoQ),MEDIUM,EUR
+8a5534c7-bf94-4ec4-a9dd-54debb3fe891,01/30/2026 07:45:00,Producer Prices (MoM),LOW,EUR
+08dc01e2-e3d1-4270-b86b-3dfdc10845e0,01/30/2026 08:00:00,KOF Leading Indicator,LOW,CHF
+520a1b3b-ca36-4d48-ab47-4a066746ea3a,01/30/2026 08:00:00,Consumer Price Index (MoM),LOW,EUR
+248f756e-c5f3-4de3-ba10-ca62465dda4c,01/30/2026 08:00:00,Consumer Price Index (YoY),LOW,EUR
+ca918273-3c80-40cf-9127-739de9862e19,01/30/2026 08:00:00,Gross Domestic Product - Estimated (QoQ),MEDIUM,EUR
+422eeba4-0f12-4750-8eca-adff5bc68d2b,01/30/2026 08:00:00,Gross Domestic Product - Estimated (YoY),LOW,EUR
+661865b2-4804-4642-acac-74710eb84c6d,01/30/2026 08:00:00,Harmonized Index of Consumer Prices (MoM),LOW,EUR
+c267b205-1aaf-4518-97b0-8f97913fee74,01/30/2026 08:00:00,Harmonized Index of Consumer Prices (YoY),MEDIUM,EUR
+ffab82d0-3b2d-44ad-a948-43a9584e342c,01/30/2026 08:55:00,Unemployment Change,MEDIUM,EUR
+20dd30ff-08f7-4ad8-bb90-40eb1ac7ede2,01/30/2026 08:55:00,Unemployment Rate s.a.,MEDIUM,EUR
+f9b66036-e8c7-45fa-8807-b943fb59b6a3,01/30/2026 09:00:00,Baden-Wuerttemberg CPI (MoM),LOW,EUR
+ccaec581-fe42-47ad-b71d-253b65ad72f9,01/30/2026 09:00:00,Baden-Wuerttemberg CPI (YoY),LOW,EUR
+a7eb6608-fab3-4a93-9dc9-0dfaba78b225,01/30/2026 09:00:00,Bavaria CPI (MoM),LOW,EUR
+d7b6bf59-85ad-45e2-8d86-5ce39fac528f,01/30/2026 09:00:00,Bavaria CPI (YoY),LOW,EUR
+a9b08482-f4a9-4501-95a2-0a6098bf7bdc,01/30/2026 09:00:00,Brandenburg CPI (MoM),LOW,EUR
+151dfb58-0766-4558-ab4e-0de6784375b2,01/30/2026 09:00:00,Brandenburg CPI (YoY),LOW,EUR
+3e25b9e6-515f-4614-9981-8b2ad3673d71,01/30/2026 09:00:00,Hesse CPI (MoM),LOW,EUR
+a6aa80bb-161a-40d1-9971-709654dcff5c,01/30/2026 09:00:00,Hesse CPI (YoY),LOW,EUR
+01e80a78-e8ef-43a3-b8d3-e60d78729c48,01/30/2026 09:00:00,North Rhine-Westphalia CPI (MoM),LOW,EUR
+04fde7c9-9abc-4c59-aff4-03625b2de6cd,01/30/2026 09:00:00,North Rhine-Westphalia CPI (YoY),LOW,EUR
+cd8b8b8d-5ceb-45bf-8d80-5a4aaffe79f8,01/30/2026 09:00:00,Saxony CPI (MoM),LOW,EUR
+1e5376af-b037-43fd-99f7-bbc5b17160a4,01/30/2026 09:00:00,Saxony CPI (YoY),LOW,EUR
+73900133-1a0e-4e57-bbd2-518e41209567,01/30/2026 09:00:00,Current Account Balance,LOW,EUR
+35a196be-409f-4e85-8340-dea836881c28,01/30/2026 09:00:00,Gross Domestic Product (QoQ),MEDIUM,EUR
+00bfcd12-2b2c-4b14-80ed-348a3b267c26,01/30/2026 09:00:00,Gross Domestic Product (YoY),MEDIUM,EUR
+44d1f290-dbdf-4ea3-a99b-3f1198d85c65,01/30/2026 09:00:00,Industrial Sales n.s.a. (YoY),LOW,EUR
+d4a58ecb-3cf3-4e33-ab5b-4fea2b1d3c07,01/30/2026 09:00:00,Industrial Sales s.a. (MoM),LOW,EUR
+10ab6d9e-1ff6-4b43-8002-3cc970cc4c51,01/30/2026 09:00:00,Trade Balance non-EU,LOW,EUR
+ce604854-5f80-4509-948b-3adfb41f0a4e,01/30/2026 09:00:00,Unemployment,LOW,EUR
+2eec32ff-e1c1-4287-b177-ca21c4a34ee7,01/30/2026 09:30:00,Consumer Credit,LOW,GBP
+db5846dd-a152-42cc-bb39-ee9688b858a7,01/30/2026 09:30:00,M4 Money Supply (MoM),LOW,GBP
+d57742f4-21bb-49c6-a5bc-6b1bd52a6ad9,01/30/2026 09:30:00,M4 Money Supply (YoY),LOW,GBP
+47ecbc64-d2dc-42e4-9253-800d1543b783,01/30/2026 09:30:00,Mortgage Approvals,LOW,GBP
+c7fe128b-09d8-412b-affd-e9dde4978d54,01/30/2026 09:30:00,Net Lending to Individuals (MoM),LOW,GBP
+e542e596-212d-418a-a2a7-84ab47f264e9,01/30/2026 10:00:00,Business Climate,MEDIUM,EUR
+753e98bb-918d-498a-984e-4cc436e0334e,01/30/2026 10:00:00,Consumer Confidence,MEDIUM,EUR
+f4299731-9f89-48bc-98a6-7488750c18ca,01/30/2026 10:00:00,Economic Sentiment Indicator,MEDIUM,EUR
+710ea0bf-90dc-497e-9a7d-27ff8c2b692a,01/30/2026 10:00:00,Gross Domestic Product s.a. (QoQ),HIGH,EUR
+c8b9f93c-bb2e-44ba-8e1b-7e817391a088,01/30/2026 10:00:00,Gross Domestic Product s.a. (YoY),HIGH,EUR
+a9fdde2c-d1d7-4710-afce-19b1b57dddc6,01/30/2026 10:00:00,Industrial Confidence,LOW,EUR
+8a968053-d1ee-4da4-97ba-6a5de68e8756,01/30/2026 10:00:00,Services Sentiment,LOW,EUR
+f83a0c2d-4373-4f3d-9f14-c164956d2e55,01/30/2026 10:00:00,Consumer Price Index (EU Norm) (MoM),LOW,EUR
+9e23327b-c559-458c-a011-2c5de0d148f0,01/30/2026 10:00:00,Consumer Price Index (EU Norm) (YoY),MEDIUM,EUR
+b5da7e17-f3b1-4344-848d-217a81445eeb,01/30/2026 10:00:00,Consumer Price Index (MoM),LOW,EUR
+28209268-385e-4789-9432-ab6bf25f7037,01/30/2026 10:00:00,Consumer Price Index (YoY),MEDIUM,EUR
+624d2f5f-8480-4e8a-8e82-868f1f5d02d5,01/30/2026 10:00:00,Producer Price Index (MoM),LOW,EUR
+c03c6612-9052-42c4-9371-bd5b1b9d088a,01/30/2026 10:00:00,Producer Price Index (YoY),LOW,EUR
+61db7d22-a2df-4b3a-8c1d-fabf84f6ff74,01/30/2026 13:00:00,Harmonized Index of Consumer Prices (MoM),MEDIUM,EUR
+7e6a18f4-6eb2-40fb-acc8-05bddfb1bde4,01/30/2026 13:00:00,Harmonized Index of Consumer Prices (YoY),HIGH,EUR
+a8273b36-84dc-43e9-8b1f-9c0387fecce1,01/30/2026 13:30:00,Gross Domestic Product (MoM),MEDIUM,CAD
+db9ce46d-4849-4eed-bb9d-c23a1d4e8b43,01/30/2026 13:30:00,Core Personal Consumption Expenditures - Price Index (MoM),HIGH,USD
+5473bbcf-234b-470d-bc7e-552c889e0ae5,01/30/2026 13:30:00,Core Personal Consumption Expenditures - Price Index (YoY),HIGH,USD
+2828434a-27a8-4f77-be24-7e51207f8642,01/30/2026 13:30:00,Personal Consumption Expenditures - Price Index (MoM),MEDIUM,USD
+4564ac48-d948-4d28-9c09-7d8385995cea,01/30/2026 13:30:00,Personal Consumption Expenditures - Price Index (YoY),MEDIUM,USD
+a12c73d9-1ac4-4ac1-9786-76f95234e58c,01/30/2026 13:30:00,Personal Income (MoM),MEDIUM,USD
+52b2adba-92f4-4122-8b91-351d726a6195,01/30/2026 13:30:00,Personal Spending,MEDIUM,USD
+feec48ee-f603-4d18-8de0-a0682735b42c,01/30/2026 14:45:00,Chicago PMI,MEDIUM,USD
+8ad8468e-8a6f-44dc-bdd8-ba36ebb0c1bc,01/30/2026 18:00:00,Baker Hughes US Oil Rig Count,LOW,USD
+9f6997c4-df23-46fe-86db-11c228b2368e,01/30/2026 20:30:00,CFTC AUD NC Net Positions,LOW,AUD
+26e44f5e-3b0d-43dc-ac9a-0139512d0d11,01/30/2026 20:30:00,CFTC EUR NC Net Positions,LOW,EUR
+96148463-6dfd-4177-8430-dfa1eac98d13,01/30/2026 20:30:00,CFTC JPY NC Net Positions,LOW,JPY
+b70851f3-f22d-476f-a966-6eb46f08bdd2,01/30/2026 20:30:00,CFTC GBP NC Net Positions,LOW,GBP
+fe96ca5b-526b-433f-98f1-c6d826050076,01/30/2026 20:30:00,CFTC Gold NC Net Positions,LOW,USD
+9e69d63e-2ee1-41e8-b669-70b09d766c6d,01/30/2026 20:30:00,CFTC Oil NC Net Positions,LOW,USD
+0dfeb70d-74c2-4400-bada-33badddb0841,01/30/2026 20:30:00,CFTC S&P 500 NC Net Positions,LOW,USD
+5aab08bf-3650-4e63-802c-bb2b53cce2bd,01/31/2026 01:30:00,NBS Manufacturing PMI,HIGH,CNY
+308effcf-66be-4473-9e68-af8b942d18bd,01/31/2026 01:30:00,NBS Non-Manufacturing PMI,HIGH,CNY
