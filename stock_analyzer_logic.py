@@ -325,13 +325,18 @@ def analyze_lower_timeframes(ticker, daily_dir):
         
         if daily_dir == "Buy":
             if is_above:
-                # 1. Flip Check
+                # 1. Flip Check (Match Direction)
                 if active_trans == "Neg->Pos":
                     tf_notes.append(active_trans_sig)
                     tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
                 
-                # 2. Dip Check (Must be in Zone)
+                # GUARD CLAUSE: Rejects setups where the flip contradicts the Buy signal
+                elif active_trans == "Pos->Neg":
+                     failure_details.append(f"{tf}: Momentum Breakdown (Pos->Neg)")
+                     # Skip further checks for this TF
+                
+                # 2. Dip Check (Slope Neg, but NOT a fresh Breakdown which is handled above)
                 elif is_in_zone_tf and (current_slope_slow < 0 or current_slope_fast < 0):
                     tf_notes.append("Dip (Slope Neg)")
                     tf_time = "Pending Turn"
@@ -354,7 +359,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     tf_time = cross_time
                     is_valid_tf = True
                 
-                if not is_valid_tf:
+                if not is_valid_tf and active_trans != "Pos->Neg":
                     reason = "Slope Positive (No Flip/Retest)" if (current_slope_slow > 0) else "Slope Negative (Not in Zone)"
                     failure_details.append(f"{tf}: {reason}")
             else:
@@ -362,13 +367,18 @@ def analyze_lower_timeframes(ticker, daily_dir):
 
         elif daily_dir == "Sell":
             if not is_above:
-                # 1. Flip Check
+                # 1. Flip Check (Match Direction)
                 if active_trans == "Pos->Neg":
                     tf_notes.append(active_trans_sig)
                     tf_time = f"{active_trans_time} @ {active_trans_price:.2f}"
                     is_valid_tf = True
                 
-                # 2. Rally Check (Must be in Zone)
+                # GUARD CLAUSE: Rejects setups where the flip contradicts the Sell signal
+                elif active_trans == "Neg->Pos":
+                     failure_details.append(f"{tf}: Momentum Breakout (Neg->Pos)")
+                     # Skip further checks for this TF
+
+                # 2. Rally Check (Slope Pos, but NOT a fresh Breakout)
                 elif is_in_zone_tf and (current_slope_slow > 0 or current_slope_fast > 0):
                     tf_notes.append("Rally (Slope Pos)")
                     tf_time = "Pending Turn"
@@ -391,7 +401,7 @@ def analyze_lower_timeframes(ticker, daily_dir):
                     tf_time = cross_time
                     is_valid_tf = True
                 
-                if not is_valid_tf:
+                if not is_valid_tf and active_trans != "Neg->Pos":
                     reason = "Slope Negative (No Flip/Retest)" if (current_slope_slow < 0) else "Slope Positive (Not in Zone)"
                     failure_details.append(f"{tf}: {reason}")
             else:
