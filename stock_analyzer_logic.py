@@ -2,7 +2,6 @@ import yfinance as yf
 from finta import TA
 import pandas as pd
 import numpy as np
-import time
 from datetime import datetime, timedelta
 
 # --- Configuration ---
@@ -54,7 +53,7 @@ def get_data(ticker, interval):
     period_map = {
         "1h": "1y",
         "4h": "2y", 
-        "1d": "5y", # Longer period for Daily to find significant S/R
+        "1d": "5y", 
         "1wk": "max",
         "1mo": "max"
     }
@@ -63,7 +62,7 @@ def get_data(ticker, interval):
     
     try:
         df = yf.Ticker(ticker).history(period=period, interval=interval)
-        if df.empty or len(df) < 100: return None 
+        if df.empty or len(df) < 250: return None 
 
         df.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
         
@@ -81,6 +80,7 @@ def get_data(ticker, interval):
 
 def get_trend_status(df):
     """
+    Returns the CURRENT trend status.
     Stable Uptrend: 20 SMA > 200 EMA
     Stable Downtrend: 20 SMA < 200 EMA
     """
@@ -121,7 +121,7 @@ def check_recent_cross(df, direction):
             if prev_bb <= prev_ema and curr_bb > curr_ema:
                 found = True
                 cross_time = dates[i]
-                cross_price = closes[i] # Price at the moment of cross
+                cross_price = closes[i]
                 break
                 
         elif direction == "Downtrend": # Death Cross
@@ -133,21 +133,19 @@ def check_recent_cross(df, direction):
                 
     return found, cross_time, cross_price
 
-# --- Support & Resistance Logic (Higher Timeframe) ---
+# --- Support & Resistance Logic ---
 
 def find_next_sr_level(ticker, current_tf, direction, current_price):
     """
-    Looks at the NEXT higher timeframe to find the nearest resistance (for buys)
-    or support (for sells).
+    Looks at the NEXT higher timeframe to find the nearest S/R.
     """
-    # Define Ladder
     tf_order = ["4h", "1d", "1wk", "1mo"]
     
     try:
         curr_idx = tf_order.index(current_tf)
-        next_tf = tf_order[curr_idx + 1]
+        # If current is 1mo, we just use 1mo again or "max"
+        next_tf = tf_order[curr_idx + 1] if curr_idx < len(tf_order)-1 else "1mo"
     except (ValueError, IndexError):
-        # If current is 1mo or unknown, stick to 1mo for S/R check
         next_tf = "1mo"
 
     df = get_data(ticker, next_tf)
@@ -155,9 +153,6 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
         return "Unknown", f"No data for {next_tf}"
 
     # Identify Pivot Points (Simple 5-bar fractal)
-    # A high is a pivot if it's higher than 2 bars left and right.
-    # A low is a pivot if it's lower than 2 bars left and right.
-    
     window = 5
     df['is_high'] = df['high'].rolling(window=window, center=True).max() == df['high']
     df['is_low'] = df['low'].rolling(window=window, center=True).min() == df['low']
@@ -165,25 +160,24 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
     pivots_high = df[df['is_high']]['high'].values
     pivots_low = df[df['is_low']]['low'].values
 
-    # Filter for "Next" Level
     target_level = None
     note = ""
 
-    if direction == "Uptrend": # Buy -> Look for Resistance (Highs > Price)
+    if direction == "Uptrend": # Buy -> Look for Resistance
         candidates = [p for p in pivots_high if p > current_price]
         if candidates:
-            target_level = min(candidates) # Closest one above
+            target_level = min(candidates)
             note = f"Resistance on {next_tf}"
         else:
-            note = "ATH (All Time High)" # Warning
+            note = "ATH (All Time High)"
             
-    elif direction == "Downtrend": # Sell -> Look for Support (Lows < Price)
+    elif direction == "Downtrend": # Sell -> Look for Support
         candidates = [p for p in pivots_low if p < current_price]
         if candidates:
-            target_level = max(candidates) # Closest one below
+            target_level = max(candidates)
             note = f"Support on {next_tf}"
         else:
-            note = "ATL (All Time Low)" # Warning
+            note = "ATL (All Time Low)"
 
     if target_level:
         return round(target_level, 4), note
@@ -193,74 +187,100 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
 # --- Core Scanner Logic ---
 
 def analyze_ticker(ticker):
-    # 1. Check 1H Filter
-    df_1h = get_data(ticker, "1h")
-    if df_1h is None: return {"Signal": "No Signal", "Reason": "Data Error (1H)"}
+    """
+    Revised "Ladder" Logic:
+    1. Base 1H Stable? -> Check 4H Cross.
+    2. Base 4H Stable? -> Check 1D Cross.
+    3. Base 1D Stable? -> Check 1W Cross.
+    4. Base 1W Stable? -> Check 1M Cross.
+    """
     
-    trend_1h = get_trend_status(df_1h)
-    if trend_1h == "Neutral":
-        return {"Signal": "No Signal", "Reason": "1H Market Choppy/Flat"}
+    # 1. ESTABLISH INITIAL BASE (1H)
+    base_tf = "1h"
+    df_base = get_data(ticker, base_tf)
     
-    bias = trend_1h
+    if df_base is None:
+        return {"Signal": "No Signal", "Reason": "Data Error (1H)"}
     
-    # 2. Ladder Climb
-    ladder = [("4h", "4-Hour"), ("1d", "Daily"), ("1wk", "Weekly"), ("1mo", "Monthly")]
+    # Check Initial Trend
+    trend_base = get_trend_status(df_base)
+    if trend_base == "Neutral":
+        return {"Signal": "No Signal", "Reason": "1H Trend Neutral"}
     
-    for tf_key, tf_name in ladder:
-        df = get_data(ticker, tf_key)
-        if df is None: return {"Signal": "No Signal", "Reason": f"Data Error ({tf_name})"}
+    current_direction = trend_base # e.g., "Uptrend"
+    
+    # 2. THE LADDER LOOP
+    # We define the steps: (Base TF, Target TF for Entry)
+    # logic: if Base is Stable, look at Target.
+    steps = [
+        ("1h", "4h"), 
+        ("4h", "1d"), 
+        ("1d", "1wk"), 
+        ("1wk", "1mo")
+    ]
+    
+    for base_name, target_name in steps:
+        # A. Verify Base Stability
+        # (For 1h, we already did it. For others, we need to check if the PREVIOUS target 
+        # is actually stable enough to serve as the new base).
         
-        # Trend Alignment Check
-        current_tf_trend = get_trend_status(df)
-        if current_tf_trend != bias:
-             return {"Signal": "No Signal", "Reason": f"{tf_name} Trend Misaligned ({current_tf_trend} vs 1H {bias})"}
+        if base_name != "1h":
+            df_base = get_data(ticker, base_name)
+            if df_base is None: return {"Signal": "No Signal", "Reason": f"Data Error ({base_name})"}
+            
+            status = get_trend_status(df_base)
+            
+            # CRITICAL: The Base must align with our established direction.
+            # If 1H was UP, but 4H is DOWN, we cannot use 4H as a base for Daily.
+            if status != current_direction:
+                return {"Signal": "No Signal", "Reason": f"Chain Broken at {base_name} ({status} vs {current_direction})"}
 
-        # Cross Check
-        is_recent, cross_time, cross_price = check_recent_cross(df, bias)
+        # B. Check Target for Entry (Recent Cross)
+        df_target = get_data(ticker, target_name)
+        if df_target is None: return {"Signal": "No Signal", "Reason": f"Data Error ({target_name})"}
+        
+        is_recent, cross_time, cross_price = check_recent_cross(df_target, current_direction)
         
         if is_recent:
             # --- SIGNAL FOUND ---
-            current_price = df.iloc[-1]['close']
+            current_price = df_target.iloc[-1]['close']
             
-            # A. Calculate Stop Loss (1% off Cross Price)
-            if bias == "Uptrend":
-                sl = cross_price * (1 - SL_BUFFER)
-            else:
-                sl = cross_price * (1 + SL_BUFFER)
+            # Stop Loss (1% off Cross Price)
+            sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
             
-            # B. Calculate Take Profit (Next Higher TF S/R)
-            tp_price, tp_note = find_next_sr_level(ticker, tf_key, bias, current_price)
+            # Take Profit (Next Higher TF S/R)
+            tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
             
-            # Format Time
             if isinstance(cross_time, pd.Timestamp):
                 cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
             else:
                 cross_time_str = str(cross_time)
-
-            # Warning Logic for ATH/ATL
+                
             warning_msg = ""
             if "ATH" in tp_note or "ATL" in tp_note:
-                warning_msg = f" | WARNING: Price at {tp_note}. Trade with caution."
+                warning_msg = f" | WARNING: {tp_note}"
 
             return {
-                "Signal": f"CONFIRMED {bias.upper()}",
-                "Timeframe": tf_name,
-                "Entry Trigger": f"Golden Cross" if bias == "Uptrend" else "Death Cross",
+                "Signal": f"CONFIRMED {current_direction.upper()}",
+                "Timeframe": f"Ladder {base_name}->{target_name}",
+                "Entry Trigger": f"{target_name} Cross",
                 "Cross Time": cross_time_str,
                 "Current Price": round(current_price, 4),
                 "Stop Loss": round(sl, 4),
                 "Take Profit": f"{tp_price} ({tp_note})",
-                "Reason": f"Recent cross on {tf_name}{warning_msg}"
+                "Reason": f"Entry on {target_name} (Base: {base_name}){warning_msg}"
             }
         
-        # If not recent, loop continues to next higher TF
+        # If NO recent cross on Target, we loop.
+        # The current 'target' becomes the 'base' for the next iteration.
+        # But only if it's stable (which we check at the start of next loop).
         continue
 
-    return {"Signal": "No Signal", "Reason": "Trend Mature / No Recent Cross on any TF"}
+    return {"Signal": "No Signal", "Reason": "All Trends Mature / Chain Completed without Entry"}
 
 def run_scanner(tickers, eco_df=None):
     results = []
-    print(f"Scanning {len(tickers)} tickers using Trend Climber Strategy...")
+    print(f"Scanning {len(tickers)} tickers using Daisy-Chain Ladder Strategy...")
     
     for i, ticker in enumerate(tickers):
         print(f"[{i+1}/{len(tickers)}] Checking {ticker}...", end="\r")
@@ -274,10 +294,8 @@ def run_scanner(tickers, eco_df=None):
         if eco_df is not None:
             danger_msg = check_economic_danger(ticker, eco_df)
         
-        # Add Reason/Warning to Remarks if valid signal
         remarks = danger_msg
         if "CONFIRMED" in analysis.get("Signal", ""):
-            # Append specific trade warnings (like ATH) to remarks
             if "WARNING" in analysis.get("Reason", ""):
                 remarks += analysis["Reason"].split("|")[1]
 
