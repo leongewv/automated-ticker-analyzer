@@ -9,9 +9,9 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# The window to define a "Recent" cross (10 to 30 bars ago)
-CROSS_MIN_BARS = 10
-CROSS_MAX_BARS = 30
+# The window to define a "Valid Entry" (10 to 30 bars ago)
+ENTRY_MIN_BARS = 10
+ENTRY_MAX_BARS = 30
 
 # Stop Loss Buffer (1%)
 SL_BUFFER = 0.01
@@ -49,7 +49,6 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 # --- Data & Indicators ---
 
 def get_data(ticker, interval):
-    # Mapping interval to data period required
     period_map = {
         "1h": "1y",
         "4h": "2y", 
@@ -57,16 +56,13 @@ def get_data(ticker, interval):
         "1wk": "max",
         "1mo": "max"
     }
-    
     period = period_map.get(interval, "2y")
-    
     try:
         df = yf.Ticker(ticker).history(period=period, interval=interval)
         if df.empty or len(df) < 250: return None 
 
         df.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
         
-        # Indicators
         df['EMA_200'] = TA.EMA(df, period=EMA_PERIOD)
         bbands = TA.BBANDS(df, period=BB_PERIOD, std_multiplier=BB_MULTIPLIER)
         df['BB_MID'] = bbands['BB_MIDDLE'] # 20 SMA
@@ -75,84 +71,66 @@ def get_data(ticker, interval):
         
         df.dropna(inplace=True)
         return df
-    except Exception as e:
+    except Exception:
         return None
 
 def get_trend_status(df):
-    """
-    Returns the CURRENT trend status.
-    Stable Uptrend: 20 SMA > 200 EMA
-    Stable Downtrend: 20 SMA < 200 EMA
-    """
     if df is None or len(df) < 1: return "None"
-    
     last = df.iloc[-1]
-    if last['BB_MID'] > last['EMA_200']:
-        return "Uptrend"
-    elif last['BB_MID'] < last['EMA_200']:
-        return "Downtrend"
+    if last['BB_MID'] > last['EMA_200']: return "Uptrend"
+    elif last['BB_MID'] < last['EMA_200']: return "Downtrend"
     return "Neutral"
 
-def check_recent_cross(df, direction):
+def get_bars_since_cross(df, direction):
     """
-    Checks if a Golden/Death Cross occurred within [Current-30 to Current-10].
-    Returns: (bool found, timestamp cross_time, float cross_price)
+    Scans the ENTIRE dataframe (or last 500 bars) to find the MOST RECENT cross.
+    Returns: 
+        bars_ago (int): Number of bars since cross (0 if just crossed).
+        cross_time (str): Timestamp of cross.
+        cross_price (float): Close price at cross.
+    If no cross found, returns (None, None, None).
     """
-    if len(df) < CROSS_MAX_BARS + 5: return False, None, 0.0
-
-    window_df = df.iloc[-(CROSS_MAX_BARS):-(CROSS_MIN_BARS)]
+    limit = 500 # Look back far enough to diagnose "Mature" trends
+    if len(df) < limit: limit = len(df)
     
+    window_df = df.iloc[-limit:]
     bb_mid = window_df['BB_MID'].values
     ema_200 = window_df['EMA_200'].values
     closes = window_df['close'].values
     dates = window_df.index
     
-    found = False
-    cross_time = None
-    cross_price = 0.0
-    
-    for i in range(1, len(bb_mid)):
+    # Iterate backwards to find the most recent cross
+    # We start from the 2nd to last bar and look back
+    for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
         curr_ema = ema_200[i]
         prev_bb = bb_mid[i-1]
         prev_ema = ema_200[i-1]
         
+        found = False
         if direction == "Uptrend": # Golden Cross
-            if prev_bb <= prev_ema and curr_bb > curr_ema:
-                found = True
-                cross_time = dates[i]
-                cross_price = closes[i]
-                break
-                
+            if prev_bb <= prev_ema and curr_bb > curr_ema: found = True
         elif direction == "Downtrend": # Death Cross
-            if prev_bb >= prev_ema and curr_bb < curr_ema:
-                found = True
-                cross_time = dates[i]
-                cross_price = closes[i]
-                break
-                
-    return found, cross_time, cross_price
+            if prev_bb >= prev_ema and curr_bb < curr_ema: found = True
+            
+        if found:
+            bars_ago = (len(bb_mid) - 1) - i
+            return bars_ago, dates[i], closes[i]
+
+    return None, None, None
 
 # --- Support & Resistance Logic ---
 
 def find_next_sr_level(ticker, current_tf, direction, current_price):
-    """
-    Looks at the NEXT higher timeframe to find the nearest S/R.
-    """
     tf_order = ["4h", "1d", "1wk", "1mo"]
-    
     try:
         curr_idx = tf_order.index(current_tf)
-        # If current is 1mo, we just use 1mo again or "max"
         next_tf = tf_order[curr_idx + 1] if curr_idx < len(tf_order)-1 else "1mo"
-    except (ValueError, IndexError):
-        next_tf = "1mo"
+    except (ValueError, IndexError): next_tf = "1mo"
 
     df = get_data(ticker, next_tf)
-    if df is None or len(df) < 50:
-        return "Unknown", f"No data for {next_tf}"
+    if df is None or len(df) < 50: return "Unknown", f"No data for {next_tf}"
 
-    # Identify Pivot Points (Simple 5-bar fractal)
     window = 5
     df['is_high'] = df['high'].rolling(window=window, center=True).max() == df['high']
     df['is_low'] = df['low'].rolling(window=window, center=True).min() == df['low']
@@ -163,120 +141,90 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
     target_level = None
     note = ""
 
-    if direction == "Uptrend": # Buy -> Look for Resistance
+    if direction == "Uptrend":
         candidates = [p for p in pivots_high if p > current_price]
         if candidates:
             target_level = min(candidates)
             note = f"Resistance on {next_tf}"
-        else:
-            note = "ATH (All Time High)"
+        else: note = "ATH (All Time High)"
             
-    elif direction == "Downtrend": # Sell -> Look for Support
+    elif direction == "Downtrend":
         candidates = [p for p in pivots_low if p < current_price]
         if candidates:
             target_level = max(candidates)
             note = f"Support on {next_tf}"
-        else:
-            note = "ATL (All Time Low)"
+        else: note = "ATL (All Time Low)"
 
-    if target_level:
-        return round(target_level, 4), note
-    else:
-        return "N/A", note
+    return (round(target_level, 4), note) if target_level else ("N/A", note)
 
 # --- Core Scanner Logic ---
 
 def analyze_ticker(ticker):
-    """
-    Revised "Ladder" Logic:
-    1. Base 1H Stable? -> Check 4H Cross.
-    2. Base 4H Stable? -> Check 1D Cross.
-    3. Base 1D Stable? -> Check 1W Cross.
-    4. Base 1W Stable? -> Check 1M Cross.
-    """
+    log_trace = [] # Store diagnostic info here
     
-    # 1. ESTABLISH INITIAL BASE (1H)
-    base_tf = "1h"
-    df_base = get_data(ticker, base_tf)
+    # 1. Base 1H
+    df_1h = get_data(ticker, "1h")
+    if df_1h is None: return {"Signal": "No Signal", "Reason": "Data Error (1H)"}
     
-    if df_base is None:
-        return {"Signal": "No Signal", "Reason": "Data Error (1H)"}
+    trend_1h = get_trend_status(df_1h)
+    log_trace.append(f"1H:{trend_1h}")
     
-    # Check Initial Trend
-    trend_base = get_trend_status(df_base)
-    if trend_base == "Neutral":
-        return {"Signal": "No Signal", "Reason": "1H Trend Neutral"}
+    if trend_1h == "Neutral":
+        return {"Signal": "No Signal", "Reason": f"1H Neutral [Trace: {' | '.join(log_trace)}]"}
     
-    current_direction = trend_base # e.g., "Uptrend"
+    current_direction = trend_1h
     
-    # 2. THE LADDER LOOP
-    # We define the steps: (Base TF, Target TF for Entry)
-    # logic: if Base is Stable, look at Target.
-    steps = [
-        ("1h", "4h"), 
-        ("4h", "1d"), 
-        ("1d", "1wk"), 
-        ("1wk", "1mo")
-    ]
+    # 2. Ladder
+    steps = [("1h", "4h"), ("4h", "1d"), ("1d", "1wk"), ("1wk", "1mo")]
     
     for base_name, target_name in steps:
-        # A. Verify Base Stability
-        # (For 1h, we already did it. For others, we need to check if the PREVIOUS target 
-        # is actually stable enough to serve as the new base).
-        
+        # Check Base (Skip for 1h as we just did it)
         if base_name != "1h":
             df_base = get_data(ticker, base_name)
-            if df_base is None: return {"Signal": "No Signal", "Reason": f"Data Error ({base_name})"}
-            
+            if df_base is None: return {"Signal": "No Signal", "Reason": f"Data Error {base_name}"}
             status = get_trend_status(df_base)
             
-            # CRITICAL: The Base must align with our established direction.
-            # If 1H was UP, but 4H is DOWN, we cannot use 4H as a base for Daily.
             if status != current_direction:
-                return {"Signal": "No Signal", "Reason": f"Chain Broken at {base_name} ({status} vs {current_direction})"}
+                log_trace.append(f"{base_name}:MISALIGNED({status})")
+                return {"Signal": "No Signal", "Reason": f"Trace: {' | '.join(log_trace)}"}
+            # else: log_trace.append(f"{base_name}:OK") (Optional, keeps log shorter)
 
-        # B. Check Target for Entry (Recent Cross)
+        # Check Target
         df_target = get_data(ticker, target_name)
-        if df_target is None: return {"Signal": "No Signal", "Reason": f"Data Error ({target_name})"}
+        if df_target is None: return {"Signal": "No Signal", "Reason": f"Data Error {target_name}"}
         
-        is_recent, cross_time, cross_price = check_recent_cross(df_target, current_direction)
+        bars_ago, cross_time, cross_price = get_bars_since_cross(df_target, current_direction)
         
-        if is_recent:
-            # --- SIGNAL FOUND ---
+        cross_info = f"{bars_ago} bars ago" if bars_ago is not None else "No Cross"
+        log_trace.append(f"{target_name}:{cross_info}")
+        
+        # Valid Entry?
+        if bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS:
+            # TRIGGER
             current_price = df_target.iloc[-1]['close']
-            
-            # Stop Loss (1% off Cross Price)
             sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
-            
-            # Take Profit (Next Higher TF S/R)
             tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
             
-            if isinstance(cross_time, pd.Timestamp):
-                cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
-            else:
-                cross_time_str = str(cross_time)
-                
-            warning_msg = ""
-            if "ATH" in tp_note or "ATL" in tp_note:
-                warning_msg = f" | WARNING: {tp_note}"
-
+            cross_time_str = str(cross_time)
+            if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
+            
+            warning = f" | WARNING: {tp_note}" if "ATH" in tp_note or "ATL" in tp_note else ""
+            
             return {
                 "Signal": f"CONFIRMED {current_direction.upper()}",
                 "Timeframe": f"Ladder {base_name}->{target_name}",
-                "Entry Trigger": f"{target_name} Cross",
-                "Cross Time": cross_time_str,
                 "Current Price": round(current_price, 4),
                 "Stop Loss": round(sl, 4),
                 "Take Profit": f"{tp_price} ({tp_note})",
-                "Reason": f"Entry on {target_name} (Base: {base_name}){warning_msg}"
+                "Cross Time": cross_time_str,
+                "Reason": f"Entry on {target_name}{warning}",
+                "Trace": " | ".join(log_trace)
             }
         
-        # If NO recent cross on Target, we loop.
-        # The current 'target' becomes the 'base' for the next iteration.
-        # But only if it's stable (which we check at the start of next loop).
+        # If not valid, continue loop (Climb Higher)
         continue
 
-    return {"Signal": "No Signal", "Reason": "All Trends Mature / Chain Completed without Entry"}
+    return {"Signal": "No Signal", "Reason": f"Trends Mature/No Entry [Trace: {' | '.join(log_trace)}]"}
 
 def run_scanner(tickers, eco_df=None):
     results = []
@@ -294,13 +242,20 @@ def run_scanner(tickers, eco_df=None):
         if eco_df is not None:
             danger_msg = check_economic_danger(ticker, eco_df)
         
-        remarks = danger_msg
+        # --- NEW: Append Trace to Remarks for Visibility ---
+        trace_log = analysis.get("Trace", "")
+        # If signal found, Trace is inside analysis object but not main reason
+        # If no signal, Trace is inside Reason
+        
+        final_remarks = danger_msg
+        if trace_log: 
+            final_remarks = f"[TRACE: {trace_log}] | {danger_msg}"
+        elif "Trace" in analysis.get("Reason", ""):
+            # Extract trace from reason if it was embedded there (for No Signal items)
+            final_remarks = f"[{analysis['Reason']}] | {danger_msg}"
+            
         if "CONFIRMED" in analysis.get("Signal", ""):
-            if "WARNING" in analysis.get("Reason", ""):
-                remarks += analysis["Reason"].split("|")[1]
-
-        if "CONFIRMED" in analysis.get("Signal", ""):
-            results.append({
+             results.append({
                 "Ticker": ticker,
                 "Signal": analysis["Signal"],
                 "Timeframe": analysis["Timeframe"],
@@ -308,9 +263,10 @@ def run_scanner(tickers, eco_df=None):
                 "Stop Loss": analysis["Stop Loss"],
                 "Take Profit": analysis["Take Profit"],
                 "Cross Time": analysis["Cross Time"],
-                "Remarks": remarks
+                "Remarks": final_remarks
             })
         else:
+            # Clean up the output so it's not too messy in CSV
             results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
@@ -319,7 +275,7 @@ def run_scanner(tickers, eco_df=None):
                 "Stop Loss": "-",
                 "Take Profit": "-",
                 "Cross Time": "-",
-                "Remarks": f"{analysis.get('Reason', 'Unknown')} | {danger_msg}"
+                "Remarks": final_remarks
             })
             
     print("\nScan Complete.")
