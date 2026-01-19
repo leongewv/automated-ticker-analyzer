@@ -9,9 +9,9 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# --- UPDATE: Lowered Minimum bars to 3 to catch fresher signals (like AUDCAD Weekly) ---
-ENTRY_MIN_BARS = 3   # Previously 10
-ENTRY_MAX_BARS = 30  # Stays at 30
+# Entry Window (Bars ago)
+ENTRY_MIN_BARS = 3   
+ENTRY_MAX_BARS = 30  
 
 # Stop Loss Buffer (1%)
 SL_BUFFER = 0.01
@@ -83,12 +83,8 @@ def get_trend_status(df):
 
 def get_bars_since_cross(df, direction):
     """
-    Scans the ENTIRE dataframe (or last 500 bars) to find the MOST RECENT cross.
-    Returns: 
-        bars_ago (int): Number of bars since cross (0 if just crossed).
-        cross_time (str): Timestamp of cross.
-        cross_price (float): Close price at cross.
-    If no cross found, returns (None, None, None).
+    Finds the most recent cross matching the 'direction'.
+    Returns: bars_ago, cross_time, cross_price
     """
     limit = 500 
     if len(df) < limit: limit = len(df)
@@ -99,7 +95,6 @@ def get_bars_since_cross(df, direction):
     closes = window_df['close'].values
     dates = window_df.index
     
-    # Iterate backwards to find the most recent cross
     for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
         curr_ema = ema_200[i]
@@ -107,9 +102,9 @@ def get_bars_since_cross(df, direction):
         prev_ema = ema_200[i-1]
         
         found = False
-        if direction == "Uptrend": # Golden Cross
+        if direction == "Uptrend": 
             if prev_bb <= prev_ema and curr_bb > curr_ema: found = True
-        elif direction == "Downtrend": # Death Cross
+        elif direction == "Downtrend": 
             if prev_bb >= prev_ema and curr_bb < curr_ema: found = True
             
         if found:
@@ -118,7 +113,39 @@ def get_bars_since_cross(df, direction):
 
     return None, None, None
 
-# --- Support & Resistance Logic ---
+# --- NEW: Previous Opposing Cross Logic (TP) ---
+
+def find_previous_opposing_cross(df, current_direction):
+    """
+    If Current is Downtrend (Sell), find the price of the last Golden Cross (Buy).
+    If Current is Uptrend (Buy), find the price of the last Death Cross (Sell).
+    """
+    target_type = "Golden" if current_direction == "Downtrend" else "Death"
+    
+    # We scan the whole loaded history
+    bb_mid = df['BB_MID'].values
+    ema_200 = df['EMA_200'].values
+    closes = df['close'].values
+    
+    # Scan backwards
+    for i in range(len(bb_mid) - 1, 0, -1):
+        curr_bb = bb_mid[i]
+        curr_ema = ema_200[i]
+        prev_bb = bb_mid[i-1]
+        prev_ema = ema_200[i-1]
+        
+        found = False
+        if target_type == "Golden": # Looking for Buy Cross
+             if prev_bb <= prev_ema and curr_bb > curr_ema: found = True
+        else: # Looking for Sell Cross
+             if prev_bb >= prev_ema and curr_bb < curr_ema: found = True
+
+        if found:
+            return round(closes[i], 4), f"Previous {target_type} Cross Level"
+
+    return None, None
+
+# --- Fallback Support & Resistance Logic ---
 
 def find_next_sr_level(ticker, current_tf, direction, current_price):
     tf_order = ["4h", "1d", "1wk", "1mo"]
@@ -196,12 +223,22 @@ def analyze_ticker(ticker):
         cross_info = f"{bars_ago} bars ago" if bars_ago is not None else "No Cross"
         log_trace.append(f"{target_name}:{cross_info}")
         
-        # Valid Entry Check (Updated Thresholds)
+        # Valid Entry?
         if bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS:
             # TRIGGER
             current_price = df_target.iloc[-1]['close']
+            
+            # Stop Loss (1% off Cross Price)
             sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
-            tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
+            
+            # --- NEW TAKE PROFIT LOGIC ---
+            # Primary: Look for previous opposing cross on SAME timeframe
+            tp_price, tp_note = find_previous_opposing_cross(df_target, current_direction)
+            
+            # Fallback: If not found, look at Higher TF S/R
+            if tp_price is None:
+                tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
+                tp_note = f"{tp_note} (Fallback)"
             
             cross_time_str = str(cross_time)
             if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
@@ -219,7 +256,6 @@ def analyze_ticker(ticker):
                 "Trace": " | ".join(log_trace)
             }
         
-        # Continue Climbing
         continue
 
     return {"Signal": "No Signal", "Reason": f"Trends Mature/No Entry [Trace: {' | '.join(log_trace)}]"}
