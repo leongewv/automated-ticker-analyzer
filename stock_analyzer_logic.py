@@ -17,7 +17,7 @@ CROSS_MAX_BARS = 30
 # Stop Loss Buffer (1%)
 SL_BUFFER = 0.01
 
-# --- Economic Danger Logic (Preserved) ---
+# --- Economic Danger Logic ---
 def check_economic_danger(ticker, eco_df, current_time=None):
     if eco_df is None or eco_df.empty: return "-"
     if current_time is None: current_time = datetime.now()
@@ -50,12 +50,9 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 # --- Data & Indicators ---
 
 def get_data(ticker, interval):
-    """
-    Smart fetch based on interval requirements.
-    """
     period_map = {
         "1h": "1y",
-        "4h": "1y",  # yfinance often requires shorter periods for intraday, but 1y works for 60m. 4h might need explicit handling or calculation from 1h if API fails.
+        "4h": "1y",
         "1d": "2y",
         "1wk": "5y",
         "1mo": "max"
@@ -64,12 +61,8 @@ def get_data(ticker, interval):
     period = period_map.get(interval, "2y")
     
     try:
-        # Note: '4h' interval is unstable in some yf versions; 
-        # usually 1h aggregated to 4h is safer, but strictly trying '1h' logic first.
-        # If '4h' fails via API, we might need to resample, but for this script we assume standard yf support.
         df = yf.Ticker(ticker).history(period=period, interval=interval)
-        
-        if df.empty or len(df) < 250: return None # Need enough data for EMA200
+        if df.empty or len(df) < 250: return None 
 
         df.rename(columns={"Open": "open", "High": "high", "Low": "low", "Close": "close", "Volume": "volume"}, inplace=True)
         
@@ -105,9 +98,9 @@ def check_recent_cross(df, direction):
     Checks if a Golden Cross (Buy) or Death Cross (Sell) occurred within 
     the lookback window [Current-30 to Current-10].
     
-    Returns: (bool is_recent, str cross_time, float cross_price)
+    Returns: (bool is_recent, str cross_time)
     """
-    if len(df) < CROSS_MAX_BARS + 5: return False, None, None
+    if len(df) < CROSS_MAX_BARS + 5: return False, None
 
     # We check the specific window in history
     # We want the cross to have happened between 10 bars ago and 30 bars ago.
@@ -117,9 +110,6 @@ def check_recent_cross(df, direction):
     
     bb_mid = window_df['BB_MID']
     ema_200 = window_df['EMA_200']
-    
-    # Check for crossover in this specific window
-    # Logic: Look for the exact bar where line A crosses line B
     
     found = False
     cross_time = None
@@ -187,8 +177,6 @@ def analyze_ticker(ticker):
     bias = trend_1h
     
     # --- TIME FRAME LADDER ---
-    # We define the sequence of checks.
-    # Key: API interval name, Display name
     ladder = [
         ("4h", "4-Hour"),
         ("1d", "Daily"),
@@ -200,27 +188,24 @@ def analyze_ticker(ticker):
         # Fetch Data
         df = get_data(ticker, tf_key)
         
-        # If data fails, we can't climb higher.
         if df is None:
             return {"Signal": "No Signal", "Reason": f"Data Error ({tf_name})"}
             
         # Check Trend alignment
         current_tf_trend = get_trend_status(df)
         
-        # If the higher timeframe contradicts the 1H bias, the chain is broken.
-        # e.g. 1H is UP, but 4H is DOWN -> Abort.
         if current_tf_trend != bias:
              return {"Signal": "No Signal", "Reason": f"{tf_name} Trend Misaligned ({current_tf_trend} vs 1H {bias})"}
 
         # Check for RECENT CROSS (10-30 bars ago)
-        is_recent, cross_time, _ = check_recent_cross(df, bias)
+        # --- FIX: Removed the extra variable '_' to match return values ---
+        is_recent, cross_time = check_recent_cross(df, bias)
         
         if is_recent:
             # TRIGGER FOUND!
             sl = calculate_stop_loss(df, bias)
             current_price = df.iloc[-1]['close']
             
-            # Format time string if it's a timestamp
             if isinstance(cross_time, pd.Timestamp):
                 cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
             else:
@@ -236,12 +221,8 @@ def analyze_ticker(ticker):
                 "Reason": f"Recent cross on {tf_name} (within 10-30 bars)"
             }
         
-        # If NOT recent (meaning the cross was > 30 bars ago), we continue to loop to the next TF.
-        # This implies the trend on this TF is "Stabilized".
         continue
 
-    # If we exit the loop, it means we climbed all the way to Monthly and found no *recent* cross.
-    # All checked timeframes are stable, but the entry signal is stale.
     return {"Signal": "No Signal", "Reason": "Trend Mature / No Recent Cross on any TF"}
 
 def run_scanner(tickers, eco_df=None):
@@ -261,7 +242,6 @@ def run_scanner(tickers, eco_df=None):
         if eco_df is not None:
             danger_msg = check_economic_danger(ticker, eco_df)
 
-        # Standardize Output
         if "CONFIRMED" in analysis.get("Signal", ""):
             results.append({
                 "Ticker": ticker,
@@ -273,7 +253,6 @@ def run_scanner(tickers, eco_df=None):
                 "Remarks": danger_msg
             })
         else:
-            # We add failed ones to CSV for debugging but not email usually
             results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
