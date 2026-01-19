@@ -81,20 +81,11 @@ def get_trend_status(df):
     elif last['BB_MID'] < last['EMA_200']: return "Downtrend"
     return "Neutral"
 
-# --- NEW: Helper for Precise Intersection ---
+# --- Helper for Precise Intersection ---
 def calculate_exact_cross(prev_sma, curr_sma, prev_ema, curr_ema):
-    """
-    Calculates the exact price level where two lines intersect.
-    Math: Intersection of two line segments.
-    """
-    # Denominator (Slope difference)
     denom = (prev_sma - curr_sma) - (prev_ema - curr_ema)
-    
-    if denom == 0: return curr_sma # Parallel lines (rare), return current
-    
-    # Numerator (Determinant-like)
+    if denom == 0: return curr_sma 
     numer = (prev_sma * curr_ema) - (curr_sma * prev_ema)
-    
     return numer / denom
 
 def get_bars_since_cross(df, direction):
@@ -120,17 +111,22 @@ def get_bars_since_cross(df, direction):
             
         if found:
             bars_ago = (len(bb_mid) - 1) - i
-            # --- UPDATE: Calculate Exact Intersection ---
             exact_price = calculate_exact_cross(prev_bb, curr_bb, prev_ema, curr_ema)
             return bars_ago, dates[i], exact_price
 
     return None, None, None
 
-def find_previous_opposing_cross(df, current_direction):
+def find_previous_opposing_cross(df, current_direction, entry_price):
+    """
+    Scans backwards for a PROFITABLE opposing cross.
+    If a recent cross implies a loss, it is skipped (Choppy Detection).
+    """
     target_type = "Golden" if current_direction == "Downtrend" else "Death"
     
     bb_mid = df['BB_MID'].values
     ema_200 = df['EMA_200'].values
+    
+    skipped_bad_cross = False # Flag to track if we had to dig deep
     
     for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
@@ -145,10 +141,25 @@ def find_previous_opposing_cross(df, current_direction):
              if prev_bb >= prev_ema and curr_bb < curr_ema: found = True
 
         if found:
-            # --- UPDATE: Calculate Exact Intersection ---
             exact_price = calculate_exact_cross(prev_bb, curr_bb, prev_ema, curr_ema)
-            return round(exact_price, 4), f"Previous {target_type} Cross Level"
-
+            
+            # --- PROFITABILITY CHECK ---
+            is_valid_tp = False
+            if current_direction == "Uptrend":
+                if exact_price > entry_price: is_valid_tp = True
+            else:
+                if exact_price < entry_price: is_valid_tp = True
+            
+            if is_valid_tp:
+                # We found a good level. Check if we skipped others to get here.
+                note = f"Previous {target_type} Cross Level"
+                if skipped_bad_cross:
+                    note += " (Deep Search)" # Internal marker
+                return round(exact_price, 4), note
+            else:
+                # Found a cross, but it's bad (Loss). Skip it and keep looking.
+                skipped_bad_cross = True
+            
     return None, None
 
 def find_next_sr_level(ticker, current_tf, direction, current_price):
@@ -220,7 +231,6 @@ def analyze_ticker(ticker):
         
         bars_ago, cross_time, cross_price = get_bars_since_cross(df_target, current_direction)
         
-        # Log exact cross price in trace
         if bars_ago is not None:
             cross_info = f"{bars_ago} bars ago @ {round(cross_price, 4)}"
         else:
@@ -233,15 +243,25 @@ def analyze_ticker(ticker):
             
             sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
             
-            tp_price, tp_note = find_previous_opposing_cross(df_target, current_direction)
+            # --- TP & WARNING LOGIC ---
+            tp_price, tp_note = find_previous_opposing_cross(df_target, current_direction, current_price)
+            
+            warning_msg = ""
+            
+            # Check for Deep Search (Choppy) Warning
+            if tp_note and "Deep Search" in tp_note:
+                warning_msg += " | WARNING: Market Choppy - Deep TP Search"
+            
             if tp_price is None:
                 tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
                 tp_note = f"{tp_note} (Fallback)"
             
+            # Check for ATH/ATL Warning
+            if "ATH" in tp_note or "ATL" in tp_note:
+                warning_msg += f" | WARNING: {tp_note}"
+
             cross_time_str = str(cross_time)
             if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
-            
-            warning = f" | WARNING: {tp_note}" if "ATH" in tp_note or "ATL" in tp_note else ""
             
             return {
                 "Signal": f"CONFIRMED {current_direction.upper()}",
@@ -250,7 +270,7 @@ def analyze_ticker(ticker):
                 "Stop Loss": round(sl, 4),
                 "Take Profit": f"{tp_price} ({tp_note})",
                 "Cross Time": cross_time_str,
-                "Reason": f"Entry on {target_name} @ {round(cross_price, 4)}{warning}",
+                "Reason": f"Entry on {target_name} @ {round(cross_price, 4)}{warning_msg}",
                 "Trace": " | ".join(log_trace)
             }
         
