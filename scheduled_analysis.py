@@ -11,29 +11,22 @@ import stock_analyzer_logic as logic
 # --- CONFIGURATION ---
 DATA_DIR = "data/incoming"
 TICKER_SOURCE_DIR = "data/ticker_sources"
-OUTPUT_FILE = f"Trade_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
+OUTPUT_FILE = f"Trend_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
 
 # Email Config
 EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
 EMAIL_PASSWORD = os.environ.get("SENDER_PASSWORD")
 EMAIL_RECEIVER = os.environ.get("RECEIVER_EMAIL")
 
-# --- MASTER FALLBACK LIST ---
+# --- MASTER FALLBACK LIST (Same as before) ---
 FULL_TICKER_LIST = [
-    # Forex
     "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
     "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
     "GBPAUD=X", "GBPNZD=X", "EURAUD=X", "EURCAD=X", "EURNZD=X", "AUDNZD=X",
     "AUDCHF=X", "CADJPY=X", "USDJPY=X", "AUDCAD=X",
-    
-    # Commodities / Indices
     "XAUUSD=X", "XAGUSD=X", "SPY", "BTC-USD", "ETH-USD", "SOL-USD", "XRP-USD",
-    
-    # Crypto
     "DOGE-USD", "SHIB-USD", "LTC-USD", "BCH-USD", "BSV-USD", "DASH-USD",
     "ZEC-USD", "XMR-USD", "XLM-USD", "XEM-USD", "XEC-USD", "XNO-USD",
-    
-    # Stocks & Other Assets
     "TSLA", "AMZN", "GOOG", "GOOGL", "META", "COIN", "ASML", "ISRG", "CELH",
     "CPRT", "FTNT", "GEHC", "ANML", "ARRR", "CC", "DCR", "DGB", "DINGO", 
     "ELON", "EURI", "ETN", "FIRO", "FORTH", "GAS", "GRS", "HUAHUA", 
@@ -41,95 +34,74 @@ FULL_TICKER_LIST = [
     "SXP", "THE", "USDUC", "VEX", "VOLT", "WBTC", "ZANO", "XEP"
 ]
 
-# --- Helper Functions ---
-
+# --- Helper Functions (Same as before) ---
 def load_tickers_from_source(source_dir):
     tickers = set()
     if not os.path.exists(source_dir):
-        print(f"Warning: Ticker source directory '{source_dir}' does not exist.")
-        print(f"-> Falling back to HARDCODED MASTER LIST ({len(FULL_TICKER_LIST)} tickers).")
+        print(f"Warning: Source dir '{source_dir}' missing. Using Master List.")
         return FULL_TICKER_LIST
 
     print(f"Loading tickers from {source_dir}...")
-    found_files = False
+    found = False
     for filename in os.listdir(source_dir):
         filepath = os.path.join(source_dir, filename)
         if os.path.isfile(filepath):
-            found_files = True
+            found = True
             try:
                 if filename.lower().endswith('.csv'):
                     df = pd.read_csv(filepath)
-                    possible_cols = [c for c in df.columns if c.lower() in ['ticker', 'symbol', 'code']]
-                    target_col = possible_cols[0] if possible_cols else df.columns[0]
-                    file_tickers = df[target_col].dropna().astype(str).str.strip().tolist()
-                    tickers.update(file_tickers)
-                    print(f"  -> Added {len(file_tickers)} from {filename}")
+                    cols = [c for c in df.columns if c.lower() in ['ticker', 'symbol', 'code']]
+                    target = cols[0] if cols else df.columns[0]
+                    tickers.update(df[target].dropna().astype(str).str.strip().tolist())
                 else:
                     with open(filepath, 'r') as f:
-                        lines = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+                        lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
                         tickers.update(lines)
-                        print(f"  -> Added {len(lines)} from {filename}")
             except Exception as e:
-                print(f"  -> Error reading {filename}: {e}")
+                print(f"Error reading {filename}: {e}")
     
-    if not found_files:
-        print("  -> Directory exists but is empty. Using MASTER FALLBACK LIST.")
-        return FULL_TICKER_LIST
-    return sorted(list(tickers))
+    return sorted(list(tickers)) if found else FULL_TICKER_LIST
 
 def auto_find_calendar(data_dir):
-    if not os.path.exists(data_dir):
-        print(f"Directory not found: {data_dir}")
-        return None
-    required_cols = {'START', 'CURRENCY', 'IMPACT'} 
-    print(f"Scanning {data_dir} for economic calendar files...")
-    for filename in os.listdir(data_dir):
-        if filename.endswith(".csv") and "Trade_Signals" not in filename:
-            filepath = os.path.join(data_dir, filename)
+    if not os.path.exists(data_dir): return None
+    req = {'START', 'CURRENCY', 'IMPACT'}
+    for f in os.listdir(data_dir):
+        if f.endswith(".csv") and "Trade_Signals" not in f:
             try:
-                df = pd.read_csv(filepath, nrows=0)
-                file_cols = {c.strip().upper() for c in df.columns}
-                if required_cols.issubset(file_cols):
-                    print(f" -> Auto-Detected Economic Calendar: {filename}")
-                    return filepath
-            except Exception: continue
-    print(" -> No Economic Calendar file found. Proceeding without economic analysis.")
+                df = pd.read_csv(os.path.join(data_dir, f), nrows=0)
+                if req.issubset({c.strip().upper() for c in df.columns}):
+                    return os.path.join(data_dir, f)
+            except: continue
     return None
 
 def load_economic_data(filepath):
-    if not filepath or not os.path.exists(filepath): return None
+    if not filepath: return None
     try:
         df = pd.read_csv(filepath)
-        df.columns = [c.strip().title() for c in df.columns] 
+        df.columns = [c.strip().title() for c in df.columns]
         df['Start'] = pd.to_datetime(df['Start'], errors='coerce')
         if 'Impact' in df.columns: df['Impact'] = df['Impact'].astype(str).str.upper()
         if 'Currency' in df.columns: df['Currency'] = df['Currency'].astype(str).str.upper()
         return df
-    except Exception as e:
-        print(f"Error reading calendar: {e}")
-        return None
+    except: return None
 
 def send_email(subject, body, attachment_path=None, is_html=False):
     if not EMAIL_SENDER or not EMAIL_PASSWORD or not EMAIL_RECEIVER:
-        print("Skipping email: Credentials not set.")
+        print("Credentials missing. Email skipped.")
         return
 
     msg = MIMEMultipart()
     msg['From'] = EMAIL_SENDER
     msg['To'] = EMAIL_RECEIVER
     msg['Subject'] = subject
-    
-    if is_html:
-        msg.attach(MIMEText(body, 'html'))
-    else:
-        msg.attach(MIMEText(body, 'plain'))
+    msg.attach(MIMEText(body, 'html' if is_html else 'plain'))
 
     if attachment_path and os.path.exists(attachment_path):
-        with open(attachment_path, "rb") as attachment:
+        with open(attachment_path, "rb") as f:
             part = MIMEBase("application", "octet-stream")
-            part.set_payload(attachment.read())
+            part.set_payload(f.read())
         encoders.encode_base64(part)
-        part.add_header("Content-Disposition", f"attachment; filename= {os.path.basename(attachment_path)}")
+        part.add_header("Content-Disposition", f"attachment; filename={os.path.basename(attachment_path)}")
         msg.attach(part)
 
     try:
@@ -138,14 +110,14 @@ def send_email(subject, body, attachment_path=None, is_html=False):
         server.login(EMAIL_SENDER, EMAIL_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print(f"Email sent to {EMAIL_RECEIVER}")
+        print("Email sent successfully.")
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        print(f"Email failed: {e}")
 
 # --- Main Execution ---
 
 def main():
-    print(f"--- Starting Analysis for {datetime.now().strftime('%Y-%m-%d')} ---")
+    print(f"--- Trend Climber Analysis: {datetime.now().strftime('%Y-%m-%d')} ---")
     
     # 1. Load Data
     tickers = load_tickers_from_source(TICKER_SOURCE_DIR)
@@ -156,91 +128,81 @@ def main():
     final_df = logic.run_scanner(tickers, eco_df=eco_df)
 
     if not final_df.empty:
-        # Reorder columns
-        if 'Remarks' in final_df.columns:
-            cols = [c for c in final_df.columns if c != 'Remarks'] + ['Remarks']
-            final_df = final_df[cols]
+        # Reorder for clarity
+        cols = ['Ticker', 'Signal', 'Timeframe', 'Current Price', 'Stop Loss', 'Cross Time', 'Remarks']
+        final_df = final_df[cols]
         
-        # Save RAW CSV
         if not os.path.exists(DATA_DIR): os.makedirs(DATA_DIR)
         out_path = os.path.join(DATA_DIR, OUTPUT_FILE)
         final_df.to_csv(out_path, index=False)
-        print(f"Results saved to {out_path}")
+        print(f"Saved: {out_path}")
         
-        # Filter for Active Signals
+        # Filter Active
         active_signals = final_df[final_df['Signal'] != "No Signal"]
+        
+        # HTML Styling
+        css = """
+        <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #333; }
+            h2 { color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; font-size: 13px; }
+            th { background-color: #2c3e50; color: white; padding: 12px; text-align: left; }
+            td { border-bottom: 1px solid #ddd; padding: 10px; vertical-align: middle; }
+            tr:nth-child(even) { background-color: #f8f9fa; }
+            tr:hover { background-color: #e9ecef; }
+            .buy { color: #27ae60; font-weight: bold; }
+            .sell { color: #c0392b; font-weight: bold; }
+            .risk { color: #e74c3c; font-weight: bold; }
+        </style>
+        """
         
         current_date = datetime.now().strftime('%Y-%m-%d')
         
-        # --- HTML GENERATION ---
-        
-        css_style = """
-        <style>
-            body { font-family: Arial, sans-serif; font-size: 14px; color: #333; }
-            h2 { color: #2c3e50; }
-            table { border-collapse: collapse; width: 100%; margin-top: 20px; font-size: 12px; }
-            th { background-color: #2c3e50; color: white; padding: 10px; text-align: left; }
-            td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
-            tr:nth-child(even) { background-color: #f2f2f2; }
-            tr:hover { background-color: #e6f7ff; }
-            .footer { margin-top: 20px; font-size: 12px; color: #777; }
-        </style>
-        """
-
         if not active_signals.empty:
-            # COPY the dataframe specifically for Email formatting
             email_df = active_signals.copy()
             
-            # --- RED TEXT LOGIC ---
-            if 'Remarks' in email_df.columns:
-                def color_high_impact(val):
-                    val_str = str(val)
-                    # Instead of returning a whole new string, we replace "HIGH"
-                    if "HIGH" in val_str:
-                        return val_str.replace("HIGH", '<span style="color: #D32F2F; font-weight: bold;">HIGH</span>')
-                    return val_str
-                
-                email_df['Remarks'] = email_df['Remarks'].apply(color_high_impact)
+            # Format Color Logic
+            def format_signal(val):
+                if "UPTREND" in str(val) or "BUY" in str(val): return f'<span class="buy">{val}</span>'
+                if "DOWNTREND" in str(val) or "SELL" in str(val): return f'<span class="sell">{val}</span>'
+                return val
 
-            display_cols = ['Ticker', 'Signal', 'Current Price', 'Daily Setup', 'Confirmations']
-            if 'Remarks' in email_df.columns: display_cols.append('Remarks')
+            def format_remarks(val):
+                if "HIGH" in str(val): return f'<span class="risk">{val}</span>'
+                return val
+
+            email_df['Signal'] = email_df['Signal'].apply(format_signal)
+            email_df['Remarks'] = email_df['Remarks'].apply(format_remarks)
             
-            # Convert to HTML (escape=False allows our red <span> tags to render)
-            table_html = email_df[display_cols].to_html(index=False, border=0, escape=False)
+            table_html = email_df.to_html(index=False, border=0, escape=False)
             
-            email_body = f"""
+            body = f"""
             <html>
-            <head>{css_style}</head>
+            <head>{css}</head>
             <body>
-                <h2>Daily Trade Signals - {current_date}</h2>
-                <p><b>--- ACTIVE SIGNALS ---</b></p>
+                <h2>Trend Climber Signals - {current_date}</h2>
+                <p>The following tickers have confirmed <b>Golden/Death Crosses</b> on stable trends.</p>
                 {table_html}
-                <div class="footer">
-                    <p>(See attached CSV for full details including "No Signal" tickers)</p>
-                </div>
+                <p style="font-size: 11px; color: #666; margin-top: 20px;">
+                    *Stop Loss calculated as 1% buffer from Current Bollinger Bands.<br>
+                    *Check attachment for full logs.
+                </p>
             </body>
             </html>
             """
         else:
-            email_body = f"""
+            body = f"""
             <html>
-            <head>{css_style}</head>
+            <head>{css}</head>
             <body>
-                <h2>Daily Trade Signals - {current_date}</h2>
-                <p>No active trade setups found today.</p>
-                <p>Monitoring {len(final_df)} tickers.</p>
+                <h2>Trend Climber Signals - {current_date}</h2>
+                <p><b>No active signals found today.</b></p>
+                <p>Scanned {len(final_df)} tickers. Most trends are either undefined or fully mature (no recent entries).</p>
             </body>
             </html>
             """
-
-        send_email(
-            subject=f"Daily Trade Signals - {current_date}",
-            body=email_body,
-            attachment_path=out_path,
-            is_html=True
-        )
-    else:
-        print("No results generated.")
+            
+        send_email(f"Trend Climber Alerts - {current_date}", body, out_path, is_html=True)
 
 if __name__ == "__main__":
     main()
