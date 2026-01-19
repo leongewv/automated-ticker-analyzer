@@ -81,6 +81,22 @@ def get_trend_status(df):
     elif last['BB_MID'] < last['EMA_200']: return "Downtrend"
     return "Neutral"
 
+# --- NEW: Helper for Precise Intersection ---
+def calculate_exact_cross(prev_sma, curr_sma, prev_ema, curr_ema):
+    """
+    Calculates the exact price level where two lines intersect.
+    Math: Intersection of two line segments.
+    """
+    # Denominator (Slope difference)
+    denom = (prev_sma - curr_sma) - (prev_ema - curr_ema)
+    
+    if denom == 0: return curr_sma # Parallel lines (rare), return current
+    
+    # Numerator (Determinant-like)
+    numer = (prev_sma * curr_ema) - (curr_sma * prev_ema)
+    
+    return numer / denom
+
 def get_bars_since_cross(df, direction):
     limit = 500 
     if len(df) < limit: limit = len(df)
@@ -88,7 +104,6 @@ def get_bars_since_cross(df, direction):
     window_df = df.iloc[-limit:]
     bb_mid = window_df['BB_MID'].values
     ema_200 = window_df['EMA_200'].values
-    closes = window_df['close'].values
     dates = window_df.index
     
     for i in range(len(bb_mid) - 1, 0, -1):
@@ -105,7 +120,9 @@ def get_bars_since_cross(df, direction):
             
         if found:
             bars_ago = (len(bb_mid) - 1) - i
-            return bars_ago, dates[i], closes[i]
+            # --- UPDATE: Calculate Exact Intersection ---
+            exact_price = calculate_exact_cross(prev_bb, curr_bb, prev_ema, curr_ema)
+            return bars_ago, dates[i], exact_price
 
     return None, None, None
 
@@ -114,7 +131,6 @@ def find_previous_opposing_cross(df, current_direction):
     
     bb_mid = df['BB_MID'].values
     ema_200 = df['EMA_200'].values
-    closes = df['close'].values
     
     for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
@@ -129,7 +145,9 @@ def find_previous_opposing_cross(df, current_direction):
              if prev_bb >= prev_ema and curr_bb < curr_ema: found = True
 
         if found:
-            return round(closes[i], 4), f"Previous {target_type} Cross Level"
+            # --- UPDATE: Calculate Exact Intersection ---
+            exact_price = calculate_exact_cross(prev_bb, curr_bb, prev_ema, curr_ema)
+            return round(exact_price, 4), f"Previous {target_type} Cross Level"
 
     return None, None
 
@@ -202,7 +220,7 @@ def analyze_ticker(ticker):
         
         bars_ago, cross_time, cross_price = get_bars_since_cross(df_target, current_direction)
         
-        # --- UPDATE: Added Cross Price to Trace Log ---
+        # Log exact cross price in trace
         if bars_ago is not None:
             cross_info = f"{bars_ago} bars ago @ {round(cross_price, 4)}"
         else:
@@ -225,7 +243,6 @@ def analyze_ticker(ticker):
             
             warning = f" | WARNING: {tp_note}" if "ATH" in tp_note or "ATL" in tp_note else ""
             
-            # We explicitly list "Trigger Price" in the Reason/Trace now for clarity
             return {
                 "Signal": f"CONFIRMED {current_direction.upper()}",
                 "Timeframe": f"Ladder {base_name}->{target_name}",
