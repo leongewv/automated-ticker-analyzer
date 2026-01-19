@@ -9,7 +9,7 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# Entry Window (Bars ago)
+# Entry Window
 ENTRY_MIN_BARS = 3   
 ENTRY_MAX_BARS = 30  
 
@@ -82,10 +82,6 @@ def get_trend_status(df):
     return "Neutral"
 
 def get_bars_since_cross(df, direction):
-    """
-    Finds the most recent cross matching the 'direction'.
-    Returns: bars_ago, cross_time, cross_price
-    """
     limit = 500 
     if len(df) < limit: limit = len(df)
     
@@ -113,21 +109,13 @@ def get_bars_since_cross(df, direction):
 
     return None, None, None
 
-# --- NEW: Previous Opposing Cross Logic (TP) ---
-
 def find_previous_opposing_cross(df, current_direction):
-    """
-    If Current is Downtrend (Sell), find the price of the last Golden Cross (Buy).
-    If Current is Uptrend (Buy), find the price of the last Death Cross (Sell).
-    """
     target_type = "Golden" if current_direction == "Downtrend" else "Death"
     
-    # We scan the whole loaded history
     bb_mid = df['BB_MID'].values
     ema_200 = df['EMA_200'].values
     closes = df['close'].values
     
-    # Scan backwards
     for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
         curr_ema = ema_200[i]
@@ -144,8 +132,6 @@ def find_previous_opposing_cross(df, current_direction):
             return round(closes[i], 4), f"Previous {target_type} Cross Level"
 
     return None, None
-
-# --- Fallback Support & Resistance Logic ---
 
 def find_next_sr_level(ticker, current_tf, direction, current_price):
     tf_order = ["4h", "1d", "1wk", "1mo"]
@@ -183,8 +169,6 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
 
     return (round(target_level, 4), note) if target_level else ("N/A", note)
 
-# --- Core Scanner Logic ---
-
 def analyze_ticker(ticker):
     log_trace = [] 
     
@@ -204,7 +188,6 @@ def analyze_ticker(ticker):
     steps = [("1h", "4h"), ("4h", "1d"), ("1d", "1wk"), ("1wk", "1mo")]
     
     for base_name, target_name in steps:
-        # Check Base
         if base_name != "1h":
             df_base = get_data(ticker, base_name)
             if df_base is None: return {"Signal": "No Signal", "Reason": f"Data Error {base_name}"}
@@ -214,28 +197,25 @@ def analyze_ticker(ticker):
                 log_trace.append(f"{base_name}:MISALIGNED({status})")
                 return {"Signal": "No Signal", "Reason": f"Trace: {' | '.join(log_trace)}"}
 
-        # Check Target
         df_target = get_data(ticker, target_name)
         if df_target is None: return {"Signal": "No Signal", "Reason": f"Data Error {target_name}"}
         
         bars_ago, cross_time, cross_price = get_bars_since_cross(df_target, current_direction)
         
-        cross_info = f"{bars_ago} bars ago" if bars_ago is not None else "No Cross"
+        # --- UPDATE: Added Cross Price to Trace Log ---
+        if bars_ago is not None:
+            cross_info = f"{bars_ago} bars ago @ {round(cross_price, 4)}"
+        else:
+            cross_info = "No Cross"
+            
         log_trace.append(f"{target_name}:{cross_info}")
         
-        # Valid Entry?
         if bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS:
-            # TRIGGER
             current_price = df_target.iloc[-1]['close']
             
-            # Stop Loss (1% off Cross Price)
             sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
             
-            # --- NEW TAKE PROFIT LOGIC ---
-            # Primary: Look for previous opposing cross on SAME timeframe
             tp_price, tp_note = find_previous_opposing_cross(df_target, current_direction)
-            
-            # Fallback: If not found, look at Higher TF S/R
             if tp_price is None:
                 tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
                 tp_note = f"{tp_note} (Fallback)"
@@ -245,6 +225,7 @@ def analyze_ticker(ticker):
             
             warning = f" | WARNING: {tp_note}" if "ATH" in tp_note or "ATL" in tp_note else ""
             
+            # We explicitly list "Trigger Price" in the Reason/Trace now for clarity
             return {
                 "Signal": f"CONFIRMED {current_direction.upper()}",
                 "Timeframe": f"Ladder {base_name}->{target_name}",
@@ -252,7 +233,7 @@ def analyze_ticker(ticker):
                 "Stop Loss": round(sl, 4),
                 "Take Profit": f"{tp_price} ({tp_note})",
                 "Cross Time": cross_time_str,
-                "Reason": f"Entry on {target_name}{warning}",
+                "Reason": f"Entry on {target_name} @ {round(cross_price, 4)}{warning}",
                 "Trace": " | ".join(log_trace)
             }
         
