@@ -9,9 +9,9 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# The window to define a "Valid Entry" (10 to 30 bars ago)
-ENTRY_MIN_BARS = 10
-ENTRY_MAX_BARS = 30
+# --- UPDATE: Lowered Minimum bars to 3 to catch fresher signals (like AUDCAD Weekly) ---
+ENTRY_MIN_BARS = 3   # Previously 10
+ENTRY_MAX_BARS = 30  # Stays at 30
 
 # Stop Loss Buffer (1%)
 SL_BUFFER = 0.01
@@ -90,7 +90,7 @@ def get_bars_since_cross(df, direction):
         cross_price (float): Close price at cross.
     If no cross found, returns (None, None, None).
     """
-    limit = 500 # Look back far enough to diagnose "Mature" trends
+    limit = 500 
     if len(df) < limit: limit = len(df)
     
     window_df = df.iloc[-limit:]
@@ -100,7 +100,6 @@ def get_bars_since_cross(df, direction):
     dates = window_df.index
     
     # Iterate backwards to find the most recent cross
-    # We start from the 2nd to last bar and look back
     for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
         curr_ema = ema_200[i]
@@ -160,7 +159,7 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
 # --- Core Scanner Logic ---
 
 def analyze_ticker(ticker):
-    log_trace = [] # Store diagnostic info here
+    log_trace = [] 
     
     # 1. Base 1H
     df_1h = get_data(ticker, "1h")
@@ -178,7 +177,7 @@ def analyze_ticker(ticker):
     steps = [("1h", "4h"), ("4h", "1d"), ("1d", "1wk"), ("1wk", "1mo")]
     
     for base_name, target_name in steps:
-        # Check Base (Skip for 1h as we just did it)
+        # Check Base
         if base_name != "1h":
             df_base = get_data(ticker, base_name)
             if df_base is None: return {"Signal": "No Signal", "Reason": f"Data Error {base_name}"}
@@ -187,7 +186,6 @@ def analyze_ticker(ticker):
             if status != current_direction:
                 log_trace.append(f"{base_name}:MISALIGNED({status})")
                 return {"Signal": "No Signal", "Reason": f"Trace: {' | '.join(log_trace)}"}
-            # else: log_trace.append(f"{base_name}:OK") (Optional, keeps log shorter)
 
         # Check Target
         df_target = get_data(ticker, target_name)
@@ -198,7 +196,7 @@ def analyze_ticker(ticker):
         cross_info = f"{bars_ago} bars ago" if bars_ago is not None else "No Cross"
         log_trace.append(f"{target_name}:{cross_info}")
         
-        # Valid Entry?
+        # Valid Entry Check (Updated Thresholds)
         if bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS:
             # TRIGGER
             current_price = df_target.iloc[-1]['close']
@@ -221,7 +219,7 @@ def analyze_ticker(ticker):
                 "Trace": " | ".join(log_trace)
             }
         
-        # If not valid, continue loop (Climb Higher)
+        # Continue Climbing
         continue
 
     return {"Signal": "No Signal", "Reason": f"Trends Mature/No Entry [Trace: {' | '.join(log_trace)}]"}
@@ -242,16 +240,12 @@ def run_scanner(tickers, eco_df=None):
         if eco_df is not None:
             danger_msg = check_economic_danger(ticker, eco_df)
         
-        # --- NEW: Append Trace to Remarks for Visibility ---
         trace_log = analysis.get("Trace", "")
-        # If signal found, Trace is inside analysis object but not main reason
-        # If no signal, Trace is inside Reason
         
         final_remarks = danger_msg
         if trace_log: 
-            final_remarks = f"[TRACE: {trace_log}] | {danger_msg}"
+            final_remarks = f"[Trace: {trace_log}] | {danger_msg}"
         elif "Trace" in analysis.get("Reason", ""):
-            # Extract trace from reason if it was embedded there (for No Signal items)
             final_remarks = f"[{analysis['Reason']}] | {danger_msg}"
             
         if "CONFIRMED" in analysis.get("Signal", ""):
@@ -266,7 +260,6 @@ def run_scanner(tickers, eco_df=None):
                 "Remarks": final_remarks
             })
         else:
-            # Clean up the output so it's not too messy in CSV
             results.append({
                 "Ticker": ticker,
                 "Signal": "No Signal",
