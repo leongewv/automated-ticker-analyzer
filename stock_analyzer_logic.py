@@ -13,6 +13,9 @@ BB_MULTIPLIER = 2.0
 ENTRY_MIN_BARS = 3   
 ENTRY_MAX_BARS = 30  
 
+# Early Exit Reversal Threshold (Lower TF)
+EXIT_MIN_BARS = 10
+
 # Stop Loss Buffer (1%)
 SL_BUFFER = 0.01
 
@@ -49,7 +52,9 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 # --- Data & Indicators ---
 
 def get_data(ticker, interval):
+    # Mapping interval to data period required
     period_map = {
+        "30m": "1mo", # New for 4H exit check
         "1h": "1y",
         "4h": "2y", 
         "1d": "5y", 
@@ -117,16 +122,12 @@ def get_bars_since_cross(df, direction):
     return None, None, None
 
 def find_previous_opposing_cross(df, current_direction, entry_price):
-    """
-    Scans backwards for a PROFITABLE opposing cross.
-    If a recent cross implies a loss, it is skipped (Choppy Detection).
-    """
     target_type = "Golden" if current_direction == "Downtrend" else "Death"
     
     bb_mid = df['BB_MID'].values
     ema_200 = df['EMA_200'].values
     
-    skipped_bad_cross = False # Flag to track if we had to dig deep
+    skipped_bad_cross = False 
     
     for i in range(len(bb_mid) - 1, 0, -1):
         curr_bb = bb_mid[i]
@@ -143,7 +144,7 @@ def find_previous_opposing_cross(df, current_direction, entry_price):
         if found:
             exact_price = calculate_exact_cross(prev_bb, curr_bb, prev_ema, curr_ema)
             
-            # --- PROFITABILITY CHECK ---
+            # Profitability Check
             is_valid_tp = False
             if current_direction == "Uptrend":
                 if exact_price > entry_price: is_valid_tp = True
@@ -151,13 +152,11 @@ def find_previous_opposing_cross(df, current_direction, entry_price):
                 if exact_price < entry_price: is_valid_tp = True
             
             if is_valid_tp:
-                # We found a good level. Check if we skipped others to get here.
                 note = f"Previous {target_type} Cross Level"
                 if skipped_bad_cross:
-                    note += " (Deep Search)" # Internal marker
+                    note += " (Deep Search)"
                 return round(exact_price, 4), note
             else:
-                # Found a cross, but it's bad (Loss). Skip it and keep looking.
                 skipped_bad_cross = True
             
     return None, None
@@ -197,6 +196,44 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
         else: note = "ATL (All Time Low)"
 
     return (round(target_level, 4), note) if target_level else ("N/A", note)
+
+# --- NEW: Early Exit Logic (Lower Timeframe Check) ---
+def check_early_exit(ticker, signal_tf, trade_direction):
+    """
+    Checks the next 2 lower timeframes.
+    Alerts if an OPPOSING cross has existed for >= 10 candles.
+    """
+    # Define Lower TF Map
+    lower_tf_map = {
+        "1mo": ["1wk", "1d"],
+        "1wk": ["1d", "4h"],
+        "1d":  ["4h", "1h"],
+        "4h":  ["1h", "30m"]
+    }
+    
+    check_tfs = lower_tf_map.get(signal_tf, [])
+    warnings = []
+    
+    opposing_direction = "Downtrend" if trade_direction == "Uptrend" else "Uptrend"
+    
+    for l_tf in check_tfs:
+        df = get_data(ticker, l_tf)
+        if df is None: continue
+        
+        # 1. Check if CURRENT status is opposing
+        status = get_trend_status(df)
+        if status == opposing_direction:
+            # 2. Check HOW LONG it has been opposing
+            bars_ago, _, _ = get_bars_since_cross(df, opposing_direction)
+            
+            if bars_ago is not None and bars_ago >= EXIT_MIN_BARS:
+                warnings.append(f"{l_tf} Reversal ({bars_ago} bars)")
+    
+    if warnings:
+        return " | ".join(warnings)
+    return "Safe"
+
+# --- Core Scanner Logic ---
 
 def analyze_ticker(ticker):
     log_trace = [] 
@@ -243,12 +280,9 @@ def analyze_ticker(ticker):
             
             sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
             
-            # --- TP & WARNING LOGIC ---
             tp_price, tp_note = find_previous_opposing_cross(df_target, current_direction, current_price)
             
             warning_msg = ""
-            
-            # Check for Deep Search (Choppy) Warning
             if tp_note and "Deep Search" in tp_note:
                 warning_msg += " | WARNING: Market Choppy - Deep TP Search"
             
@@ -256,20 +290,24 @@ def analyze_ticker(ticker):
                 tp_price, tp_note = find_next_sr_level(ticker, target_name, current_direction, current_price)
                 tp_note = f"{tp_note} (Fallback)"
             
-            # Check for ATH/ATL Warning
             if "ATH" in tp_note or "ATL" in tp_note:
                 warning_msg += f" | WARNING: {tp_note}"
 
             cross_time_str = str(cross_time)
             if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
             
+            # --- NEW: Check for Early Exit Warning ---
+            exit_warning = check_early_exit(ticker, target_name, current_direction)
+            
             return {
                 "Signal": f"CONFIRMED {current_direction.upper()}",
-                "Timeframe": f"Ladder {base_name}->{target_name}",
+                "Timeframe": f"Ladder {base_name}->{target_name}", # Display only
+                "Signal_TF": target_name, # Passed for internal logic
                 "Current Price": round(current_price, 4),
                 "Stop Loss": round(sl, 4),
                 "Take Profit": f"{tp_price} ({tp_note})",
                 "Cross Time": cross_time_str,
+                "Exit Warning": exit_warning,
                 "Reason": f"Entry on {target_name} @ {round(cross_price, 4)}{warning_msg}",
                 "Trace": " | ".join(log_trace)
             }
@@ -310,6 +348,7 @@ def run_scanner(tickers, eco_df=None):
                 "Current Price": analysis["Current Price"],
                 "Stop Loss": analysis["Stop Loss"],
                 "Take Profit": analysis["Take Profit"],
+                "Exit Warning": analysis.get("Exit Warning", "-"),
                 "Cross Time": analysis["Cross Time"],
                 "Remarks": final_remarks
             })
@@ -321,6 +360,7 @@ def run_scanner(tickers, eco_df=None):
                 "Current Price": "-",
                 "Stop Loss": "-",
                 "Take Profit": "-",
+                "Exit Warning": "-",
                 "Cross Time": "-",
                 "Remarks": final_remarks
             })
