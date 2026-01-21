@@ -22,4 +22,4 @@ jobs:
           pip install pandas yfinance finta openpyxl
 
       - name: Run Connection Diagnostic
-        run: python test_connection.py
+        run: python testconnection.py
