@@ -9,7 +9,7 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# --- UPDATE: Strict Freshness Window ---
+# Strict Freshness Window (for New Entries)
 ENTRY_MIN_BARS = 3   
 ENTRY_MAX_BARS = 10  
 
@@ -52,7 +52,6 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 # --- Data & Indicators ---
 
 def get_data(ticker, interval):
-    # Mapping interval to data period required
     period_map = {
         "30m": "1mo", 
         "1h": "1y",
@@ -219,7 +218,6 @@ def check_early_exit(ticker, signal_tf, trade_direction):
         
         status = get_trend_status(df)
         if status == opposing_direction:
-            # Check how long it has been opposing
             bars_ago, _, _ = get_bars_since_cross(df, opposing_direction)
             if bars_ago is not None and bars_ago >= EXIT_MIN_BARS:
                 warnings.append(f"{l_tf} Opposing ({bars_ago} bars)")
@@ -233,9 +231,11 @@ def check_early_exit(ticker, signal_tf, trade_direction):
 def analyze_ticker(ticker):
     log_trace = [] 
     
-    # Priority Order: Bottom-Up (Tactical -> Strategic)
-    # If 4H has a trend, we stick with 4H (Entry or Hold). We do NOT look at Daily.
+    # Priority: FRESH signals (Higher or Lower) > EXISTING signals (Lowest TF preferred)
     check_timeframes = ["4h", "1d", "1wk", "1mo"]
+    
+    # Store the first "Existing" trend we find as a fallback
+    fallback_existing_trend = None
     
     for tf_name in check_timeframes:
         df = get_data(ticker, tf_name)
@@ -246,42 +246,18 @@ def analyze_ticker(ticker):
         current_direction = get_trend_status(df)
         if current_direction == "Neutral":
             log_trace.append(f"{tf_name}:Neutral")
-            # If 4H is neutral, we CAN climb to Daily.
             continue
             
-        # If we are here, we have a DIRECTION on this timeframe.
-        # We calculate the details, and we STOP here. We do not climb higher.
-        
         bars_ago, cross_time, cross_price = get_bars_since_cross(df, current_direction)
         
         if bars_ago is not None:
             cross_info = f"{bars_ago} bars ago"
         else:
-            # Should not happen if direction is not neutral, but safety check
-            cross_info = "Trend Active (No recent cross found)"
-            
+            cross_info = "Trend Active (No recent cross)"
         log_trace.append(f"{tf_name}:{cross_info}")
         
-        # --- LOGIC SPLIT: New Entry vs Existing Trend ---
-        
-        # 1. New Entry? (3-10 bars)
-        is_fresh = (bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS)
-        
-        # 2. Existing Trend? (Trend is Active but old)
-        # We process this too, instead of ignoring it.
-        
-        signal_label = ""
-        if is_fresh:
-            signal_label = f"CONFIRMED {current_direction.upper()}"
-            reason_str = f"Entry on {tf_name} @ {round(cross_price, 4)}"
-        else:
-            signal_label = f"EXISTING {current_direction.upper()}"
-            reason_str = f"Active Trend on {tf_name} ({bars_ago} bars)"
-
-        # Common Calculations for both cases
+        # --- PREPARE RESULT OBJECT ---
         current_price = df.iloc[-1]['close']
-        
-        # SL/TP might differ for "Existing", but let's provide standard levels for reference
         sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
         
         tp_price, tp_note = find_previous_opposing_cross(df, current_direction, current_price)
@@ -300,26 +276,50 @@ def analyze_ticker(ticker):
         cross_time_str = str(cross_time)
         if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
         
-        # Exit Warnings
         exit_warning = check_early_exit(ticker, tf_name, current_direction)
         
-        return {
-            "Signal": signal_label,
+        # --- DECISION LOGIC ---
+        is_fresh = (bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS)
+        
+        result_payload = {
+            "Signal": f"CONFIRMED {current_direction.upper()}" if is_fresh else f"EXISTING {current_direction.upper()}",
             "Timeframe": tf_name, 
             "Current Price": round(current_price, 4),
             "Stop Loss": round(sl, 4),
             "Take Profit": f"{tp_price} ({tp_note})",
             "Cross Time": cross_time_str,
             "Exit Warning": exit_warning,
-            "Reason": f"{reason_str}{warning_msg}",
-            "Trace": " | ".join(log_trace)
+            "Reason": f"{'Entry' if is_fresh else 'Active Trend'} on {tf_name} @ {round(cross_price, 4)}{warning_msg}",
+            "Trace": " | ".join(log_trace) # Will be partial trace for fresh, full for existing
         }
+
+        # 1. IF FRESH: Return immediately (Highest Priority)
+        # Even if we found a stale trend on 4H, a Fresh Daily trend TRUMPS it.
+        if is_fresh:
+            # Update trace with final state
+            result_payload["Trace"] = " | ".join(log_trace)
+            return result_payload
+            
+        # 2. IF EXISTING: Store as fallback (only the first/lowest one)
+        # We continue looping to see if a Higher TF has a FRESH signal.
+        if fallback_existing_trend is None:
+            fallback_existing_trend = result_payload
+
+    # End of Loop
+    
+    # If we found a Fresh signal, we would have returned already.
+    # If we are here, we only have Stale/Existing trends or nothing.
+    
+    if fallback_existing_trend:
+        # Update the trace to show the full scan path
+        fallback_existing_trend["Trace"] = " | ".join(log_trace)
+        return fallback_existing_trend
 
     return {"Signal": "No Signal", "Reason": f"No Active Trend Found [Trace: {' | '.join(log_trace)}]"}
 
 def run_scanner(tickers, eco_df=None):
     results = []
-    print(f"Scanning {len(tickers)} tickers using Bottom-Up Priority...")
+    print(f"Scanning {len(tickers)} tickers using Freshness Priority Strategy...")
     
     for i, ticker in enumerate(tickers):
         print(f"[{i+1}/{len(tickers)}] Checking {ticker}...", end="\r")
@@ -341,7 +341,6 @@ def run_scanner(tickers, eco_df=None):
         elif "Trace" in analysis.get("Reason", ""):
             final_remarks = f"[{analysis['Reason']}] | {danger_msg}"
         
-        # We append BOTH Confirmed Entries and Existing Trends to the output
         if "CONFIRMED" in analysis.get("Signal", "") or "EXISTING" in analysis.get("Signal", ""):
              results.append({
                 "Ticker": ticker,
