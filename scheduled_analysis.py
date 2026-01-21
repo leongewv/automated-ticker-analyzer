@@ -18,7 +18,7 @@ EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
 EMAIL_PASSWORD = os.environ.get("SENDER_PASSWORD")
 EMAIL_RECEIVER = os.environ.get("RECEIVER_EMAIL")
 
-# --- MASTER FALLBACK LIST (Abbreviated for brevity, full list maintained in logic) ---
+# --- MASTER FALLBACK LIST (Abbreviated) ---
 FULL_TICKER_LIST = [
     "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
     "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
@@ -126,9 +126,18 @@ def main():
     final_df = logic.run_scanner(tickers, eco_df=eco_df)
 
     if not final_df.empty:
-        # --- UPDATE: Added 'Exit Warning' to output columns ---
-        cols = ['Ticker', 'Signal', 'Timeframe', 'Current Price', 'Stop Loss', 'Take Profit', 'Exit Warning', 'Cross Time', 'Remarks']
+        # --- SORTING LOGIC: CONFIRMED > EXISTING > No Signal ---
+        def sort_key(signal):
+            if "CONFIRMED" in signal: return 1
+            if "EXISTING" in signal: return 2
+            return 3 # No Signal or Error
         
+        # Apply sort
+        final_df['SortOrder'] = final_df['Signal'].apply(sort_key)
+        final_df = final_df.sort_values(by=['SortOrder', 'Ticker'])
+        final_df = final_df.drop(columns=['SortOrder']) # Cleanup
+
+        cols = ['Ticker', 'Signal', 'Timeframe', 'Current Price', 'Stop Loss', 'Take Profit', 'Exit Warning', 'Cross Time', 'Remarks']
         available_cols = [c for c in cols if c in final_df.columns]
         final_df = final_df[available_cols]
         
@@ -137,6 +146,7 @@ def main():
         final_df.to_csv(out_path, index=False)
         print(f"Saved: {out_path}")
         
+        # Filter Active Signals (Confirmed & Existing)
         active_signals = final_df[final_df['Signal'] != "No Signal"]
         
         current_date = datetime.now().strftime('%Y-%m-%d')
@@ -170,8 +180,7 @@ def main():
                 return val
                 
             def format_exit(val):
-                # Highlight Early Exit Warnings in Orange/Red
-                if "Reversal" in str(val): return f'<span class="warning">{val}</span>'
+                if "Opposing" in str(val): return f'<span class="warning">{val}</span>'
                 return val
 
             if 'Signal' in email_df.columns: email_df['Signal'] = email_df['Signal'].apply(format_signal)
@@ -191,7 +200,7 @@ def main():
                     <p style="font-size: 11px; color: #666; margin-top: 20px;">
                         *Stop Loss: 1% from Cross Price (Exact intersection).<br>
                         *Take Profit: Previous profitable opposing cross (Smart Scan).<br>
-                        *Exit Warning: Sustained reversal (>10 bars) on lower 2 TFs.
+                        *Exit Warning: Sustained reversal (>10 bars) on lower TFs down to 30m.
                     </p>
                 </div>
             </body>
