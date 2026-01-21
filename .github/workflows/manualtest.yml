@@ -1,0 +1,25 @@
+name: Manual Connection Test
+
+# This allows you to click a button to run it manually
+on:
+  workflow_dispatch:
+
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install pandas yfinance finta openpyxl
+
+      - name: Run Connection Diagnostic
+        run: python test_connection.py
