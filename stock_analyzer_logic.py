@@ -9,9 +9,9 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# Entry Window
+# --- UPDATE: Strict Freshness Window ---
 ENTRY_MIN_BARS = 3   
-ENTRY_MAX_BARS = 30  
+ENTRY_MAX_BARS = 10  
 
 # Early Exit Reversal Threshold (Lower TF)
 EXIT_MIN_BARS = 10
@@ -54,7 +54,7 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 def get_data(ticker, interval):
     # Mapping interval to data period required
     period_map = {
-        "30m": "1mo", # New for 4H exit check
+        "30m": "1mo", 
         "1h": "1y",
         "4h": "2y", 
         "1d": "5y", 
@@ -199,14 +199,13 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
 
 def check_early_exit(ticker, signal_tf, trade_direction):
     """
-    Checks the next 2 lower timeframes.
-    Alerts if an OPPOSING cross has existed for >= 10 candles.
+    Checks ALL relevant lower timeframes down to 30m for conflicting trends.
     """
     lower_tf_map = {
-        "1mo": ["1wk", "1d"],
-        "1wk": ["1d", "4h"],
-        "1d":  ["4h", "1h"],
-        "4h":  ["1h", "30m"]
+        "1mo": ["1wk", "1d", "4h", "1h", "30m"],     
+        "1wk": ["1d", "4h", "1h", "30m"],            
+        "1d":  ["4h", "1h", "30m"],                  
+        "4h":  ["1h", "30m"]                         
     }
     
     check_tfs = lower_tf_map.get(signal_tf, [])
@@ -220,9 +219,10 @@ def check_early_exit(ticker, signal_tf, trade_direction):
         
         status = get_trend_status(df)
         if status == opposing_direction:
+            # Check how long it has been opposing
             bars_ago, _, _ = get_bars_since_cross(df, opposing_direction)
             if bars_ago is not None and bars_ago >= EXIT_MIN_BARS:
-                warnings.append(f"{l_tf} Reversed ({bars_ago} bars)")
+                warnings.append(f"{l_tf} Opposing ({bars_ago} bars)")
     
     if warnings:
         return " | ".join(warnings)
@@ -233,17 +233,9 @@ def check_early_exit(ticker, signal_tf, trade_direction):
 def analyze_ticker(ticker):
     log_trace = [] 
     
-    # --- INDEPENDENT CHECKS ---
-    # We check each TF independently for a valid signal.
-    # We do NOT let 1H or 4H block a Daily signal.
-    
+    # Priority Order: Bottom-Up (Tactical -> Strategic)
+    # If 4H has a trend, we stick with 4H (Entry or Hold). We do NOT look at Daily.
     check_timeframes = ["4h", "1d", "1wk", "1mo"]
-    
-    # We store the "Best" signal found (Highest priority or just first valid)
-    # Priority: 1mo > 1wk > 1d > 4h (We iterate in this order or reverse?)
-    # Let's check all and return the highest TF signal found, or all? 
-    # Usually returning the FIRST valid one in the list [4h, 1d, 1wk, 1mo] implies 4H is base.
-    # Let's iterate and return the first VALID signal we find.
     
     for tf_name in check_timeframes:
         df = get_data(ticker, tf_name)
@@ -251,64 +243,83 @@ def analyze_ticker(ticker):
             log_trace.append(f"{tf_name}:NoData")
             continue
         
-        # 1. Determine Current Direction of this TF
         current_direction = get_trend_status(df)
         if current_direction == "Neutral":
             log_trace.append(f"{tf_name}:Neutral")
+            # If 4H is neutral, we CAN climb to Daily.
             continue
             
-        # 2. Check for RECENT CROSS on this TF
+        # If we are here, we have a DIRECTION on this timeframe.
+        # We calculate the details, and we STOP here. We do not climb higher.
+        
         bars_ago, cross_time, cross_price = get_bars_since_cross(df, current_direction)
         
         if bars_ago is not None:
             cross_info = f"{bars_ago} bars ago"
         else:
-            cross_info = "No Cross"
+            # Should not happen if direction is not neutral, but safety check
+            cross_info = "Trend Active (No recent cross found)"
+            
         log_trace.append(f"{tf_name}:{cross_info}")
         
-        # 3. Validate Entry Window
-        if bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS:
-            # --- VALID SIGNAL FOUND ---
-            current_price = df.iloc[-1]['close']
-            sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
-            
-            # Take Profit
-            tp_price, tp_note = find_previous_opposing_cross(df, current_direction, current_price)
-            
-            warning_msg = ""
-            if tp_note and "Deep Search" in tp_note:
-                warning_msg += " | WARNING: Market Choppy - Deep TP Search"
-            
-            if tp_price is None:
-                tp_price, tp_note = find_next_sr_level(ticker, tf_name, current_direction, current_price)
-                tp_note = f"{tp_note} (Fallback)"
-            
-            if "ATH" in tp_note or "ATL" in tp_note:
-                warning_msg += f" | WARNING: {tp_note}"
+        # --- LOGIC SPLIT: New Entry vs Existing Trend ---
+        
+        # 1. New Entry? (3-10 bars)
+        is_fresh = (bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS)
+        
+        # 2. Existing Trend? (Trend is Active but old)
+        # We process this too, instead of ignoring it.
+        
+        signal_label = ""
+        if is_fresh:
+            signal_label = f"CONFIRMED {current_direction.upper()}"
+            reason_str = f"Entry on {tf_name} @ {round(cross_price, 4)}"
+        else:
+            signal_label = f"EXISTING {current_direction.upper()}"
+            reason_str = f"Active Trend on {tf_name} ({bars_ago} bars)"
 
-            cross_time_str = str(cross_time)
-            if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
-            
-            # --- Check Lower TFs for WARNINGS (Not blockers) ---
-            exit_warning = check_early_exit(ticker, tf_name, current_direction)
-            
-            return {
-                "Signal": f"CONFIRMED {current_direction.upper()}",
-                "Timeframe": tf_name, # The TF that triggered
-                "Current Price": round(current_price, 4),
-                "Stop Loss": round(sl, 4),
-                "Take Profit": f"{tp_price} ({tp_note})",
-                "Cross Time": cross_time_str,
-                "Exit Warning": exit_warning,
-                "Reason": f"Entry on {tf_name} @ {round(cross_price, 4)}{warning_msg}",
-                "Trace": " | ".join(log_trace)
-            }
+        # Common Calculations for both cases
+        current_price = df.iloc[-1]['close']
+        
+        # SL/TP might differ for "Existing", but let's provide standard levels for reference
+        sl = cross_price * (1 - SL_BUFFER) if current_direction == "Uptrend" else cross_price * (1 + SL_BUFFER)
+        
+        tp_price, tp_note = find_previous_opposing_cross(df, current_direction, current_price)
+        
+        warning_msg = ""
+        if tp_note and "Deep Search" in tp_note:
+            warning_msg += " | WARNING: Market Choppy - Deep TP Search"
+        
+        if tp_price is None:
+            tp_price, tp_note = find_next_sr_level(ticker, tf_name, current_direction, current_price)
+            tp_note = f"{tp_note} (Fallback)"
+        
+        if "ATH" in tp_note or "ATL" in tp_note:
+            warning_msg += f" | WARNING: {tp_note}"
 
-    return {"Signal": "No Signal", "Reason": f"No Entry Found [Trace: {' | '.join(log_trace)}]"}
+        cross_time_str = str(cross_time)
+        if isinstance(cross_time, pd.Timestamp): cross_time_str = cross_time.strftime('%Y-%m-%d %H:%M')
+        
+        # Exit Warnings
+        exit_warning = check_early_exit(ticker, tf_name, current_direction)
+        
+        return {
+            "Signal": signal_label,
+            "Timeframe": tf_name, 
+            "Current Price": round(current_price, 4),
+            "Stop Loss": round(sl, 4),
+            "Take Profit": f"{tp_price} ({tp_note})",
+            "Cross Time": cross_time_str,
+            "Exit Warning": exit_warning,
+            "Reason": f"{reason_str}{warning_msg}",
+            "Trace": " | ".join(log_trace)
+        }
+
+    return {"Signal": "No Signal", "Reason": f"No Active Trend Found [Trace: {' | '.join(log_trace)}]"}
 
 def run_scanner(tickers, eco_df=None):
     results = []
-    print(f"Scanning {len(tickers)} tickers using Independent TF Check...")
+    print(f"Scanning {len(tickers)} tickers using Bottom-Up Priority...")
     
     for i, ticker in enumerate(tickers):
         print(f"[{i+1}/{len(tickers)}] Checking {ticker}...", end="\r")
@@ -329,8 +340,9 @@ def run_scanner(tickers, eco_df=None):
             final_remarks = f"[Trace: {trace_log}] | {danger_msg}"
         elif "Trace" in analysis.get("Reason", ""):
             final_remarks = f"[{analysis['Reason']}] | {danger_msg}"
-            
-        if "CONFIRMED" in analysis.get("Signal", ""):
+        
+        # We append BOTH Confirmed Entries and Existing Trends to the output
+        if "CONFIRMED" in analysis.get("Signal", "") or "EXISTING" in analysis.get("Signal", ""):
              results.append({
                 "Ticker": ticker,
                 "Signal": analysis["Signal"],
