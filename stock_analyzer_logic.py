@@ -9,7 +9,7 @@ EMA_PERIOD = 200
 BB_PERIOD = 20
 BB_MULTIPLIER = 2.0
 
-# Strict Freshness Window (for New Entries)
+# --- STABILITY SETTING: 3 to 10 bars ---
 ENTRY_MIN_BARS = 3   
 ENTRY_MAX_BARS = 10  
 
@@ -52,6 +52,7 @@ def check_economic_danger(ticker, eco_df, current_time=None):
 # --- Data & Indicators ---
 
 def get_data(ticker, interval):
+    # Mapping interval to data period required
     period_map = {
         "30m": "1mo", 
         "1h": "1y",
@@ -290,28 +291,20 @@ def analyze_ticker(ticker):
             "Cross Time": cross_time_str,
             "Exit Warning": exit_warning,
             "Reason": f"{'Entry' if is_fresh else 'Active Trend'} on {tf_name} @ {round(cross_price, 4)}{warning_msg}",
-            "Trace": " | ".join(log_trace) # Will be partial trace for fresh, full for existing
+            "Trace": " | ".join(log_trace) 
         }
 
         # 1. IF FRESH: Return immediately (Highest Priority)
-        # Even if we found a stale trend on 4H, a Fresh Daily trend TRUMPS it.
         if is_fresh:
-            # Update trace with final state
             result_payload["Trace"] = " | ".join(log_trace)
             return result_payload
             
         # 2. IF EXISTING: Store as fallback (only the first/lowest one)
-        # We continue looping to see if a Higher TF has a FRESH signal.
         if fallback_existing_trend is None:
             fallback_existing_trend = result_payload
 
     # End of Loop
-    
-    # If we found a Fresh signal, we would have returned already.
-    # If we are here, we only have Stale/Existing trends or nothing.
-    
     if fallback_existing_trend:
-        # Update the trace to show the full scan path
         fallback_existing_trend["Trace"] = " | ".join(log_trace)
         return fallback_existing_trend
 
