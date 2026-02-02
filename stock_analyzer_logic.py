@@ -13,15 +13,24 @@ ENTRY_MAX_BARS = 10
 EXIT_MIN_BARS = 10
 SL_BUFFER = 0.01
 
-# --- Minimal Helper for Price Accuracy & Status Tag ---
 def get_live_tick(ticker):
-    """Fetches the latest tick and returns the status."""
+    """Robustly fetches the latest price tick, handling yfinance Multi-Index issues."""
     try:
-        # Get the latest 1-minute data to bypass daily lag
-        data = yf.download(ticker, period="1d", interval="1m", progress=False)
+        # We fetch 5 days of 1m data to ensure we catch the market open on Mondays
+        data = yf.download(ticker, period="5d", interval="1m", progress=False, group_by='ticker')
         if not data.empty:
-            return data['Close'].iloc[-1], "LIVE"
-    except:
+            # Handle Multi-Index columns if present
+            if isinstance(data.columns, pd.MultiIndex):
+                # Take the last Close value for the specific ticker
+                price_series = data[ticker]['Close'].dropna()
+            else:
+                price_series = data['Close'].dropna()
+            
+            if not price_series.empty:
+                val = price_series.iloc[-1]
+                # Ensure we return a float, not a Series
+                return float(val), "LIVE"
+    except Exception:
         pass
     return None, "HIST"
 
@@ -56,9 +65,9 @@ def get_trend_status(df):
     last = df.iloc[-1]
     return "Uptrend" if last['BB_MID'] > last['EMA_200'] else ("Downtrend" if last['BB_MID'] < last['EMA_200'] else "Neutral")
 
-def calculate_exact_cross(prev_sma, curr_sma, prev_ema, curr_ema):
-    denom = (prev_sma - curr_sma) - (prev_ema - curr_ema)
-    return (prev_sma * curr_ema - curr_sma * prev_ema) / denom if denom != 0 else curr_sma
+def calculate_exact_cross(p_sma, c_sma, p_ema, c_ema):
+    denom = (p_sma - c_sma) - (p_ema - c_ema)
+    return (p_sma * c_ema - c_sma * p_ema) / denom if denom != 0 else c_sma
 
 def get_bars_since_cross(df, direction):
     limit = min(500, len(df))
@@ -68,20 +77,19 @@ def get_bars_since_cross(df, direction):
         found = (direction == "Uptrend" and bb_mid[i-1] <= ema_200[i-1] and bb_mid[i] > ema_200[i]) or \
                 (direction == "Downtrend" and bb_mid[i-1] >= ema_200[i-1] and bb_mid[i] < ema_200[i])
         if found:
-            return (len(bb_mid) - 1) - i, dates[i], calculate_exact_cross(bb_mid[i-1], bb_mid[i], ema_200[i-1], ema_200[i])
+            return (len(bb_mid)-1)-i, dates[i], calculate_exact_cross(bb_mid[i-1], bb_mid[i], ema_200[i-1], ema_200[i])
     return None, None, None
 
 def find_previous_opposing_cross(df, current_direction, entry_price):
-    target_type = "Golden" if current_direction == "Downtrend" else "Death"
-    bb_mid, ema_200 = df['BB_MID'].values, df['EMA_200'].values
-    skipped = False 
+    target = "Golden" if current_direction == "Downtrend" else "Death"
+    bb_mid, ema_200, skipped = df['BB_MID'].values, df['EMA_200'].values, False 
     for i in range(len(bb_mid) - 1, 0, -1):
-        found = (target_type == "Golden" and bb_mid[i-1] <= ema_200[i-1] and bb_mid[i] > ema_200[i]) or \
-                (target_type == "Death" and bb_mid[i-1] >= ema_200[i-1] and bb_mid[i] < ema_200[i])
+        found = (target == "Golden" and bb_mid[i-1] <= ema_200[i-1] and bb_mid[i] > ema_200[i]) or \
+                (target == "Death" and bb_mid[i-1] >= ema_200[i-1] and bb_mid[i] < ema_200[i])
         if found:
             price = calculate_exact_cross(bb_mid[i-1], bb_mid[i], ema_200[i-1], ema_200[i])
             if (current_direction == "Uptrend" and price > entry_price) or (current_direction == "Downtrend" and price < entry_price):
-                return round(price, 4), f"Prev {target_type}" + (" (Deep)" if skipped else "")
+                return round(float(price), 4), f"Prev {target}" + (" (Deep)" if skipped else "")
             skipped = True
     return None, None
 
@@ -94,10 +102,10 @@ def find_next_sr_level(ticker, current_tf, direction, current_price):
     df['is_high'], df['is_low'] = df['high'].rolling(5, center=True).max() == df['high'], df['low'].rolling(5, center=True).min() == df['low']
     if direction == "Uptrend":
         cands = [p for p in df[df['is_high']]['high'] if p > current_price]
-        return (round(min(cands), 4), f"Res on {next_tf}") if cands else ("ATH", "ATH")
+        return (round(float(min(cands)), 4), f"Res on {next_tf}") if cands else ("ATH", "ATH")
     else:
         cands = [p for p in df[df['is_low']]['low'] if p < current_price]
-        return (round(max(cands), 4), f"Supp on {next_tf}") if cands else ("ATL", "ATL")
+        return (round(float(max(cands)), 4), f"Supp on {next_tf}") if cands else ("ATL", "ATL")
 
 def check_early_exit(ticker, signal_tf, direction):
     tfs, opp = {"1mo":["1wk","1d","4h","1h","30m"], "1wk":["1d","4h","1h","30m"], "1d":["4h","1h","30m"], "4h":["1h","30m"]}, ("Downtrend" if direction == "Uptrend" else "Uptrend")
@@ -111,6 +119,8 @@ def check_early_exit(ticker, signal_tf, direction):
 
 def analyze_ticker(ticker):
     log_trace, fallback = [], None
+    live_p, price_status = get_live_tick(ticker)
+    
     for tf_name in ["4h", "1d", "1wk", "1mo"]:
         df = get_data(ticker, tf_name)
         if df is None: continue
@@ -118,14 +128,11 @@ def analyze_ticker(ticker):
         if status == "Neutral": continue
         
         bars_ago, cross_time, cross_price = get_bars_since_cross(df, status)
-        
-        # FIX: Safety check to prevent crash on old trends
-        if cross_price is None: continue
+        if cross_price is None: 
+            log_trace.append(f"{tf_name}:NoRecentCross")
+            continue
 
-        # FIX: Pull Live Tick for AUDCHF Accuracy and Labeling
-        live_p, price_status = get_live_tick(ticker)
-        current_price = live_p if live_p is not None else df.iloc[-1]['close']
-
+        current_price = live_p if live_p is not None else float(df.iloc[-1]['close'])
         sl = cross_price * (1 - SL_BUFFER if status == "Uptrend" else 1 + SL_BUFFER)
         tp_price, tp_note = find_previous_opposing_cross(df, status, current_price)
         if tp_price is None: tp_price, tp_note = find_next_sr_level(ticker, tf_name, status, current_price)
@@ -135,13 +142,13 @@ def analyze_ticker(ticker):
         
         result = {
             "Ticker": ticker, "Signal": f"{'CONFIRMED' if is_fresh else 'EXISTING'} {status.upper()}",
-            "Timeframe": tf_name, "Current Price": round(current_price, 4), "Stop Loss": round(sl, 4),
+            "Timeframe": tf_name, "Current Price": round(current_price, 4), "Stop Loss": round(float(sl), 4),
             "Take Profit": f"{tp_price} ({tp_note})", "Exit Warning": check_early_exit(ticker, tf_name, status),
-            "Cross Time": cross_str, "Remarks": f"[{price_status}] Trace: {tf_name}:{bars_ago if bars_ago else 'Act'}"
+            "Cross Time": cross_str, "Remarks": f"[{price_status}] Trace: {' | '.join(log_trace + [f'{tf_name}:{bars_ago if bars_ago else 'Act'}'])}"
         }
         if is_fresh: return result
         if not fallback: fallback = result
-    return fallback if fallback else {"Signal": "No Signal"}
+    return fallback if fallback else {"Signal": "No Signal", "Remarks": f"Trace: {' | '.join(log_trace)}"}
 
 def run_scanner(tickers, eco_df=None):
     results = []
@@ -153,7 +160,7 @@ def run_scanner(tickers, eco_df=None):
                 res["Remarks"] = f"{danger} | {res.get('Remarks', '')}"
                 results.append(res)
             else:
-                results.append({"Ticker": ticker, "Signal": "No Signal", "Remarks": danger})
+                results.append({"Ticker": ticker, "Signal": "No Signal", "Remarks": f"{danger} | {res.get('Remarks','')}"})
         except Exception as e:
             results.append({"Ticker": ticker, "Signal": "Error", "Remarks": str(e)})
     return pd.DataFrame(results)
