@@ -18,7 +18,7 @@ EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
 EMAIL_PASSWORD = os.environ.get("SENDER_PASSWORD")
 EMAIL_RECEIVER = os.environ.get("RECEIVER_EMAIL")
 
-# --- MASTER FALLBACK LIST ---
+# --- MASTER FALLBACK LIST (Abbreviated) ---
 FULL_TICKER_LIST = [
     "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
     "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
@@ -115,6 +115,7 @@ def send_email(subject, body, attachment_path=None, is_html=False):
         print(f"Email failed: {e}")
 
 # --- Main Execution ---
+
 def main():
     print(f"--- Trend Climber Analysis: {datetime.now().strftime('%Y-%m-%d')} ---")
     
@@ -122,26 +123,21 @@ def main():
     eco_file = auto_find_calendar(DATA_DIR)
     eco_df = load_economic_data(eco_file)
     
-    # Run the updated scanner from the logic file
     final_df = logic.run_scanner(tickers, eco_df=eco_df)
 
     if not final_df.empty:
-        # Sorting Logic
+        # --- SORTING LOGIC: CONFIRMED > EXISTING > No Signal ---
         def sort_key(signal):
-            if "CONFIRMED" in str(signal): return 1
-            if "EXISTING" in str(signal): return 2
-            return 3
+            if "CONFIRMED" in signal: return 1
+            if "EXISTING" in signal: return 2
+            return 3 # No Signal or Error
         
+        # Apply sort
         final_df['SortOrder'] = final_df['Signal'].apply(sort_key)
         final_df = final_df.sort_values(by=['SortOrder', 'Ticker'])
-        final_df = final_df.drop(columns=['SortOrder'])
+        final_df = final_df.drop(columns=['SortOrder']) # Cleanup
 
-        # ORGANIZED COLUMN SELECTION
-        cols = [
-            'Ticker', 'Signal', 'Timeframe', 'Current Price', 'Stop Loss', 
-            'Take Profit', 'Exit Warning', 'Cross Time', 'Eco Calendar', 
-            'Bar Trace', 'Remarks'
-        ]
+        cols = ['Ticker', 'Signal', 'Timeframe', 'Current Price', 'Stop Loss', 'Take Profit', 'Exit Warning', 'Cross Time', 'Remarks']
         available_cols = [c for c in cols if c in final_df.columns]
         final_df = final_df[available_cols]
         
@@ -150,21 +146,24 @@ def main():
         final_df.to_csv(out_path, index=False)
         print(f"Saved: {out_path}")
         
-        # Filter Active Signals for Email
+        # Filter Active Signals (Confirmed & Existing)
         active_signals = final_df[final_df['Signal'] != "No Signal"]
+        
         current_date = datetime.now().strftime('%Y-%m-%d')
         
         css = """
         <style>
-            body { font-family: 'Segoe UI', sans-serif; font-size: 14px; color: #333; }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #333; }
             h2 { color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }
-            table { border-collapse: collapse; width: 100%; margin-top: 20px; font-size: 12px; }
-            th { background-color: #2c3e50; color: white; padding: 10px; text-align: left; }
-            td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; font-size: 13px; }
+            th { background-color: #2c3e50; color: white; padding: 12px; text-align: left; }
+            td { border-bottom: 1px solid #ddd; padding: 10px; vertical-align: middle; }
             tr:nth-child(even) { background-color: #f8f9fa; }
+            tr:hover { background-color: #e9ecef; }
             .buy { color: #27ae60; font-weight: bold; }
             .sell { color: #c0392b; font-weight: bold; }
             .risk { color: #e74c3c; font-weight: bold; }
+            .warning { color: #d35400; font-weight: bold; } 
         </style>
         """
         
@@ -172,16 +171,21 @@ def main():
             email_df = active_signals.copy()
             
             def format_signal(val):
-                if "UP" in str(val) or "BUY" in str(val): return f'<span class="buy">{val}</span>'
-                if "DOWN" in str(val) or "SELL" in str(val): return f'<span class="sell">{val}</span>'
+                if "UPTREND" in str(val) or "BUY" in str(val): return f'<span class="buy">{val}</span>'
+                if "DOWNTREND" in str(val) or "SELL" in str(val): return f'<span class="sell">{val}</span>'
                 return val
 
-            def format_eco(val):
-                if val and val != "-" and val != "Safe": return f'<span class="risk">{val}</span>'
+            def format_remarks(val):
+                if "HIGH" in str(val) or "WARNING" in str(val): return f'<span class="risk">{val}</span>'
+                return val
+                
+            def format_exit(val):
+                if "Opposing" in str(val): return f'<span class="warning">{val}</span>'
                 return val
 
             if 'Signal' in email_df.columns: email_df['Signal'] = email_df['Signal'].apply(format_signal)
-            if 'Eco Calendar' in email_df.columns: email_df['Eco Calendar'] = email_df['Eco Calendar'].apply(format_eco)
+            if 'Remarks' in email_df.columns: email_df['Remarks'] = email_df['Remarks'].apply(format_remarks)
+            if 'Exit Warning' in email_df.columns: email_df['Exit Warning'] = email_df['Exit Warning'].apply(format_exit)
             
             table_html = email_df.to_html(index=False, border=0, escape=False)
             
@@ -190,15 +194,32 @@ def main():
             <head>{css}</head>
             <body>
                 <h2>Trend Climber Signals - {current_date}</h2>
-                <p>Technical and fundamental analysis for current active trends.</p>
+                <p>The following tickers have confirmed <b>Golden/Death Crosses</b> on stable trends.</p>
                 {table_html}
+                <div class="footer">
+                    <p style="font-size: 11px; color: #666; margin-top: 20px;">
+                        *Stop Loss: 1% from Cross Price (Exact intersection).<br>
+                        *Take Profit: Previous profitable opposing cross (Smart Scan).<br>
+                        *Exit Warning: Sustained reversal (>10 bars) on lower TFs down to 30m.
+                    </p>
+                </div>
             </body>
             </html>
             """
         else:
-            body = f"<html><head>{css}</head><body><h2>No active signals found - {current_date}</h2></body></html>"
+            body = f"""
+            <html>
+            <head>{css}</head>
+            <body>
+                <h2>Trend Climber Signals - {current_date}</h2>
+                <p><b>No active signals found today.</b></p>
+                <p>Scanned {len(final_df)} tickers.</p>
+            </body>
+            </html>
+            """
             
         send_email(f"Trend Climber Alerts - {current_date}", body, out_path, is_html=True)
 
 if __name__ == "__main__":
     main()
+
