@@ -16,20 +16,15 @@ SL_BUFFER = 0.01
 def get_live_tick(ticker):
     """Robustly fetches the latest price tick, handling yfinance Multi-Index issues."""
     try:
-        # We fetch 5 days of 1m data to ensure we catch the market open on Mondays
         data = yf.download(ticker, period="5d", interval="1m", progress=False, group_by='ticker')
         if not data.empty:
-            # Handle Multi-Index columns if present
             if isinstance(data.columns, pd.MultiIndex):
-                # Take the last Close value for the specific ticker
                 price_series = data[ticker]['Close'].dropna()
             else:
                 price_series = data['Close'].dropna()
             
             if not price_series.empty:
-                val = price_series.iloc[-1]
-                # Ensure we return a float, not a Series
-                return float(val), "LIVE"
+                return float(price_series.iloc[-1]), "LIVE"
     except Exception:
         pass
     return None, "HIST"
@@ -129,7 +124,7 @@ def analyze_ticker(ticker):
         
         bars_ago, cross_time, cross_price = get_bars_since_cross(df, status)
         if cross_price is None: 
-            log_trace.append(f"{tf_name}:NoRecentCross")
+            log_trace.append(f"{tf_name}:NoCross")
             continue
 
         current_price = live_p if live_p is not None else float(df.iloc[-1]['close'])
@@ -140,27 +135,72 @@ def analyze_ticker(ticker):
         is_fresh = (bars_ago is not None and ENTRY_MIN_BARS <= bars_ago <= ENTRY_MAX_BARS)
         cross_str = cross_time.strftime('%Y-%m-%d %H:%M') if isinstance(cross_time, pd.Timestamp) else str(cross_time)
         
+        # Build the trace for this timeframe
+        current_tf_trace = f"{tf_name}:{bars_ago if bars_ago is not None else 'Act'}"
+        
         result = {
-            "Ticker": ticker, "Signal": f"{'CONFIRMED' if is_fresh else 'EXISTING'} {status.upper()}",
-            "Timeframe": tf_name, "Current Price": round(current_price, 4), "Stop Loss": round(float(sl), 4),
-            "Take Profit": f"{tp_price} ({tp_note})", "Exit Warning": check_early_exit(ticker, tf_name, status),
-            "Cross Time": cross_str, "Remarks": f"[{price_status}] Trace: {' | '.join(log_trace + [f'{tf_name}:{bars_ago if bars_ago else 'Act'}'])}"
+            "Ticker": ticker, 
+            "Signal": f"{'CONFIRMED' if is_fresh else 'EXISTING'} {status.upper()}",
+            "Timeframe": tf_name, 
+            "Current Price": round(current_price, 4), 
+            "Stop Loss": round(float(sl), 4),
+            "Take Profit": f"{tp_price} ({tp_note})", 
+            "Exit Warning": check_early_exit(ticker, tf_name, status),
+            "Cross Time": cross_str, 
+            "PriceStatus": price_status,
+            "Bar Trace": " | ".join(log_trace + [current_tf_trace])
         }
         if is_fresh: return result
         if not fallback: fallback = result
-    return fallback if fallback else {"Signal": "No Signal", "Remarks": f"Trace: {' | '.join(log_trace)}"}
+    
+    return fallback if fallback else {"Signal": "No Signal", "Bar Trace": " | ".join(log_trace)}
 
 def run_scanner(tickers, eco_df=None):
     results = []
-    for ticker in tickers:
+    print(f"Scanning {len(tickers)} tickers...")
+    
+    for i, ticker in enumerate(tickers):
+        print(f"[{i+1}/{len(tickers)}] Checking {ticker}...", end="\r")
+        
         try:
-            res = analyze_ticker(ticker)
-            danger = check_economic_danger(ticker, eco_df) if eco_df is not None else "-"
-            if res.get("Signal") != "No Signal":
-                res["Remarks"] = f"{danger} | {res.get('Remarks', '')}"
-                results.append(res)
-            else:
-                results.append({"Ticker": ticker, "Signal": "No Signal", "Remarks": f"{danger} | {res.get('Remarks','')}"})
+            analysis = analyze_ticker(ticker)
         except Exception as e:
-            results.append({"Ticker": ticker, "Signal": "Error", "Remarks": str(e)})
+            analysis = {"Signal": "Error", "Bar Trace": str(e)}
+
+        eco_danger = "-"
+        if eco_df is not None:
+            eco_danger = check_economic_danger(ticker, eco_df)
+        
+        price_tag = f"[{analysis.get('PriceStatus', 'HIST')}]"
+        
+        if "Signal" in analysis and analysis["Signal"] != "No Signal":
+             results.append({
+                "Ticker": ticker,
+                "Signal": analysis["Signal"],
+                "Timeframe": analysis["Timeframe"],
+                "Current Price": analysis["Current Price"],
+                "Stop Loss": analysis["Stop Loss"],
+                "Take Profit": analysis["Take Profit"],
+                "Exit Warning": analysis.get("Exit Warning", "-"),
+                "Cross Time": analysis["Cross Time"],
+                "Eco Calendar": eco_danger,
+                "Bar Trace": analysis.get("Bar Trace", "-"),
+                "Remarks": price_tag
+            })
+        else:
+            results.append({
+                "Ticker": ticker,
+                "Signal": "No Signal",
+                "Timeframe": "-",
+                "Current Price": "-",
+                "Stop Loss": "-",
+                "Take Profit": "-",
+                "Exit Warning": "-",
+                "Cross Time": "-",
+                "Eco Calendar": eco_danger,
+                "Bar Trace": analysis.get("Bar Trace", "-"),
+                "Remarks": price_tag
+            })
+            
+    print("\nScan Complete.")
     return pd.DataFrame(results)
