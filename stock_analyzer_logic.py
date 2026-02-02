@@ -17,15 +17,15 @@ def get_live_price(ticker_str):
     """Fetches the most recent price using fast_info or 1m download."""
     try:
         t = yf.Ticker(ticker_str)
-        # 1. Try fast_info (usually real-time)
+        # 1. Try fast_info for real-time tick
         price = t.fast_info['lastPrice']
         if price and not np.isnan(price):
             return price, "Live"
             
-        # 2. Try 1m download as backup
+        # 2. Backup: 1m download
         live_data = yf.download(ticker_str, period="1d", interval="1m", progress=False)
         if not live_data.empty:
-            return live_data['Close'].iloc[-1], "Live (1m)"
+            return live_data['Close'].iloc[-1], "Live(1m)"
     except:
         pass
     return None, "Hist"
@@ -45,7 +45,7 @@ def check_economic_danger(ticker, eco_df, current_time=None):
     )
     danger_events = eco_df[mask]
     if danger_events.empty: return "Safe"
-    warnings = [f"{r['Currency']} {r['Name']} ({r['Impact']}) at {r['Start'].strftime('%H:%M')}" for _, r in danger_events.iterrows()]
+    warnings = [f"{r['Currency']} {r['Name']}({r['Impact']})@{r['Start'].strftime('%H:%M')}" for _, r in danger_events.iterrows()]
     return " | ".join(warnings)
 
 def get_data(ticker, interval):
@@ -66,20 +66,19 @@ def get_trend_status(df):
     last = df.iloc[-1]
     return "Uptrend" if last['BB_MID'] > last['EMA_200'] else ("Downtrend" if last['BB_MID'] < last['EMA_200'] else "Neutral")
 
-def calculate_exact_cross(prev_sma, curr_sma, prev_ema, curr_ema):
-    denom = (prev_sma - curr_sma) - (prev_ema - curr_ema)
-    return (prev_sma * curr_ema - curr_sma * prev_ema) / denom if denom != 0 else curr_sma
+def calculate_exact_cross(p_sma, c_sma, p_ema, c_ema):
+    denom = (p_sma - c_sma) - (p_ema - c_ema)
+    return (p_sma * c_ema - c_sma * p_ema) / denom if denom != 0 else c_sma
 
 def get_bars_since_cross(df, direction):
     limit = min(len(df), 500)
     window_df = df.iloc[-limit:]
     bb_mid, ema_200, dates = window_df['BB_MID'].values, window_df['EMA_200'].values, window_df.index
     for i in range(len(bb_mid) - 1, 0, -1):
-        found = False
-        if direction == "Uptrend" and bb_mid[i-1] <= ema_200[i-1] and bb_mid[i] > ema_200[i]: found = True
-        elif direction == "Downtrend" and bb_mid[i-1] >= ema_200[i-1] and bb_mid[i] < ema_200[i]: found = True
+        found = (direction == "Uptrend" and bb_mid[i-1] <= ema_200[i-1] and bb_mid[i] > ema_200[i]) or \
+                (direction == "Downtrend" and bb_mid[i-1] >= ema_200[i-1] and bb_mid[i] < ema_200[i])
         if found:
-            return (len(bb_mid) - 1) - i, dates[i], calculate_exact_cross(bb_mid[i-1], bb_mid[i], ema_200[i-1], ema_200[i])
+            return (len(bb_mid)-1)-i, dates[i], calculate_exact_cross(bb_mid[i-1], bb_mid[i], ema_200[i-1], ema_200[i])
     return None, None, None
 
 def find_previous_opposing_cross(df, current_direction, entry_price):
@@ -134,7 +133,6 @@ def analyze_ticker(ticker):
         bars, cross_time, cross_price = get_bars_since_cross(df, status)
         log_trace.append(f"{tf}:{bars if bars else 'Act'}")
         
-        # FIX: Ensure we use live price for comparison and reporting
         rep_price = live_price if live_price else df.iloc[-1]['close']
         sl = round(cross_price * (1 - SL_BUFFER if status == "Uptrend" else 1 + SL_BUFFER), 4)
         tp_p, tp_n = find_previous_opposing_cross(df, status, rep_price)
