@@ -6,12 +6,12 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
-import stock_analyzer_logic as logic  # Ensure this matches your logic filename
+import stock_analyzer_logic as logic 
 
 # --- CONFIGURATION ---
 DATA_DIR = "data/incoming"
 TICKER_SOURCE_DIR = "data/ticker_sources"
-OUTPUT_FILE = f"Hierarchical_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
+OUTPUT_FILE = f"Diagnostic_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
 
 # Email Config
 EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
@@ -45,7 +45,7 @@ def load_tickers_from_source(source_dir):
 
 def send_email(subject, body, attachment_path=None, is_html=False):
     if not EMAIL_SENDER or not EMAIL_PASSWORD or not EMAIL_RECEIVER:
-        print("Email credentials missing. Skipping email.")
+        print("Email credentials missing.")
         return
     msg = MIMEMultipart()
     msg['From'], msg['To'], msg['Subject'] = EMAIL_SENDER, EMAIL_RECEIVER, subject
@@ -65,21 +65,19 @@ def send_email(subject, body, attachment_path=None, is_html=False):
         server.login(EMAIL_SENDER, EMAIL_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print("Email sent successfully.")
+        print("Email sent.")
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        print(f"Email failed: {e}")
 
 def main():
-    print(f"--- Hierarchical Analysis Mode: {datetime.now().strftime('%Y-%m-%d %H:%M')} ---")
-    
+    print(f"--- Diagnostic Analysis: {datetime.now().strftime('%Y-%m-%d %H:%M')} ---")
     tickers = load_tickers_from_source(TICKER_SOURCE_DIR)
-    print(f"Scanning {len(tickers)} tickers across 4H, Daily, and Weekly tiers...")
     
-    # Run the updated tiered scanner
+    # Run scanner
     final_df = logic.run_scanner(tickers)
 
     if not final_df.empty:
-        # Sorting Logic: Trend signals first, then Contrarian, then No Signal
+        # Sorting
         def sort_key(s):
             if "TREND" in str(s): return 1
             if "CONTRARIAN" in str(s): return 2
@@ -88,57 +86,50 @@ def main():
         final_df['SortOrder'] = final_df['Signal'].apply(sort_key)
         final_df = final_df.sort_values(by=['SortOrder', 'Ticker']).drop(columns=['SortOrder'])
 
-        # Save to CSV
+        # Save CSV
         if not os.path.exists(DATA_DIR): os.makedirs(DATA_DIR)
         out_path = os.path.join(DATA_DIR, OUTPUT_FILE)
         final_df.to_csv(out_path, index=False)
         
-        # Filter for active signals for the email body
-        active = final_df[final_df['Signal'] != "No Signal"].copy()
-        
         css = """
         <style>
-            body{font-family:sans-serif;font-size:13px;color:#333;}
-            table{border-collapse:collapse;width:100%;margin-top:20px;}
-            th{background:#2c3e50;color:white;padding:12px;text-align:left;}
-            td{border-bottom:1px solid #ddd;padding:10px;vertical-align:top;}
-            .trend_up{color:#27ae60;font-weight:bold;}
-            .trend_down{color:#c0392b;font-weight:bold;}
-            .contra_buy{color:#2980b9;font-weight:bold;font-style:italic;}
-            .contra_sell{color:#8e44ad;font-weight:bold;font-style:italic;}
-            .tier_label{color:#7f8c8d;font-size:11px;}
+            body{font-family:sans-serif;font-size:12px;color:#333;}
+            table{border-collapse:collapse;width:100%;}
+            th{background:#34495e;color:white;padding:8px;text-align:left;}
+            td{border-bottom:1px solid #eee;padding:8px;vertical-align:top;}
+            .trend{color:#27ae60;font-weight:bold;}
+            .contra{color:#2980b9;font-weight:bold;}
+            .trace{color:#888;font-family:monospace;font-size:11px;}
         </style>
         """
         
-        if not active.empty:
-            # Apply styling to signals
-            def style_signal(v):
-                if "TREND UPTREND" in v: return f'<span class="trend_up">{v}</span>'
-                if "TREND DOWNTREND" in v: return f'<span class="trend_down">{v}</span>'
-                if "CONTRARIAN BUY" in v: return f'<span class="contra_buy">{v}</span>'
-                if "CONTRARIAN SELL" in v: return f'<span class="contra_sell">{v}</span>'
-                return v
-
-            active['Signal'] = active['Signal'].apply(style_signal)
+        # Prepare HTML Table
+        email_df = final_df.copy()
+        
+        # Style the Signal Column
+        def style_sig(v):
+            if "TREND" in v: return f'<span class="trend">{v}</span>'
+            if "CONTRARIAN" in v: return f'<span class="contra">{v}</span>'
+            return v
             
-            table_html = active.to_html(index=False, border=0, escape=False)
-            body = f"""
-            <html>
-            <head>{css}</head>
-            <body>
-                <h2>Market Analysis Report: {datetime.now().strftime('%d %b %Y')}</h2>
-                <p>The following tickers have triggered tiered signals (4H/1D, 1D/1W, or 1W/1M):</p>
-                {table_html}
-                <p><small>Note: Contrarian trades require steep Bollinger Band movement confirmation.</small></p>
-            </body>
-            </html>
-            """
-        else:
-            body = "<html><body><h2>No tiered signals identified for today.</h2></body></html>"
+        email_df['Signal'] = email_df['Signal'].apply(style_sig)
+        # Style the Trace Column
+        email_df['Trace'] = email_df['Trace'].apply(lambda x: f'<span class="trace">{x}</span>')
+        
+        table_html = email_df.to_html(index=False, border=0, escape=False)
+        
+        body = f"""
+        <html>
+        <head>{css}</head>
+        <body>
+            <h3>Market Diagnostic Report - {datetime.now().strftime('%Y-%m-%d')}</h3>
+            <p>Full scan results including internal logic traces:</p>
+            {table_html}
+        </body>
+        </html>
+        """
             
-        send_email(f"Tiered Trend Report - {datetime.now().strftime('%Y-%m-%d')}", body, out_path, is_html=True)
-    else:
-        print("No data processed.")
+        send_email(f"Diagnostic Report - {datetime.now().strftime('%Y-%m-%d')}", body, out_path, is_html=True)
 
 if __name__ == "__main__":
     main()
