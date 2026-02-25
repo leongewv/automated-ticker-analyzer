@@ -11,9 +11,9 @@ import stock_analyzer_logic as logic
 # --- CONFIGURATION ---
 DATA_DIR = "data/incoming"
 TICKER_SOURCE_DIR = "data/ticker_sources"
-OUTPUT_FILE = f"Diagnostic_Signals_{datetime.now().strftime('%Y%m%d')}.csv"
+OUTPUT_FILE = f"Trade_Report_{datetime.now().strftime('%Y%m%d')}.csv"
 
-# Email Config
+# Email Config (Ensure these are set in your Environment Variables)
 EMAIL_SENDER = os.environ.get("SENDER_EMAIL")
 EMAIL_PASSWORD = os.environ.get("SENDER_PASSWORD")
 EMAIL_RECEIVER = os.environ.get("RECEIVER_EMAIL")
@@ -23,8 +23,7 @@ FULL_TICKER_LIST = [
     "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
     "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
     "GBPAUD=X", "GBPNZD=X", "EURAUD=X", "EURCAD=X", "EURNZD=X", "AUDNZD=X",
-    "XAUUSD=X", "SPY", "BTC-USD", "ETH-USD", "TSLA", "AMZN", "GOOG", "META",
-    "AUDCHF=X", "NZDCHF=X", "GBPCHF=X", "EURCHF=X"
+    "XAUUSD=X", "SPY", "BTC-USD", "ETH-USD", "TSLA", "AMZN", "GOOG", "META"
 ]
 
 def load_tickers_from_source(source_dir):
@@ -46,7 +45,7 @@ def load_tickers_from_source(source_dir):
 
 def send_email(subject, body, attachment_path=None, is_html=False):
     if not EMAIL_SENDER or not EMAIL_PASSWORD or not EMAIL_RECEIVER:
-        print("Email credentials missing.")
+        print("Email configuration missing. Check environment variables.")
         return
     msg = MIMEMultipart()
     msg['From'], msg['To'], msg['Subject'] = EMAIL_SENDER, EMAIL_RECEIVER, subject
@@ -66,19 +65,19 @@ def send_email(subject, body, attachment_path=None, is_html=False):
         server.login(EMAIL_SENDER, EMAIL_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print("Email sent.")
+        print("Report emailed successfully.")
     except Exception as e:
-        print(f"Email failed: {e}")
+        print(f"SMTP Error: {e}")
 
 def main():
-    print(f"--- Diagnostic Analysis: {datetime.now().strftime('%Y-%m-%d %H:%M')} ---")
+    print(f"--- Hierarchical Market Scan: {datetime.now().strftime('%Y-%m-%d %H:%M')} ---")
     tickers = load_tickers_from_source(TICKER_SOURCE_DIR)
     
-    # Run scanner
+    # Run the hierarchical scanner logic
     final_df = logic.run_scanner(tickers)
 
     if not final_df.empty:
-        # Sorting
+        # Sorting Priority: Trend trades first, then Contrarian, then No Signal
         def sort_key(s):
             if "TREND" in str(s): return 1
             if "CONTRARIAN" in str(s): return 2
@@ -87,50 +86,65 @@ def main():
         final_df['SortOrder'] = final_df['Signal'].apply(sort_key)
         final_df = final_df.sort_values(by=['SortOrder', 'Ticker']).drop(columns=['SortOrder'])
 
-        # Save CSV
+        # Organize columns for the CSV output
+        desired_cols = ['Ticker', 'Signal', 'TF', 'Price', 'Stop Loss', 'Bars Ago', 'Status', 'Trace']
+        final_df = final_df[[c for c in desired_cols if c in final_df.columns]]
+
+        # Save the master CSV
         if not os.path.exists(DATA_DIR): os.makedirs(DATA_DIR)
         out_path = os.path.join(DATA_DIR, OUTPUT_FILE)
         final_df.to_csv(out_path, index=False)
         
+        # Email Formatting
         css = """
         <style>
-            body{font-family:sans-serif;font-size:12px;color:#333;}
-            table{border-collapse:collapse;width:100%;}
-            th{background:#34495e;color:white;padding:8px;text-align:left;}
-            td{border-bottom:1px solid #eee;padding:8px;vertical-align:top;}
-            .trend{color:#27ae60;font-weight:bold;}
-            .contra{color:#2980b9;font-weight:bold;}
-            .trace{color:#888;font-family:monospace;font-size:11px;}
+            body{font-family:sans-serif;font-size:12px;color:#222;}
+            table{border-collapse:collapse;width:100%;margin-top:15px;}
+            th{background:#2c3e50;color:#ecf0f1;padding:10px;text-align:left;border:1px solid #34495e;}
+            td{border:1px solid #bdc3c7;padding:8px;vertical-align:top;}
+            .buy{color:#27ae60;font-weight:bold;}
+            .sell{color:#c0392b;font-weight:bold;}
+            .sl{color:#e67e22;font-weight:bold;}
+            .trace{color:#95a5a6;font-family:monospace;font-size:10px;}
+            .header-info{margin-bottom:20px;padding:10px;background:#f9f9f9;border-left:5px solid #3498db;}
         </style>
         """
         
-        # Prepare HTML Table
-        email_df = final_df.copy()
+        # Filter active signals for the email table body
+        active_signals = final_df[final_df['Signal'] != "No Signal"].copy()
         
-        # Style the Signal Column
-        def style_sig(v):
-            if "TREND" in v: return f'<span class="trend">{v}</span>'
-            if "CONTRARIAN" in v: return f'<span class="contra">{v}</span>'
-            return v
+        if not active_signals.empty:
+            # Apply color coding to Signal column
+            active_signals['Signal'] = active_signals['Signal'].apply(
+                lambda v: f'<span class="{"buy" if "UP" in v or "BUY" in v else "sell"}">{v}</span>'
+            )
+            # Highlight Stop Loss
+            active_signals['Stop Loss'] = active_signals['Stop Loss'].apply(lambda v: f'<span class="sl">{v}</span>')
+            # Format Trace
+            active_signals['Trace'] = active_signals['Trace'].apply(lambda v: f'<span class="trace">{v}</span>')
             
-        email_df['Signal'] = email_df['Signal'].apply(style_sig)
-        # Style the Trace Column
-        email_df['Trace'] = email_df['Trace'].apply(lambda x: f'<span class="trace">{x}</span>')
-        
-        table_html = email_df.to_html(index=False, border=0, escape=False)
-        
-        body = f"""
-        <html>
-        <head>{css}</head>
-        <body>
-            <h3>Market Diagnostic Report - {datetime.now().strftime('%Y-%m-%d')}</h3>
-            <p>Full scan results including internal logic traces:</p>
-            {table_html}
-        </body>
-        </html>
-        """
+            table_html = active_signals.to_html(index=False, border=0, escape=False)
             
-        send_email(f"Diagnostic Report - {datetime.now().strftime('%Y-%m-%d')}", body, out_path, is_html=True)
+            body = f"""
+            <html>
+            <head>{css}</head>
+            <body>
+                <div class="header-info">
+                    <h2>Hierarchical Signal Report: {datetime.now().strftime('%d %b %Y')}</h2>
+                    <p>Analysis Tiers: 4H/Daily, Daily/Weekly, Weekly/Monthly.<br>
+                    <i>Requirement: Signal TF Cross + Higher TF Bollinger Expansion.</i></p>
+                </div>
+                {table_html}
+                <p><small>Calculated Stop Loss includes a 1% buffer from the mathematical cross price.</small></p>
+            </body>
+            </html>
+            """
+        else:
+            body = "<html><body><h3>Scan Complete: No hierarchical signals identified today.</h3></body></html>"
+            
+        send_email(f"Market Scan Report - {datetime.now().strftime('%Y-%m-%d')}", body, out_path, is_html=True)
+    else:
+        print("No tickers were successfully processed.")
 
 if __name__ == "__main__":
     main()
