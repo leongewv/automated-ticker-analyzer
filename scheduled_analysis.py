@@ -23,8 +23,7 @@ FULL_TICKER_LIST = [
     "GBPUSD=X", "EURUSD=X", "JPY=X", "GBPCAD=X", "AUDUSD=X", "NZDUSD=X",
     "EURGBP=X", "GBPJPY=X", "EURJPY=X", "USDCHF=X", "USDCAD=X", "AUDJPY=X",
     "GBPAUD=X", "GBPNZD=X", "EURAUD=X", "EURCAD=X", "EURNZD=X", "AUDNZD=X",
-    "XAUUSD=X", "SPY", "BTC-USD", "ETH-USD", "TSLA", "AMZN", "GOOG", "META",
-    "AUDCHF=X", "NZDCHF=X", "GBPCHF=X", "EURCHF=X"
+    "META", "AUDCHF=X", "NZDCHF=X", "GBPCHF=X", "EURCHF=X", "PANW", "CRWD", "MSFT", "NOW",
 ]
 
 def load_tickers_from_source(source_dir):
